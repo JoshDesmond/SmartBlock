@@ -41,7 +41,6 @@
 *.sh       text eol=lf
 *.bat      text eol=crlf
 *.cmd      text eol=crlf
-*.ps1      text eol=crlf
 
 # Serialisation
 *.json     text
@@ -59,6 +58,9 @@
 # Exclude files from exporting
 .gitattributes export-ignore
 .gitignore     export-ignore
+
+# Make node binary
+package-lock.json binary
 
 # Original Source & Repository available at:
 # https://github.com/alexkaratarakis/gitattributes

@@ -1,0 +1,18 @@
+{
+  "name": "automati_site",
+  "version": "1.0.0",
+  "description": "Website landing page",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "node-sass -w scss/ -o css/ --recursive"
+  },
+  "author": "Josh Desmond",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "node-sass": "^4.14.1"
+  }
+}
