@@ -4,10 +4,23 @@
 	"description": "An extension to label data for use in training SmartBlock",
 	"permissions": ["activeTab", "storage", "declarativeContent"],
 	"options_page": "options.html",
+	"options_ui": {
+		"page": "options.html",
+		"open_in_tab": false
+	},
 	"background": {
 		"scripts": ["background.js"],
 		"persistent": false
 	},
+	"content_scripts": [
+		{
+			"matches": ["https://en.wikipedia.org/wiki/*"],
+			"exclude_matches": ["https://en.wikipedia.org/wiki/Main_Page"],
+			"js": [
+				"content.js"
+			]
+		}
+	],
 	"page_action": {
 		"default_popup": "popup.html",
 		"default_icon": {
