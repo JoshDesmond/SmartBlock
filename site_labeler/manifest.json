@@ -14,7 +14,7 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://en.wikipedia.org/wiki/*"],
+			"matches": ["<all_urls>"],
 			"exclude_matches": ["https://en.wikipedia.org/wiki/Main_Page"],
 			"js": [
 				"content.js"

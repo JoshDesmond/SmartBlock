@@ -39,6 +39,9 @@ class Views {
         this.footerDiv.style.backgroundColor = 'black';
         this.footerDiv.style.opacity = '0.95';
         this.footerDiv.style.textAlign = 'center';
+
+        this.displayWordCount();
+        this.addTextualAnalysisButton();
     }
 
     /**
@@ -47,12 +50,39 @@ class Views {
     displayWordCount() {
         const wordCount = this._model.countWords();
         const wordCountText = document.createElement('p');
-        wordCountText.innerText = wordCount.toString();
-        views.footerDiv.appendChild(wordCountText);
+        wordCountText.innerText = "This page has " + wordCount.toString() + " words";
+        this.footerDiv.appendChild(wordCountText);
+    }
+
+    /**
+     * Adds a action to the
+     */
+    addTextualAnalysisButton() {
+        // TODO
+        // this.footerDiv.onclick = new analysisController(model, this.footerDiv);
     }
 }
+
+
+/**
+ * Controller for the extualAnalysisButton
+ */
+class analysisController {
+
+    /**
+     * Instantializes the controller for a given model/view
+     *
+     * @param {!Model} model The model of the web page for analysis
+     * @param {HTMLDivElement} clickable The associated button element
+     * {!TODO <? implements clickable>} how do you make an element work like that?
+     */
+    constructor(model, clickable) {
+        this._model = model
+
+    }
+}
+
 
 const model = new Model();
 const views = new Views(model);
 
-views.displayWordCount();
