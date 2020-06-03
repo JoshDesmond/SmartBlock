@@ -2,6 +2,24 @@
 class Model {
 
     /**
+     * Parse the textual content of the current webpage.
+     * @returns {String} The extracted text of the webpage.
+     */
+    extractText() {
+        const text = document.body.innerText;
+        return text;
+    }
+
+    /**
+     * Extracts the title of the current webpage
+     * @returns {string}
+     */
+    extractTitle() {
+        const titleTags = document.head.getElementsByTagName("title");
+        return titleTags[0].text;
+    }
+
+    /**
      * TODO how to reference "document" as a link in JavaScriptDocs?
      * Counts how many words there are in the readable text of document
      * @return {Number} The word count of document
@@ -55,19 +73,20 @@ class Views {
     }
 
     /**
-     * Adds a action to the
+     * Adds an action to the to the footer for navigating to the textual
+     * analysis view
      */
     addTextualAnalysisButton() {
-        // TODO
-        // this.footerDiv.onclick = new analysisController(model, this.footerDiv);
+        const ac = new AnalysisController(this._model, this.footerDiv);
+        this.footerDiv.onclick = ac.onClick;
     }
 }
 
 
 /**
- * Controller for the extualAnalysisButton
+ * Controller for the textualAnalysisButton
  */
-class analysisController {
+class AnalysisController {
 
     /**
      * Instantializes the controller for a given model/view
@@ -77,12 +96,17 @@ class analysisController {
      * {!TODO <? implements clickable>} how do you make an element work like that?
      */
     constructor(model, clickable) {
-        this._model = model
+        console.log(model);
+        this._model = model;
+    }
 
+    onClick() {
+        console.log(this._model);
+        console.log(this._model.extractText());
+        console.log(this._model.extractTitle());
     }
 }
 
 
 const model = new Model();
 const views = new Views(model);
-
