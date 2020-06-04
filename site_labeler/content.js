@@ -57,6 +57,7 @@ class Views {
         this.footerDiv.style.backgroundColor = 'black';
         this.footerDiv.style.opacity = '0.95';
         this.footerDiv.style.textAlign = 'center';
+        this.footerDiv.style.zIndex = '100' // Arbitrarily large number
 
         this.displayWordCount();
         this.addTextualAnalysisButton();
