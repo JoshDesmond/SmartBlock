@@ -1,6 +1,16 @@
 /** The program logic for static text analysis & labeling */
 class Model {
 
+
+    /**
+     * Determines what voting actions are available based on the webpage, its content, and the
+     * users settings.
+     */
+    getVotingActions() {
+        return ["Very Unproductive", "Unproductive", "Productive", "Very Productive", "N/A"];
+    }
+
+
     /**
      * Parse the textual content of the current webpage.
      * @returns {String} The extracted text of the webpage.
@@ -57,9 +67,11 @@ class Views {
         this.footerDiv.style.backgroundColor = 'black';
         this.footerDiv.style.opacity = '0.95';
         this.footerDiv.style.textAlign = 'center';
-        this.footerDiv.style.zIndex = '100' // Arbitrarily large number
+        this.footerDiv.style.zIndex = '10000' // Arbitrarily large number
 
         this.displayWordCount();
+        this.addVotingButtons();
+        // TODO consider checking if the url has been labeled already, and indicating if so
         this.addTextualAnalysisButton();
     }
 
@@ -69,9 +81,37 @@ class Views {
     displayWordCount() {
         const wordCount = this._model.countWords();
         const wordCountText = document.createElement('p');
+        wordCountText.style.zIndex = '10001' // Arbitrarily larger number
+        wordCountText.style.color ='#dcdcdc'
         wordCountText.innerText = "This page has " + wordCount.toString() + " words";
         this.footerDiv.appendChild(wordCountText);
     }
+
+
+    /**
+     * Adds the voting buttons on the bottom of the page.
+     */
+    addVotingButtons() {
+        const votes = this._model.getVotingActions();
+        for (let action of votes) {
+            console.log(action.toString()); // TEMP
+
+            const button = document.createElement('button');
+            button.setAttribute("data-action", action);
+            button.innerHTML = action;
+            this.footerDiv.appendChild(button);
+        }
+    }
+
+
+    /**
+     * Determines the appropriate voting actions that can be made
+     * @returns {undefined}
+     */
+    getVotingActions() {
+        return undefined;
+    }
+
 
     /**
      * Adds an action to the to the footer for navigating to the textual
@@ -81,6 +121,7 @@ class Views {
         const ac = new AnalysisController(this._model, this.footerDiv);
         this.footerDiv.onclick = ac.onClick;
     }
+
 }
 
 
