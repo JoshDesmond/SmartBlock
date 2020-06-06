@@ -50,6 +50,8 @@ class Model {
 /** The GUI overlay shown when labeling sites */
 class Views {
 
+    firstWordCount = true;
+
     /**
      * Creates a new View and appends the GUI to the tab associated with this script
      * @param {!Model} model The model object in use by the plugin.
@@ -63,7 +65,7 @@ class Views {
         this.footerDiv.id = 'labeling-footer-div';
         this.footerDiv.style.backgroundColor = 'black';
 
-        this.displayWordCount();
+        this.displayWordCount(this._model.countWords());
         this.addVotingButtons();
 
         this.addTextualAnalysisButton();
@@ -72,13 +74,17 @@ class Views {
     /**
      * Updates the footer to display the page's current word count.
      */
-    displayWordCount() {
-        const wordCount = this._model.countWords();
-        const wordCountText = document.createElement('p');
-        wordCountText.style.zIndex = '10001' // Arbitrarily larger number
-        wordCountText.style.color ='#dcdcdc'
-        wordCountText.innerText = "This page has " + wordCount.toString() + " words";
-        this.footerDiv.appendChild(wordCountText);
+    displayWordCount(wordCount) {
+        if (this.firstWordCount) {
+            this.wordCountText = document.createElement('p');
+            this.wordCountText.style.zIndex = '10001' // Arbitrarily larger number
+            this.wordCountText.style.color ='#dcdcdc'
+            this.wordCountText.innerText = "This page has " + wordCount.toString() + " words";
+            this.footerDiv.appendChild(this.wordCountText);
+            this.firstWordCount = false;
+        }
+
+        this.wordCountText.innerText = "This page has " + wordCount.toString() + " words";
     }
 
 
@@ -133,20 +139,27 @@ class AnalysisController {
      * Instantializes the controller for a given model/view
      *
      * @param {!Model} model The model of the web page for analysis
+     * @param {!Views} views The view to modify on re-analysis
      */
-    constructor(model) {
+    constructor(model, views) {
         this._model = model;
+        this._views = views;
     }
 
     onClick() {
         console.log(this._model.extractTitle());
         console.log(this._model.extractText());
     }
+
+    analyze() {
+        const wordCount = this._model.countWords();
+        this._views.displayWordCount(wordCount);
+    }
 }
+
 
 class FlagsController {
     /**
-     *
      * @param {!Model} model The model of associated webpage being labeled
      * @param {!Views} views The view object to update the display of
      */
@@ -166,7 +179,7 @@ const model = new Model();
 const views = new Views(model);
 
 // Add controllers
-const ac = new AnalysisController(model);
+const ac = new AnalysisController(model, views);
 views.footerDiv.onclick = (() => ac.onClick());
 
 const fc = new FlagsController(model, views);
@@ -186,3 +199,33 @@ document.onkeyup = function (e) {
         fc.toggle();
     }
 };
+
+// Code below from: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+// Select the node that will be observed for mutations
+const targetNode = document.body;
+
+// Options for the observer (which mutations to observe)
+const config = { childList: true, subtree: true };
+
+let analyzedFlag = false;
+
+// Callback function to execute when mutations are observed
+const callback = function(mutationsList, observer) {
+    if (analyzedFlag) { // This check prevents an infinite analysis loop
+        analyzedFlag = false;
+        return;
+    }
+    for(const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            console.log('A child node has been added or removed.');
+            analyzedFlag = true;
+            ac.analyze(); // Refresh word count
+        }
+    }
+};
+
+// Create an observer instance linked to the callback function
+const observer = new MutationObserver(callback);
+
+// Start observing the target node for configured mutations
+observer.observe(targetNode, config);
