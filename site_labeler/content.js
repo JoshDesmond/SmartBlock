@@ -100,10 +100,6 @@ class Views {
                 button.style.marginRight = '2em';
             }
         }
-
-        // Add space in the middle
-        if (votes.length === 4) {
-        }
     }
 
 
