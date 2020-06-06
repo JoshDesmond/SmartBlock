@@ -16,10 +16,14 @@
 		{
 			"matches": ["<all_urls>"],
 			"exclude_matches": ["https://en.wikipedia.org/wiki/Main_Page"],
+			"css": ["plugin.css"],
 			"js": [
 				"content.js"
 			]
 		}
+	],
+	"web_accessible_resources": [
+		"plugin.css"
 	],
 	"page_action": {
 		"default_popup": "popup.html",

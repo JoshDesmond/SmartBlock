@@ -59,18 +59,13 @@ class Views {
         this.footerDiv = document.createElement('div');
         document.body.appendChild(this.footerDiv);
 
-        this.footerDiv.id = 'LabelingFooter';
-        this.footerDiv.style.position = 'fixed';
-        this.footerDiv.style.width = '100%';
-        this.footerDiv.style.bottom = '0';
+        // Extra styling TODO validate CSS here?
+        this.footerDiv.id = 'labeling-footer-div';
         this.footerDiv.style.backgroundColor = 'black';
-        this.footerDiv.style.opacity = '0.95';
-        this.footerDiv.style.textAlign = 'center';
-        this.footerDiv.style.zIndex = '10000' // Arbitrarily large number
 
         this.displayWordCount();
         this.addVotingButtons();
-        // TODO consider checking if the url has been labeled already, and indicating if so
+
         this.addTextualAnalysisButton();
     }
 

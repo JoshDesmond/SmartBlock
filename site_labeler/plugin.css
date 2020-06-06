@@ -1,0 +1,49 @@
+#labeling-footer-div > * {
+    all: initial;
+}
+
+#labeling-footer-div > p {
+    all: initial;
+    display: block;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    z-index: 10001;
+    color: rgb(220, 220, 220);
+}
+
+#labeling-footer-div {
+    all: initial;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    background-color: black;
+    opacity: 0.85;
+    text-align: center;
+    z-index: 10000;
+    display: block;
+}
+
+#labeling-footer-div > button {
+    font-style: normal;
+    display: inline-block;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: normal;
+    border: 2px solid #9b9b9b;
+    background-color: whitesmoke;
+    padding: 5px 11px;
+    color: #4c4c4c;
+    text-decoration: none;
+    align-items: flex-start;
+    box-sizing: border-box;
+    text-align: center;
+    word-spacing: normal;
+    text-rendering: auto;
+}
