@@ -88,12 +88,21 @@ class Views {
     addVotingButtons() {
         const votes = this._model.getStandardVotingActions();
         for (let action of votes) {
-            console.log(action.toString()); // TEMP
 
             const button = document.createElement('button');
             button.setAttribute("data-action", action);
             button.innerHTML = action;
+            button.style.width = "10em";
             this.footerDiv.appendChild(button);
+            if (action.toString() === "Productive") {
+                button.style.marginLeft = '2em';
+            } else if (action.toString() === "Productive") {
+                button.style.marginRight = '2em';
+            }
+        }
+
+        // Add space in the middle
+        if (votes.length === 4) {
         }
     }
 
