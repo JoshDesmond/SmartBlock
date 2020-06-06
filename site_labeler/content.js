@@ -1,15 +1,13 @@
 /** The program logic for static text analysis & labeling */
 class Model {
 
-
     /**
      * Determines what voting actions are available based on the webpage, its content, and the
      * users settings.
      */
-    getVotingActions() {
-        return ["Very Unproductive", "Unproductive", "Productive", "Very Productive", "N/A"];
+    getStandardVotingActions() {
+        return ["Very Unproductive", "Unproductive", "Productive", "Very Productive"];
     }
-
 
     /**
      * Parse the textual content of the current webpage.
@@ -35,16 +33,9 @@ class Model {
      * @return {Number} The word count of document
      */
     countWords() {
-        const paragraphs = document.getElementsByTagName("p");
-        let wordCount = 0;
-        for (let i = 0; i < paragraphs.length; i++) {
-            let words = paragraphs[i].innerText.split(" ");
-            for (let j = 0; j < words.length; j++) {
-                wordCount++;
-            }
-        }
-
-        return wordCount;
+        const text = this.extractText();
+        const words = text.split(" ");
+        return words.length;
     }
 }
 
@@ -92,7 +83,7 @@ class Views {
      * Adds the voting buttons on the bottom of the page.
      */
     addVotingButtons() {
-        const votes = this._model.getVotingActions();
+        const votes = this._model.getStandardVotingActions();
         for (let action of votes) {
             console.log(action.toString()); // TEMP
 
@@ -118,8 +109,8 @@ class Views {
      * analysis view
      */
     addTextualAnalysisButton() {
-        const ac = new AnalysisController(this._model, this.footerDiv);
-        this.footerDiv.onclick = ac.onClick;
+        const ac = new AnalysisController(this._model);
+        this.footerDiv.onclick = (() => ac.onClick());
     }
 
 }
@@ -130,22 +121,24 @@ class Views {
  */
 class AnalysisController {
 
+    _model;
+
     /**
      * Instantializes the controller for a given model/view
      *
      * @param {!Model} model The model of the web page for analysis
-     * @param {HTMLDivElement} clickable The associated button element
-     * {!TODO <? implements clickable>} how do you make an element work like that?
      */
-    constructor(model, clickable) {
+    constructor(model) {
         console.log(model);
         this._model = model;
+        console.log(this._model);
     }
 
     onClick() {
+        console.log(this);
         console.log(this._model);
-        console.log(this._model.extractText());
         console.log(this._model.extractTitle());
+        console.log(this._model.extractText());
     }
 }
 
