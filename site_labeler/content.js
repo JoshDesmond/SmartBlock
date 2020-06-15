@@ -22,6 +22,15 @@ class Model {
     }
 
     /**
+     * Retrieve the entire HTML of the current webpage
+     * @returns {String} The entire HTML of the webpage
+     */
+    extractFullHTML() {
+        const html = document.getElementsByTagName('html')[0].innerHTML;
+        return html;
+    }
+
+    /**
      * Extracts the title of the current webpage
      * @returns {string}
      */
