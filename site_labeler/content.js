@@ -13,15 +13,6 @@ class Model {
     }
 
     /**
-     * Parse the textual content of the current webpage.
-     * @returns {String} The extracted text of the webpage.
-     */
-    extractText() {
-        const text = document.body.innerText;
-        return text;
-    }
-
-    /**
      * Retrieve the entire HTML of the current webpage
      * @returns {String} The entire HTML of the webpage
      */
@@ -40,19 +31,45 @@ class Model {
     }
 
     /**
+     * Parse the textual content of the current webpage.
+     * @returns {String} The extracted text of the webpage.
+     */
+    extractText() {
+        // TODO FIXME the .innerText doesn't add any textual separation between elements.
+        const text = document.body.innerText;
+        return text;
+    }
+
+    /**
      * TODO how to reference "document" as a link in JavaScriptDocs?
      * Counts how many words there are in the readable text of document
      * @return {Number} The word count of document
      */
     countWords() {
         const text = this.extractText();
-        const words = text.split(" ");
+        // const words = text.split(" "); // TODO temp
+        const words = text.split(/\s+/g);
+        for (const w of words) {
+            console.log(w);
+        }
         return words.length;
     }
 
     /** Toggles the status of whether flags are enabled or not **/
     toggleFlags() {
         this.flags = !this.flags;
+    }
+
+    undoLastVote() {
+        // TODO
+    }
+
+    /**
+     * Handles a voting action either by button or keypress
+     * @param voteNumber Very Unproductive -> 1, Productive -> 2, Very Prod -> 3
+     */
+    handleVote(voteNumber) {
+        // TODO
     }
 }
 
@@ -140,7 +157,7 @@ class Views {
 
 
 /**
- * Controller for the textualAnalysisButton
+ * Controller for the textual analysis action
  */
 class AnalysisController {
 
@@ -191,21 +208,31 @@ const views = new Views(model);
 const ac = new AnalysisController(model, views);
 views.footerDiv.onclick = (() => ac.onClick());
 
-const fc = new FlagsController(model, views);
+const flagsController = new FlagsController(model, views);
 
 // Add hotkeys
 document.onkeyup = function (e) {
-    // TODO switch to case statement?
-    if (e.key === "d") {
-        model.handleVote(window.location.href, model.question, "Not Relevant", false);
-    } else if (e.key === "j") {
-        model.handleVote(window.location.href, model.question, "Slightly Relevant", false);
-    } else if (e.key === "k") {
-        model.handleVote(window.location.href, model.question, "Very Relevant", false);
-    } else if (e.key === "Backspace" || e.key === "Delete") {
-        model.undoLastVote();
-    } else if (e.key === " ") {
-        fc.toggle();
+    switch (e.key) {
+        case 'd':
+            // TODO not sure how this will refactor out in later iterations :/
+            model.handleVote(1);
+            break;
+        case 'f':
+            model.handleVote(2);
+            break;
+        case 'j':
+            model.handleVote(3);
+            break;
+        case 'k':
+            model.handleVote(4);
+            break;
+        case "Backspace":
+        case "Delete":
+            model.undoLastVote();
+            break;
+        case " ":
+            flagsController.toggle();
+            break;
     }
 };
 
