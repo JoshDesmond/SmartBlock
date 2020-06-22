@@ -211,6 +211,12 @@ views.footerDiv.onclick = (() => ac.onClick());
 const flagsController = new FlagsController(model, views);
 
 // Add hotkeys
+window.addEventListener('keydown', function(e) {
+	if(e.keyCode == 32 && e.target == document.body) {
+		e.preventDefault();
+	}
+});
+
 document.onkeyup = function (e) {
 	switch (e.key) {
 		case 'd':
