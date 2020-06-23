@@ -62,6 +62,7 @@ class Model {
 
 	undoLastVote() {
 		// TODO
+		console.log("undo!");
 	}
 
 	/**
@@ -69,6 +70,7 @@ class Model {
 	 * @param voteNumber Very Unproductive -> 1, Productive -> 2, Very Prod -> 3
 	 */
 	handleVote(voteNumber) {
+	    console.log("voting: " + voteNumber);
 		// TODO
 	}
 }
@@ -212,35 +214,38 @@ const flagsController = new FlagsController(model, views);
 
 // Add hotkeys
 window.addEventListener('keydown', function(e) {
-	if(e.keyCode == 32 && e.target == document.body) {
-		e.preventDefault();
+	if (e.target === document.body) {
+		switch (e.key) {
+			case 'd':
+			    e.preventDefault();
+				// TODO not sure how this will refactor out in later iterations :/
+				model.handleVote(1);
+				break;
+			case 'f':
+				e.preventDefault();
+				model.handleVote(2);
+				break;
+			case 'j':
+				e.preventDefault();
+				model.handleVote(3);
+				break;
+			case 'k':
+				e.preventDefault();
+				model.handleVote(4);
+				break;
+			case "Backspace":
+			case "Delete":
+				e.preventDefault();
+				model.undoLastVote();
+				break;
+			case " ":
+				e.preventDefault();
+				flagsController.toggle();
+				break;
+		}
 	}
 });
 
-document.onkeyup = function (e) {
-	switch (e.key) {
-		case 'd':
-			// TODO not sure how this will refactor out in later iterations :/
-			model.handleVote(1);
-			break;
-		case 'f':
-			model.handleVote(2);
-			break;
-		case 'j':
-			model.handleVote(3);
-			break;
-		case 'k':
-			model.handleVote(4);
-			break;
-		case "Backspace":
-		case "Delete":
-			model.undoLastVote();
-			break;
-		case " ":
-			flagsController.toggle();
-			break;
-	}
-};
 
 // Code below from: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 // Select the node that will be observed for mutations
