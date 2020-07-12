@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 
+// Code partially from: https://www.sqlitetutorial.net/sqlite-nodejs/connect/
 let db = new sqlite3.Database(":memory:", function (err) {
     "use strict";
     if (err) {
@@ -25,3 +26,5 @@ db.exec(dbSchema, function (err) {
         console.log(err);
     }
 });
+
+db.close();
