@@ -1,3 +1,5 @@
+'use strict';
+
 /** The program logic for static text analysis & labeling */
 class Model {
 
