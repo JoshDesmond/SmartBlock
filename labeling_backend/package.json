@@ -1,0 +1,19 @@
+{
+  "name": "labeling_backend",
+  "version": "1.0.0",
+  "description": "A web server that hosts endpoints for managing labeled data",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "J. Desmond",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.0"
+  }
+}
