@@ -14,10 +14,22 @@ class Model {
      * Console logs the entire database
      */
     printDatabase() {
-        this.db.all('SELECT * FROM Labels', (err, rows) => {
+        console.log(this.db);
+        this.db.all('SELECT SnapshotId, Url, Title FROM Snapshots', printSnapshots);
+
+        function printSnapshots(err, rows) {
             if (err) console.log(err);
-            else console.log(rows);
-        });
+
+            for (let row of rows) {
+                this.db.get('SELECT * FROM Labels WHERE SnapshotID=?',
+                    [row.SnapshotId], printLabel);
+
+                function printLabel(innerErr, innerRow) {
+                    if (innerErr) console.log(innerErr);
+                    console.log(`URL: ${row.Url}, Label: ${JSON.stringify(innerRow)}`);
+                }
+            }
+        }
     }
 }
 
