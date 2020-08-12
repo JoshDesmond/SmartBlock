@@ -62,6 +62,10 @@
 # Make node binary
 package-lock.json binary
 
+# Database files
+.sqlite binary
+.db binary
+
 # Original Source & Repository available at:
 # https://github.com/alexkaratarakis/gitattributes
 #
