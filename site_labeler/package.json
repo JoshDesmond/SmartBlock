@@ -3,9 +3,10 @@
     "version": "1.0.0",
     "description": "Extension to label the site data that powers SmartBlock",
     "main": "app/content.js",
-    "dependencies": {
+    "devDependencies": {
         "rollup": "^2.23.1",
-        "rollup-plugin-chrome-extension": "^3.3.0"
+        "rollup-plugin-chrome-extension": "^3.3.0",
+		"rollup-plugin-delete": "^2.0.0"
     },
     "scripts": {
         "build": "rollup -c",

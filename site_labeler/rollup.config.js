@@ -2,6 +2,7 @@ import {
     chromeExtension,
     simpleReloader,
 } from 'rollup-plugin-chrome-extension';
+import del from 'rollup-plugin-delete';
 
 /** @noinspection */
 export default {
@@ -13,5 +14,6 @@ export default {
     plugins: [
         chromeExtension(),
         simpleReloader(),
+        del({targets: 'build/*'})
     ],
 }
