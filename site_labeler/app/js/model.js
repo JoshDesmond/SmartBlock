@@ -57,6 +57,7 @@ class Model {
 
     /** Toggles the status of whether flags are enabled or not **/
     toggleFlags() {
+        // TODO implement observable interface and notify views of update
         this.flags = !this.flags;
     }
 
