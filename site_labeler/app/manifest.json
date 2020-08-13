@@ -3,37 +3,23 @@
 	"version": "1.0",
 	"description": "An extension to label data for use in training SmartBlock",
 	"permissions": ["activeTab", "storage", "declarativeContent"],
-	"options_page": "options.html",
-	"options_ui": {
-		"page": "options.html",
-		"open_in_tab": false
-	},
 	"background": {
-		"scripts": ["src/background.js"],
+		"scripts": ["background.js"],
 		"persistent": false
 	},
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
 			"exclude_matches": ["https://en.wikipedia.org/wiki/Main_Page"],
-			"css": ["plugin.css"],
+			"css": ["css/plugin.css"],
 			"js": [
-				"src/content.js"
+				"content.js"
 			]
 		}
 	],
 	"web_accessible_resources": [
-		"plugin.css"
+		"css/plugin.css"
 	],
-	"page_action": {
-		"default_popup": "src/popup.html",
-		"default_icon": {
-			"16": "images/get_started16.png",
-			"32": "images/get_started32.png",
-			"48": "images/get_started48.png",
-			"128": "images/get_started128.png"
-		}
-	},
 	"icons": {
 		"16": "images/get_started16.png",
 		"32": "images/get_started32.png",
