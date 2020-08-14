@@ -1,12 +1,17 @@
-import {ModelState} from "./modelState.js";
+import {ModelState, FLAG_NAMES} from "./modelState.js";
 
 /** The program logic for static text analysis & labeling */
 class Model {
 
     constructor() {
-        this.flags = false;
         this.voteAlreadySubmitted = false;
         this.modelState = new ModelState();
+        this.url = window.location.href;
+        this.domain = new URL(this.url).hostname;
+        // TODO TEMP
+        if (this.url === null) {
+            console.error("URL is null");
+        }
     }
 
     /**
@@ -41,20 +46,28 @@ class Model {
      */
     extractText() {
         // TODO FIXME the .innerText doesn't add any textual separation between elements.
-        const text = document.body.innerText;
-        return text;
+        this.text = document.body.innerText;
+        return this.text;
     }
 
     /**
-     * TODO how to reference "document" as a link in JavaScriptDocs?
      * Counts how many words there are in the readable text of document
      * @return {Number} The word count of document
      */
     countWords() {
         const text = this.extractText();
-        // const words = text.split(" "); // TODO temp
-        const words = text.split(/\s+/g);
-        return words.length;
+        this.words = text.split(/\s+/g);
+        return this.words.length;
+    }
+
+    /** Returns the last/cached result of countWords() */
+    getLatestWordCount() {
+        return this.words.length;
+    }
+
+    /** Returns the last/cached result of extractText() */
+    getLatestTextContent() {
+        return this.text;
     }
 
     /** Toggles the status of whether flags are enabled or not **/
@@ -67,15 +80,47 @@ class Model {
         console.log("undo!");
     }
 
+    /**
+     * Compiles all the necesarry data into a json object that will be submitted to the labeling
+     * backend API.
+     */
+    assembleLabelForSubmission() {
+        const label = {
+            webpage: {
+                url: this.url,
+                domain: this.domain
+            },
+            snapshot: {
+                dateTime: Math.round((new Date()).getTime() / 1000),
+                title: this.extractTitle(),
+                contentRaw: this.getLatestTextContent()
+            },
+            label: {
+                primaryVote: this.modelState.primaryVote,
+                secondaryVote: this.modelState.secondaryVote,
+                isObvious: this.modelState.isObviousState,
+                isAmbiguous: this.modelState.isAmbiguousState,
+                topic: this.modelState.topic
+            },
+            flags: {
+                isVeryAmbiguous: this.modelState.flags[0],
+                isReviewable: this.modelState.flags[1],
+                isNotTextual: this.modelState.flags[2],
+                isInteresting: this.modelState.flags[3]
+            }
+        }
+
+        return label;
+    }
+
     /** Validates the current modelState and submits the vote to the backend. */
     submit() {
         if (this.modelState.isValidForSubmission()) {
             console.log("Submitting Vote!");
-            const data = {url: "Hello.com"};
             fetch('http://localhost:3000/labels', {
                 method: 'POST',
                 mode: 'cors',
-                body: JSON.stringify(data),
+                body: JSON.stringify(this.assembleLabelForSubmission()),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -88,18 +133,6 @@ class Model {
             console.log("Invalid modelState configuration, no vote submitted");
         }
     }
-
-    resetState() {
-        this.modelState.resetState();
-    }
-
-    /**
-     * Handles a voting action either by button or keypress
-     * @param voteNumber Very Unproductive -> 1, Productive -> 2, Very Prod -> 3
-     */
-    handleVote(voteNumber) {
-        this.modelState.handleVote(voteNumber);
-    }
 }
 
-export {Model};
+export {Model, FLAG_NAMES};

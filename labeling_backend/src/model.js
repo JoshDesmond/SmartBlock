@@ -8,6 +8,8 @@ class Model {
 
     doSomething(body) {
         console.log("Here's a body: " + body);
+        console.log(`Body.url: ${body.url}`);
+        console.log(`Body.title: ${body.title}`);
     }
 
     /**

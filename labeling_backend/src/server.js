@@ -21,7 +21,14 @@ app.get('/labels', (request, response) => {
 });
 
 app.post('/labels', (request, response) => {
+	/**
+	 * At the minimum each label requires the following information:
+	 * -- Url, Domain,
+	 * -- DateTime, Title, ContentRaw
+	 * -- PrimaryVote
+	 */
     console.log(`Creating new label with: ${JSON.stringify(request.body)}`);
+    model.doSomething(request.body);
     response.json({
 		status: "success"
 	});

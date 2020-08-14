@@ -22,19 +22,19 @@ class KeydownController {
         switch (e.key) {
             case 'd':
                 e.preventDefault();
-                this.model.handleVote(1);
+                this.model.modelState.handleVote(1);
                 break;
             case 'f':
                 e.preventDefault();
-                this.model.handleVote(2);
+                this.model.modelState.handleVote(2);
                 break;
             case 'j':
                 e.preventDefault();
-                this.model.handleVote(3);
+                this.model.modelState.handleVote(3);
                 break;
             case 'k':
                 e.preventDefault();
-                this.model.handleVote(4);
+                this.model.modelState.handleVote(4);
                 break;
             case "Backspace":
             case "Delete":
@@ -43,31 +43,31 @@ class KeydownController {
                 break;
             case " ":
                 e.preventDefault();
-                this.model.toggleFlags();
+                this.model.modelState.toggleFlags();
                 break;
             case "c":
-                this.model.handleFlag(1);
+                this.model.modelState.handleFlag(0);
                 break;
             case "v":
-                this.model.handleFlag(2);
+                this.model.modelState.handleFlag(1);
                 break;
             case "n":
-                this.model.handleFlag(3);
+                this.model.modelState.handleFlag(2);
                 break;
             case "m":
-                this.model.handleFlag(4);
+                this.model.modelState.handleFlag(3);
                 break;
             case "a":
-                this.model.handleAmbiguous();
+                this.model.modelState.handleAmbiguous();
                 break;
             case ";":
-                this.model.handleObvious();
+                this.model.modelState.handleObvious();
                 break;
             case "Enter":
                 this.model.submit();
                 break;
             case "Escape":
-                this.model.resetState();
+                this.model.modelState.resetState();
                 break;
             default:
                 break;
