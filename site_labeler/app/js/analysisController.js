@@ -20,8 +20,11 @@ class AnalysisController {
     }
 
     analyze() {
+        const lastWordCount = this._model.getLatestWordCount();
         const wordCount = this._model.countWords();
-        this._views.displayWordCount(wordCount);
+        if (lastWordCount !== wordCount) { // Only update if there's been a change
+            this._views.displayWordCount(wordCount);
+        }
     }
 }
 

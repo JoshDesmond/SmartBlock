@@ -27,6 +27,7 @@ let readyForAnalysis = true; // to rate limit analysis
 
 // Callback function to execute when mutations are observed
 const mutationCallback = function (mutationsList, observer) {
+    console.log("Mutation observed, running investigation");
     /** Check the type of mutation to see if there was a childList mutation */
     let wasThereAChildListMutation = false;
     for (const mutation of mutationsList) {
@@ -56,6 +57,9 @@ const mutationCallback = function (mutationsList, observer) {
      * If the analyzed flag is true, (-> analysis was just run), then halt any analysis on this
      * invocation, as running analysis can trigger a mutation in the document and
      * would therefore continue to trigger analysis in an infinite loop.
+     *
+     * // TODO this logic currently prevents every other invocation of analysis, and might
+     * // potentially prevent the last ?
      */
     if (analyzedFlag) {
         console.log("Skipping analysis was just run");
@@ -68,7 +72,7 @@ const mutationCallback = function (mutationsList, observer) {
         readyForAnalysis = false;
     }
     console.log("Running analysis and toggling on the analyzed flag");
-    analyzedFlag = false;
+    analyzedFlag = true;
     ac.analyze();
 };
 
