@@ -1,6 +1,7 @@
 /** The GUI overlay shown when labeling sites */
 class Views {
 
+    /** */
     firstWordCount = true;
 
     /**

@@ -1,5 +1,5 @@
 /**
- * Keylistener for the standard labeling workflow.
+ * Key listener for the standard labeling workflow.
  */
 class KeydownController {
 
