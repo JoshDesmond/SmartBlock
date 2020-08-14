@@ -13,7 +13,7 @@ const ac = new AnalysisController(model, views);
 views.footerDiv.onclick = (() => ac.onClick());
 
 // Add hotkeys
-const keydownController = new KeydownController(model);
+const keydownController = new KeydownController(model, document);
 window.addEventListener('keydown', keydownController);
 
 // Code below from: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver

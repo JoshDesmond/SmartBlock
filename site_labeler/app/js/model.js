@@ -1,8 +1,13 @@
+import {ModelState} from "./modelState.js";
+
 /** The program logic for static text analysis & labeling */
 class Model {
 
-    flags = false;
-    voteAlreadySubmitted = false;
+    constructor() {
+        this.flags = false;
+        this.voteAlreadySubmitted = false;
+        this.modelState = new ModelState();
+    }
 
     /**
      * Determines what voting actions are available based on the webpage, its content, and the
@@ -49,16 +54,12 @@ class Model {
         const text = this.extractText();
         // const words = text.split(" "); // TODO temp
         const words = text.split(/\s+/g);
-        for (const w of words) {
-            console.log(w);
-        }
         return words.length;
     }
 
     /** Toggles the status of whether flags are enabled or not **/
     toggleFlags() {
-        // TODO implement observable interface and notify views of update
-        this.flags = !this.flags;
+        this.modelState.toggleFlags();
     }
 
     undoLastVote() {
@@ -66,13 +67,33 @@ class Model {
         console.log("undo!");
     }
 
+    /** Validates the current modelState and submits the vote to the backend. */
+    submit() {
+        if (this.modelState.isValidForSubmission()) {
+            console.log("Submitting Vote!");
+            const data = { url: "Hello.com"};
+            fetch('http://localhost:3000/labels', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json());
+        } else {
+            console.log("Invalid modelState configuration, no vote submitted");
+        }
+    }
+
+    resetState() {
+        this.modelState.resetState();
+    }
+
     /**
      * Handles a voting action either by button or keypress
      * @param voteNumber Very Unproductive -> 1, Productive -> 2, Very Prod -> 3
      */
     handleVote(voteNumber) {
-        console.log("voting: " + voteNumber);
-        // TODO
+        this.modelState.handleVote(voteNumber);
     }
 }
 

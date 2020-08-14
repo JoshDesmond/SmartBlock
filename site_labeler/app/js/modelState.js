@@ -45,7 +45,7 @@ class ModelState {
      *
      * @param {number} vote The value of the vote, must be between 1 and 4
      **/
-    handleVote(vote){
+    handleVote(vote) {
         if (vote < 1 || vote > 4) {
             throw RangeError(`Illegal vote value ${vote} given`);
         }
@@ -59,10 +59,36 @@ class ModelState {
         this.update();
     }
 
+
+    /**
+     * Toggles the status of flag-mode. Flag mode allows for the setting of flags
+     * and for secondary voting
+     */
+    toggleFlags() {
+        this.flagState = !this.flagState;
+        this.update();
+    }
+
+    /**
+     * @return true if a primary vote has been submitted and there is no illegal configuration
+     */
+    isValidForSubmission() {
+        if (this.primaryVote === null) return false;
+        if (this.secondaryVote === this.primaryVote) return false;
+        if (this.isAmbiguousState && this.isObviousState) return false;
+
+        return true;
+    }
+
     /** Notify all observers of a change */
     update() {
         for (let observer of this.observers) {
             observer.update();
         }
+
+        console.log("Updating");
+        console.log(this);
     }
 }
+
+export {ModelState};

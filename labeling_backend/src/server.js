@@ -5,17 +5,19 @@ import bodyParser from 'body-parser';
 // Configure Express
 const app = express();
 const port = 3000;
-app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(express.json({ limit: '1mb' }));
+app.use(bodyParser.json());
 
 // Create Model object
 const model = new Model();
 
 // Configure endpoints
 app.post('labels', (request, response) => {
-    console.log(`Creating new label with url: ${request.body.url}`);
-    console.log(request.body);
-    model.doSomething(request.body);
-    response.json(request.body);
+    console.log(`Creating new label with: ${request.body}`);
+    response.json({
+		status: "success"
+	});
 });
 
 // Launch Server
@@ -28,4 +30,4 @@ function printDatabase() {
     model.printDatabase();
 }
 
-printDatabase();
+// printDatabase();
