@@ -12,9 +12,16 @@ app.use(bodyParser.json());
 // Create Model object
 const model = new Model();
 
+
 // Configure endpoints
-app.post('labels', (request, response) => {
-    console.log(`Creating new label with: ${request.body}`);
+app.get('/labels', (request, response) => {
+	response.json({
+		status: "successsss"
+	})
+});
+
+app.post('/labels', (request, response) => {
+    console.log(`Creating new label with: ${JSON.stringify(request.body)}`);
     response.json({
 		status: "success"
 	});
