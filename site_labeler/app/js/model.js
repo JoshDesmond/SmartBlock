@@ -71,14 +71,19 @@ class Model {
     submit() {
         if (this.modelState.isValidForSubmission()) {
             console.log("Submitting Vote!");
-            const data = { url: "Hello.com"};
+            const data = {url: "Hello.com"};
             fetch('http://localhost:3000/labels', {
                 method: 'POST',
+                mode: 'cors',
                 body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(response => response.json());
+            }).then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => {
+                    console.error('Error: ', error);
+                })
         } else {
             console.log("Invalid modelState configuration, no vote submitted");
         }
