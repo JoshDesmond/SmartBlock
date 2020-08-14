@@ -81,7 +81,7 @@ class Model {
     }
 
     /**
-     * Compiles all the necesarry data into a json object that will be submitted to the labeling
+     * Compiles all the necessary data into a json object that will be submitted to the labeling
      * backend API.
      */
     assembleLabelForSubmission() {
@@ -100,7 +100,7 @@ class Model {
                 secondaryVote: this.modelState.secondaryVote,
                 isObvious: this.modelState.isObviousState,
                 isAmbiguous: this.modelState.isAmbiguousState,
-                topic: this.modelState.topic
+                topic: null
             },
             flags: {
                 isVeryAmbiguous: this.modelState.flags[0],

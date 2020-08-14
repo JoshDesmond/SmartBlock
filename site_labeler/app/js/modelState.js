@@ -103,10 +103,20 @@ class ModelState {
         return true;
     }
 
-    /** Notify all observers of a change */
+    /**
+     * Registers a new observer to be notified on all update actions.
+     *
+     * @param observer An object which implements the notify() method, called any time the model
+     * updates
+     */
+    registerObserver(observer) {
+        this.observers.push(observer);
+    }
+
+    /** Notify all observers of a change by calling their notify() method's*/
     update() {
         for (let observer of this.observers) {
-            observer.update();
+            observer.notify();
         }
 
         console.log("Updating");

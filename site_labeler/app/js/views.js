@@ -10,6 +10,7 @@ class Views {
      */
     constructor(model) {
         this._model = model;
+        this._model.modelState.registerObserver(this);
         this.footerDiv = document.createElement('div');
         document.body.appendChild(this.footerDiv);
 
@@ -60,16 +61,44 @@ class Views {
         }
     }
 
+    repaintModel() {
+        this.repaintFlagState();
+        this.repaintSelectedVote();
+        this.repaintCertaintyToggle();
+    }
 
-    /** Updates the display of the footer to reflect the state of the model */
-    repaintFlags() {
-        if (this._model.flags === true) {
+    /**
+     * Updates the display of the footer to reflect the current status of whether or not flags
+     * are selected.
+     * */
+    repaintFlagState() {
+        // TODO
+        if (this._model.modelState.flagState) {
             this.footerDiv.style.backgroundColor = 'red';
         } else {
             this.footerDiv.style.backgroundColor = 'black';
         }
     }
 
+    /**
+     * Updates the display of the footer to reflect the currently selected vote
+     */
+    repaintSelectedVote() {
+        // TODO
+    }
+
+    /**
+     * Updates the display of the footer to reflect whether isObvious or isAmbiguous is toggled.
+     */
+    repaintCertaintyToggle() {
+        // TODO
+        if (this._model.modelState.isAmbiguousState) {
+
+        } else if (this._model.modelState.isObviousState) {
+
+        }
+
+    }
 
     /**
      * Adds an action to the to the footer for navigating to the textual
@@ -78,6 +107,14 @@ class Views {
     addTextualAnalysisButton() {
 
     }
+
+    /**
+     * Called by the model any time there is an observable state change.
+     */
+    notify() {
+        this.repaintModel();
+    }
+
 
 }
 
