@@ -51,7 +51,8 @@ class Views {
 
             const button = document.createElement('button');
             this.votingButtons.push(button);
-            button.setAttribute("data-action", action);
+            // TODO delete this?
+            // button.setAttribute("data-action", action);
             button.innerHTML = action;
             button.style.width = "10em";
             this.footerDiv.appendChild(button);
@@ -61,6 +62,21 @@ class Views {
                 button.style.marginRight = '2em';
             }
         }
+
+        this.isAmbiguousButton = document.createElement('button');
+        this.isAmbiguousButton.innerHTML = "Ambiguous";
+        this.isAmbiguousButton.style.width = "fit-content";
+        this.isAmbiguousButton.style.position = "absolute";
+        this.isAmbiguousButton.style.left = "0px";
+        this.isAmbiguousButton.style.height = "100%";
+        this.footerDiv.insertBefore(this.isAmbiguousButton, this.votingButtons[0]);
+        this.isObviousButton = document.createElement('button');
+        this.isObviousButton.innerHTML = "Obvious";
+        this.isObviousButton.style.width = "fit-content";
+        this.isObviousButton.style.position = "absolute";
+        this.isObviousButton.style.right = "0px";
+        this.isObviousButton.style.height = "100%";
+        this.footerDiv.appendChild(this.isObviousButton);
     }
 
     repaintModel() {
@@ -128,13 +144,13 @@ class Views {
      * Updates the display of the footer to reflect whether isObvious or isAmbiguous is toggled.
      */
     repaintCertaintyToggle() {
-        // TODO
+        this._resetButton(this.isObviousButton);
+        this._resetButton(this.isAmbiguousButton);
         if (this._model.modelState.isAmbiguousState) {
-
+            this._enableButton(this.isAmbiguousButton);
         } else if (this._model.modelState.isObviousState) {
-
+            this._enableButton(this.isObviousButton);
         }
-
     }
 
     /**
