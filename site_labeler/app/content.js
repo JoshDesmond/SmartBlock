@@ -13,7 +13,7 @@ const ac = new AnalysisController(model, views);
 views.footerDiv.onclick = (() => ac.onClick());
 
 // Add hotkeys
-const keydownController = new KeydownController(model, document);
+const keydownController = new KeydownController(model);
 window.addEventListener('keydown', keydownController);
 
 // Observe the document for mutations, and trigger analysis on mutation
@@ -27,6 +27,10 @@ let readyForAnalysis = true; // to rate limit analysis
 
 // Callback function to execute when mutations are observed
 const mutationCallback = function (mutationsList, observer) {
+    /**
+     * TODO create a method that causes the cessation of analysis
+     */
+
     console.log("Mutation observed, running investigation");
     /** Check the type of mutation to see if there was a childList mutation */
     let wasThereAChildListMutation = false;
@@ -36,9 +40,19 @@ const mutationCallback = function (mutationsList, observer) {
         }
     }
     if (wasThereAChildListMutation === false) {
+        console.log("False alarm");
         return;
     } else {
         console.log("There was a childList mutation"); // TODO temp
+    }
+
+    if (model.getLatestWordCount() > model.MAX_WORDS) {
+        console.log("Maxwords already reached, halting analysis");
+        return;
+    }
+
+    if (model.voteAlreadySubmitted) {
+        console.log("Vote already submitted, halting analysis")
     }
 
     /**

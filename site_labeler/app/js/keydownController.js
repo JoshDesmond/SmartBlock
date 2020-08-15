@@ -6,11 +6,9 @@ class KeydownController {
     /**
      * Creates a keydown event handler/listener
      * @param {Model} model
-     * @param {Document} document Document which listener is listening for
      */
-    constructor(model, document) {
+    constructor(model) {
         this.model = model;
-        this.document = document;
     }
 
     /** Event listener for the window 'keydown' event. */

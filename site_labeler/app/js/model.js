@@ -3,6 +3,8 @@ import {ModelState, FLAG_NAMES} from "./modelState.js";
 /** The program logic for static text analysis & labeling */
 class Model {
 
+    MAX_WORDS = 1500;
+
     constructor() {
         this.voteAlreadySubmitted = false;
         this.modelState = new ModelState();
@@ -129,6 +131,10 @@ class Model {
                 .catch(error => {
                     console.error('Error: ', error);
                 })
+
+            // TODO trigger a toast
+            this.voteAlreadySubmitted = true;
+
         } else {
             console.log("Invalid modelState configuration, no vote submitted");
         }

@@ -1,3 +1,4 @@
+// TODO refactor to model? (Because the other constant is there?)
 const FLAG_NAMES = ["isVeryAmbiguous", "isReviewable", "isNotTextual", "isInteresting"]
 
 /**
