@@ -12,17 +12,17 @@ class ModelState {
     flags = [false, false, false, false];
     /** True when the isObvious toggle is enabled. Exclusive in relation to isAmbiguousState. */
     isObviousState = false;
-    /** True when the isAmbigious toggle is enabled. Exclusive in relation to isObviousState. */
+    /** True when the isAmbiguous toggle is enabled. Exclusive in relation to isObviousState. */
     isAmbiguousState = false;
-    primaryVote;
+    primaryVote = null;
     /** Optional */
-    secondaryVote;
+    secondaryVote = null;
     /** List of observers to notify on update */
     observers;
 
 
     constructor() {
-        this.observers = new Array();
+        this.observers = [];
     }
 
     /** Clears any votes and disables all flags */
