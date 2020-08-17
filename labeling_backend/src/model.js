@@ -6,10 +6,55 @@ class Model {
         this.db = new sqlite3.Database('labels.sqlite');
     }
 
-    doSomething(body) {
-        console.log("Here's a body: " + body);
-        console.log(`Body.url: ${body.url}`);
-        console.log(`Body.title: ${body.title}`);
+    /**
+     *
+     * @param webpage JSON object with fields url and domain
+     */
+    createWebpage(webpage) {
+
+        const sqlString = `INSERT INTO Webpages(Url, Domain)
+                           VALUES (?, ?)`;
+
+        this.db.run(sqlString, [webpage.url, webpage.domain], (err) => {
+            if (err) {
+                console.log(err.message);
+            }
+
+            return webpage.url;
+            // TODO return url
+        });
+
+    }
+
+    /**
+     *
+     * @param url of the website
+     * @param snapshot JSON object with fields dateTime, title, contentRaw
+     */
+    createSnapshot(snapshot, url) {
+        const sqlString = `INSERT INTO Snapshots(Url, DateTime, Title, ContentRaw)
+                           VALUES (?, ?, ?, ?)`;
+        const params = [url, snapshot.dateTime, snapshot.title, snapshot.contentRaw];
+        this.db.run(sqlString, params, (err) => {
+            if (err) {
+                console.log(err.message);
+            }
+
+            // TODO log status, return snapshotId
+        });
+    }
+
+    createLabel(label, snapshotId) {
+        // TODO
+        const sqlString = `INSERT INTO Labels(PrimaryVote, SecondaryVote, IsObvious,
+                                              IsAmbiguous, Topic, SnapshotId)
+                           VALUES (?, ?, ?, ?, ?, ?)`;
+        const params = []
+
+    }
+
+    createFlags() {
+
     }
 
     /**

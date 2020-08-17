@@ -21,16 +21,17 @@ app.get('/labels', (request, response) => {
 });
 
 app.post('/labels', (request, response) => {
-	/**
-	 * At the minimum each label requires the following information:
-	 * -- Url, Domain,
-	 * -- DateTime, Title, ContentRaw
-	 * -- PrimaryVote
-	 */
     console.log(`Creating new label with: ${JSON.stringify(request.body)}`);
-    model.doSomething(request.body);
+    const url = model.createWebpage(request.body.webpage);
+    const snapshotId = model.createSnapshot(request.body.snapshot, url);
+    const labelId = model.createLabel(request.body.label, snapshotId);
+    const flagsId = model.createFlags();
     response.json({
-		status: "success"
+		status: "success",
+        url: url,
+        snapshotId: snapshotId,
+        labelId: labelId,
+        flagsId: flagsId
 	});
 });
 
