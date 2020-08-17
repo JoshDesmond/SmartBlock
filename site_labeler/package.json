@@ -6,7 +6,7 @@
     "devDependencies": {
         "rollup": "^2.23.1",
         "rollup-plugin-chrome-extension": "^3.3.0",
-		"rollup-plugin-delete": "^2.0.0"
+        "rollup-plugin-delete": "^2.0.0"
     },
     "scripts": {
         "build": "rollup -c",
