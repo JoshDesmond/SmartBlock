@@ -20,25 +20,23 @@ app.get('/labels', (request, response) => {
 	})
 });
 
+
+/**
+ * Posts a new website/snapshot/label to the database
+ */
 app.post('/labels', (request, response) => {
-    console.log(`Creating new label with: ${JSON.stringify(request.body)}`);
-    const url = model.createWebpage(request.body.webpage);
-    const snapshotId = model.createSnapshot(request.body.snapshot, url);
-    const labelId = model.createLabel(request.body.label, snapshotId);
-    const flagsId = model.createFlags();
-    response.json({
-		status: "success",
-        url: url,
-        snapshotId: snapshotId,
-        labelId: labelId,
-        flagsId: flagsId
-	});
+    console.log(`Post received with webpage.url === ${JSON.stringify(request.body.webpage.url)}`)
+    console.log("response");
+    console.log(response);
+    model.postSnapshotLabel(request.body, response);
 });
 
 // Launch Server
 app.listen(port, () => {
     console.log(`Launching server on port ${port}`);
 });
+
+model.clearDatabase();
 
 // model.printDatabase();
 
