@@ -20,6 +20,8 @@ app.get('/labels', (request, response) => {
 	})
 });
 
+// TODO create a get endpoint for extracting relevant information to a url
+
 
 /**
  * Posts a new website/snapshot/label to the database

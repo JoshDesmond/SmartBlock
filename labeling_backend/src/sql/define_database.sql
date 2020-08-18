@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS Labels(
     IsAmbiguous INTEGER DEFAULT 0, --Boolean
     Topic VARCHAR, --Optional
     SnapshotId INTEGER NOT NULL,
+    UserId INTEGER NOT NULL,
+    FOREIGN KEY (UserId) REFERENCES Users(UserId),
     FOREIGN KEY (SnapshotId) REFERENCES Snapshots(SnapshotId),
     CHECK (PrimaryVote <= 4 AND
            SecondaryVote <= 4 AND
@@ -29,14 +31,22 @@ CREATE TABLE IF NOT EXISTS Labels(
 
 CREATE TABLE IF NOT EXISTS Flags(
     FlagsId INTEGER PRIMARY KEY,
-    IsVeryAmbiguous INTEGER DEFAULT 0, --Boolean
+    IsDynamicContent INTEGER DEFAULT 0, --Boolean
     IsReviewable INTEGER DEFAULT 0, --Boolean
     IsNotTextual INTEGER DEFAULT 0, --Boolean
     IsInteresting INTEGER DEFAULT 0, --Boolean
     Url VARCHAR NOT NULL,
+    UserId INTEGER NOT NULL,
+    FOREIGN KEY (UserId) REFERENCES Users(UserId),
     FOREIGN KEY (Url) REFERENCES Webpages(Url),
-    CHECK (IsVeryAmbiguous <= 1 AND
+    CHECK (IsDynamicContent <= 1 AND
            IsReviewable <= 1 AND
            IsNotTextual <= 1 AND
            IsInteresting <= 1)
+);
+
+CREATE TABLE IF NOT EXISTS Users(
+    -- TODO research how to securely handle a users/userid table
+    UserId INTEGER PRIMARY KEY,
+    Username VARCHAR NOT NULL UNIQUE
 );
