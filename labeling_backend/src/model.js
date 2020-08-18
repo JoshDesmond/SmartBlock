@@ -1,5 +1,6 @@
 import sqlite3 from 'sqlite3';
 
+
 class Model {
     constructor() {
         console.log("Constructing a model, hello world!");
@@ -10,6 +11,7 @@ class Model {
     postSnapshotLabel(data, response) {
         const url = data.webpage.url;
         this.createWebpage(data.webpage);
+        // TODO convert this to use promises or something, (nested callbacks are ugly).
         this.createSnapshot(data.snapshot, url, (snapshotId) => {
             this.createLabel(data.label, snapshotId, (labelId) => {
                 const responseJSON = {
@@ -95,6 +97,7 @@ class Model {
 
     /**
      * Console logs the entire database
+     * @deprecated TODO clean this up into something useful or delete it
      */
     printDatabase() {
         console.log(this.db);

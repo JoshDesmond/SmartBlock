@@ -25,9 +25,9 @@ app.get('/labels', (request, response) => {
  * Posts a new website/snapshot/label to the database
  */
 app.post('/labels', (request, response) => {
+    // TODO separate out the labels endpoint from the snapshot/webpage endpoint
+    // TODO also create an endpoint for flags
     console.log(`Post received with webpage.url === ${JSON.stringify(request.body.webpage.url)}`)
-    console.log("response");
-    console.log(response);
     model.postSnapshotLabel(request.body, response);
 });
 
@@ -36,7 +36,7 @@ app.listen(port, () => {
     console.log(`Launching server on port ${port}`);
 });
 
-model.clearDatabase();
+// model.clearDatabase();
 
 // model.printDatabase();
 
