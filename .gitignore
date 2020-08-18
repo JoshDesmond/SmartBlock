@@ -30,6 +30,10 @@ Thumbs.db
 # Logs
 *.log
 
+# Database
+.db
+.sqlite
+
 #======================
 #==== Editor Files ====
 #======================
@@ -44,7 +48,6 @@ local.properties
 # !.vscode/launch.json
 # !.vscode/extensions.json
 
-# 
 
 #======================
 #==== Build Files =====
