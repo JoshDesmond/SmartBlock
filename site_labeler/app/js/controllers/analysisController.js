@@ -1,5 +1,5 @@
 /**
- * Controller for the textual analysis action
+ * Controller for providing additional textual analysis action
  */
 class AnalysisController {
 

@@ -1,5 +1,6 @@
 /**
  * Key listener for the standard labeling workflow.
+ * @implements {EventListenerObject}
  */
 class KeydownController {
 

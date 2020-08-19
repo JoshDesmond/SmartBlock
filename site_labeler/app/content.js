@@ -1,14 +1,21 @@
 'use strict';
 
 import {Model, FLAG_NAMES} from './js/model.js';
-import {Views} from "./js/views.js";
-import {KeydownController} from './js/keydownController.js';
-import {AnalysisController} from "./js/analysisController.js";
+import {Views} from './js/views.js';
+import {KeydownController} from './js/controllers/keydownController.js';
+import {AnalysisController} from './js/controllers/analysisController.js';
+import {VoteController} from './js/controllers/voteController.js'
 
 const model = new Model();
 const views = new Views(model);
 
 // Add controllers
+views.votingButtons.forEach((button, index) => {
+    button.addEventListener('click', new VoteController(model, index));
+});
+
+views.
+
 const ac = new AnalysisController(model, views);
 views.footerDiv.onclick = (() => ac.onClick());
 
@@ -29,6 +36,7 @@ let readyForAnalysis = true; // to rate limit analysis
 const mutationCallback = function (mutationsList, observer) {
     /**
      * TODO create a method that causes the cessation of analysis
+     * TODO refactor into controller
      */
 
     console.log("Mutation observed, running investigation");

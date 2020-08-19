@@ -3,6 +3,8 @@ class Views {
 
     /** */
     firstWordCount = true;
+    /** @type {HTMLButtonElement[]} Access to the four likert scale voting buttons */
+    votingButtons;
 
     /**
      * Creates a new View and appends the GUI to the tab associated with this script
@@ -63,6 +65,7 @@ class Views {
             }
         }
 
+        // TODO how to refactor this into a separate .html file and reference it?
         this.isAmbiguousButton = document.createElement('button');
         this.isAmbiguousButton.innerHTML = "Ambiguous";
         this.isAmbiguousButton.style.width = "fit-content";
