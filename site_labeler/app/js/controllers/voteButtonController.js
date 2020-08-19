@@ -4,7 +4,7 @@ import {Model} from "../model.js";
  * Key listener for the standard labeling workflow.
  * @implements {EventListenerObject}
  */
-export class VoteController {
+export class VoteButtonController {
 
     /** @type {Number} */
     value;

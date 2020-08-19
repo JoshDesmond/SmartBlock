@@ -2,7 +2,7 @@
  * Key listener for the standard labeling workflow.
  * @implements {EventListenerObject}
  */
-class KeydownController {
+export class KeydownController {
 
     /**
      * Creates a keydown event handler/listener
@@ -73,5 +73,3 @@ class KeydownController {
         }
     }
 }
-
-export {KeydownController};

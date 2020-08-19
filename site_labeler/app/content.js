@@ -4,17 +4,18 @@ import {Model, FLAG_NAMES} from './js/model.js';
 import {Views} from './js/views.js';
 import {KeydownController} from './js/controllers/keydownController.js';
 import {AnalysisController} from './js/controllers/analysisController.js';
-import {VoteController} from './js/controllers/voteController.js'
+import {VoteButtonController} from './js/controllers/voteButtonController.js'
 
 const model = new Model();
 const views = new Views(model);
 
 // Add controllers
 views.votingButtons.forEach((button, index) => {
-    button.addEventListener('click', new VoteController(model, index));
+    button.addEventListener('click', new VoteButtonController(model, index));
 });
 
-views.
+views.otherButtons.forEach();
+
 
 const ac = new AnalysisController(model, views);
 views.footerDiv.onclick = (() => ac.onClick());

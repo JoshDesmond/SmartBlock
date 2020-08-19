@@ -21,7 +21,6 @@ class Model {
                     labelId: labelId,
                 };
 
-                console.log(response);
                 response.json(responseJSON);
             });
         });

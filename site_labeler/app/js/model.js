@@ -3,7 +3,9 @@ import {ModelState, FLAG_NAMES} from "./modelState.js";
 /** The program logic for static text analysis & labeling */
 class Model {
 
+    /** @type {Number} The maximum number of words that will be analyzed on a given page */
     MAX_WORDS = 1500;
+    voteAlreadySubmitted = false;
 
     constructor() {
         this.voteAlreadySubmitted = false;

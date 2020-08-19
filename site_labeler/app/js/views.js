@@ -5,6 +5,8 @@ class Views {
     firstWordCount = true;
     /** @type {HTMLButtonElement[]} Access to the four likert scale voting buttons */
     votingButtons;
+    /** @type {HTMLButtonElement[]} Buttons for isAmbiguous, isObvious, and flags */
+    otherButtons;
 
     /**
      * Creates a new View and appends the GUI to the tab associated with this script
@@ -13,7 +15,7 @@ class Views {
     constructor(model) {
         this._model = model;
         this._model.modelState.registerObserver(this);
-        this.footerDiv = document.createElement('div');
+        this.footerDiv = document.createElement('div'); // TODO refactor to html
         document.body.appendChild(this.footerDiv);
 
         // Extra styling TODO validate CSS here?
@@ -22,6 +24,7 @@ class Views {
 
         this.displayWordCount(this._model.countWords());
         this.votingButtons = [];
+        this.otherButtons = [];
         this.addVotingButtons();
 
         this.addTextualAnalysisButton();
@@ -65,6 +68,11 @@ class Views {
             }
         }
 
+
+    }
+
+    /** Adds the isObvious and isAmbiguous buttons to the UI */
+    addCertaintyButtons() {
         // TODO how to refactor this into a separate .html file and reference it?
         this.isAmbiguousButton = document.createElement('button');
         this.isAmbiguousButton.innerHTML = "Ambiguous";
@@ -72,6 +80,7 @@ class Views {
         this.isAmbiguousButton.style.position = "absolute";
         this.isAmbiguousButton.style.left = "0px";
         this.isAmbiguousButton.style.height = "100%";
+        this.isAmbiguousButton.setAttribute("data-action", 'isAmbiguous');
         this.footerDiv.insertBefore(this.isAmbiguousButton, this.votingButtons[0]);
         this.isObviousButton = document.createElement('button');
         this.isObviousButton.innerHTML = "Obvious";
@@ -79,7 +88,11 @@ class Views {
         this.isObviousButton.style.position = "absolute";
         this.isObviousButton.style.right = "0px";
         this.isObviousButton.style.height = "100%";
+        this.isObviousButton.setAttribute("data-action", 'isObvious');
         this.footerDiv.appendChild(this.isObviousButton);
+
+        this.otherButtons.push(this.isAmbiguousButton);
+        this.otherButtons.push(this.isObviousButton);
     }
 
     repaintModel() {

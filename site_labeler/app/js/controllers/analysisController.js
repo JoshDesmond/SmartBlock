@@ -1,7 +1,9 @@
 /**
- * Controller for providing additional textual analysis action
+ * Controller for providing additional an textual analysis action (– for checking what text is
+ * being extracted).
+ * @implements {EventListenerObject}
  */
-class AnalysisController {
+export class AnalysisController {
 
     /**
      * Instantializes the controller for a given model/view
@@ -14,9 +16,10 @@ class AnalysisController {
         this._views = views;
     }
 
-    onClick() {
+    handleEvent(evt) {
         console.log(this._model.extractTitle());
         console.log(this._model.extractText());
+        this.analyze();
     }
 
     analyze() {
@@ -27,5 +30,3 @@ class AnalysisController {
         }
     }
 }
-
-export {AnalysisController};
