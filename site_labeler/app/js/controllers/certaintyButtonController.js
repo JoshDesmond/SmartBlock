@@ -18,11 +18,21 @@ export class CertaintyButtonController {
     }
 
 
+    /**
+     * Handles on click events for the certainty and flag buttons
+     * @param {Event} e
+     */
     handleEvent(e) {
-        // TODO how to reference the data-action attribute of the event target?
         // this.isObviousButton.setAttribute("data-action", 'isObvious');
-        if (e.target) {} // ...
-        this._model.modelState.handleAmbiguous();
-        this._model.modelState.handleObvious();
+        /** @type {HTMLButtonElement} */
+        const button = e.target;
+        switch (button.getAttribute('data-action')) {
+            case 'isObvious':
+                this._model.modelState.handleObvious();
+                break;
+            case 'isAmbiguous':
+                this._model.modelState.handleAmbiguous();
+                break;
+        }
     }
 }

@@ -26,7 +26,13 @@ class Views {
         this.votingButtons = [];
         this.otherButtons = [];
         this.addVotingButtons();
-
+        this.addCertaintyButtons();
+        this.votingButtons.forEach((button) => {
+            button.setAttribute('class', "footerButton");
+        });
+        this.otherButtons.forEach((button) => {
+            button.setAttribute('class', "footerButton");
+        });
         this.addTextualAnalysisButton();
     }
 

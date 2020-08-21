@@ -5,6 +5,7 @@ import {Views} from './js/views.js';
 import {KeydownController} from './js/controllers/keydownController.js';
 import {AnalysisController} from './js/controllers/analysisController.js';
 import {VoteButtonController} from './js/controllers/voteButtonController.js'
+import {CertaintyButtonController} from "./js/controllers/certaintyButtonController";
 
 const model = new Model();
 const views = new Views(model);
@@ -14,11 +15,14 @@ views.votingButtons.forEach((button, index) => {
     button.addEventListener('click', new VoteButtonController(model, index));
 });
 
-views.otherButtons.forEach();
+views.otherButtons.forEach((button) => {
+    button.addEventListener('click', new CertaintyButtonController(model));
+});
 
 
+// TODO figure out what you want to do with this analysis controller thingy
 const ac = new AnalysisController(model, views);
-views.footerDiv.onclick = (() => ac.onClick());
+// views.footerDiv.onclick = (() => ac.onClick());
 
 // Add hotkeys
 const keydownController = new KeydownController(model);

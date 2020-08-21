@@ -14,8 +14,8 @@ export class KeydownController {
 
     /** Event listener for the window 'keydown' event. */
     handleEvent(e) {
-        if (e.target !== document.body) {
-            return
+        if (e.target !== document.body && e.target.getAttribute('class') !== "footerButton") {
+            return;
         }
 
         switch (e.key) {
