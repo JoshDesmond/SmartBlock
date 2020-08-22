@@ -33,6 +33,15 @@ app.post('/labels', (request, response) => {
     model.postSnapshotLabel(request.body, response);
 });
 
+/**
+ * Endpoint for posting an undo request. Data submitted must be a label that was already submitted.
+ */
+app.post('/undo', (request, response) => {
+    console.log(`Post for undo received with webpage.url === ${JSON.stringify(request.body.webpage.url)}`);
+    model.undoLabel(request.body, response);
+});
+
+
 // Launch Server
 app.listen(port, () => {
     console.log(`Launching server on port ${port}`);

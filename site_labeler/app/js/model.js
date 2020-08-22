@@ -6,6 +6,8 @@ class Model {
     /** @type {Number} The maximum number of words that will be analyzed on a given page */
     MAX_WORDS = 1500;
     voteAlreadySubmitted = false;
+    /** @type {} */
+    _submittedLabel;
 
     constructor() {
         this.voteAlreadySubmitted = false;
@@ -79,10 +81,7 @@ class Model {
         this.modelState.toggleFlags();
     }
 
-    undoLastVote() {
-        // TODO
-        console.log("undo!");
-    }
+
 
     /**
      * Compiles all the necessary data into a json object that will be submitted to the labeling
@@ -121,10 +120,12 @@ class Model {
     submit() {
         if (this.modelState.isValidForSubmission()) {
             console.log("Submitting Vote!");
+            this._submittedLabel = this.assembleLabelForSubmission();
+            this.voteAlreadySubmitted = true;
             fetch('http://localhost:3000/labels', {
                 method: 'POST',
                 mode: 'cors',
-                body: JSON.stringify(this.assembleLabelForSubmission()),
+                body: JSON.stringify(this._submittedLabel),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -132,14 +133,42 @@ class Model {
                 .then(data => console.log(data))
                 .catch(error => {
                     console.error('Error: ', error);
+                    this.voteAlreadySubmitted = false;
+                    this._submittedLabel = null;
                 })
 
             // TODO trigger a toast
-            this.voteAlreadySubmitted = true;
 
         } else {
             console.log("Invalid modelState configuration, no vote submitted");
         }
+    }
+
+    /** Sends a request to the backend to undo the last vote and updates model accordingly */
+    undoLastVote() {
+        if (this._submittedLabel === null || this.voteAlreadySubmitted !== true) {
+            console.log("A vote does not appear to have been submitted, ignoring undo input");
+            return;
+        }
+
+        fetch('http://localhost:3000/undo', {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(this._submittedLabel),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this._submittedLabel = null;
+                this.voteAlreadySubmitted = false;
+                // TODO toast
+            })
+            .catch(error => {
+                console.error(error);
+                // TODO error toast
+            })
     }
 }
 

@@ -12,6 +12,7 @@ class Model {
         const url = data.webpage.url;
         this.createWebpage(data.webpage);
         // TODO convert this to use promises or something, (nested callbacks are ugly).
+        // TODO create flags
         this.createSnapshot(data.snapshot, url, (snapshotId) => {
             this.createLabel(data.label, snapshotId, (labelId) => {
                 const responseJSON = {
@@ -24,6 +25,92 @@ class Model {
                 response.json(responseJSON);
             });
         });
+    }
+
+    /**
+     * Handles the undo route with a passed in snapshotLabel as data.
+     * @param data
+     * @param response
+     */
+    undoLabel(data, response) {
+        // Need to SELECT and retrieve snapshotId - that, along with the url, is enough to
+        // delete the entries
+        const sqlSnapshotString = `DELETE
+                                   FROM Snapshots
+                                   WHERE SnapshotId = ?`
+        const sqlLabelString = `DELETE
+                                FROM Labels
+                                WHERE SnapshotId = ?`
+
+        // The SnapshotId, once retrieved, is enough to delete the Label and Snapshot entries
+        this.getSnapshotIdOfData(data, (snapshotId) => {
+            this.db.run(sqlSnapshotString, [snapshotId], function (err) {
+                if (err) return console.error(err.message);
+            });
+            this.db.run(sqlLabelString, [snapshotId], function (err) {
+                if (err) return console.error(err.message);
+            })
+
+            const sqlWebpagesString = `DELETE FROM Webpages WHERE Url = ?`;
+            const sqlFlagsString = `DELETE FROM Flags WHERE Url = ?`;
+
+            // The url is enough information to retrieve the Webpages and Flags entries, however,
+            // these should only be deleted if there now exist no labels for the url
+            this.checkIfUrlHasLabels(data, (hasLabels) => {
+                if (hasLabels) {
+                    response.json({status: "Undo Success! - Url/Flags kept"});
+                    return;
+                }
+
+                // Since there is no url, delete the entry in Urls and Flags
+                this.db.run(sqlWebpagesString, [data.webpage.url], function(err) {
+                    if (err) return console.error(err.message);
+                });
+                this.db.run(sqlFlagsString, [data.webpage.url], function(err) {
+                    if (err) return console.error(err.message);
+
+                    response.json({status: "Undo Success!"});
+                });
+            });
+        });
+    }
+
+    /**
+     *
+     * @param data
+     * @param callback
+     */
+    getSnapshotIdOfData(data, callback) {
+        const sqlString = `SELECT SnapshotId
+                           FROM Snapshots
+                           WHERE Url = ?
+                             AND DateTime = ?`;
+        const params = [data.webpage.url, data.snapshot.dateTime];
+        this.db.get(sqlString, params, function (err, row) {
+            if (err) {
+                return console.error(err.message);
+            }
+            callback(row.SnapshotId);
+        });
+    }
+
+    /**
+     * Checks if a URL has any associated Labels
+     *
+     * @param data Standard Data JSON object
+     * @param callback Returns a boolean that is true if the url still has labels
+     */
+    checkIfUrlHasLabels(data, callback) {
+        const sqlString = `SELECT SnapshotId
+                           FROM Snapshots
+                           WHERE Url = ?`
+        this.db.get(sqlString, [data.webpage.url], function(err, row) {
+            if (err) {
+                return console.error(err.message);
+            }
+            console.log(`Row is: ${row}`);
+            callback(row !== null);
+        })
     }
 
     /**
@@ -131,6 +218,7 @@ class Model {
         this.db.run(`DELETE
                      FROM Flags`);
     }
+
 }
 
 export {Model}
