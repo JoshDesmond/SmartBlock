@@ -20,6 +20,8 @@ class Views {
         this.footerDiv = document.createElement('div'); // TODO refactor to html
         document.body.appendChild(this.footerDiv);
 
+
+
         // Extra styling TODO validate CSS here?
         this.footerDiv.id = 'labeling-footer-div';
         this.footerDiv.style.backgroundColor = 'black';
@@ -54,10 +56,16 @@ class Views {
         this.wordCountText.innerText = "This page has " + wordCount.toString() + " words";
     }
 
-    toastInitalized = false;
-
-    createToast() {
-        document.body.appendChild(new Toast().get());
+    /**
+     * Creates a toast notification with the given text
+     * @param text
+     * @param isError True if the toast notification should be in red/is an error or warning
+     */
+    createToast(text, isError) {
+        if (isError) {
+            // style toast with red notification
+        }
+        document.body.appendChild(new Toast(text).get());
     }
 
 
