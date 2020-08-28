@@ -1,3 +1,5 @@
+import {Toast} from "./toast.js";
+
 /** The GUI overlay shown when labeling sites */
 class Views {
 
@@ -50,6 +52,12 @@ class Views {
         }
 
         this.wordCountText.innerText = "This page has " + wordCount.toString() + " words";
+    }
+
+    toastInitalized = false;
+
+    createToast() {
+        document.body.appendChild(new Toast().get());
     }
 
 

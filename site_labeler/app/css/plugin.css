@@ -47,3 +47,44 @@
     word-spacing: normal;
     text-rendering: auto;
 }
+
+.toast {
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-width: 400px;
+    z-index: 100000;
+
+    padding: 6px;
+    background: #cccccc;
+    color: #333333;
+    font-family: sans-serif;
+    text-align: center;
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    box-shadow: 0 0 10px #4c4c4c;
+
+    visibility: hidden;
+    opacity: 0;
+    top: 0;
+    transition: opacity 0.2s, top 0.2s, visibility 0.2;
+}
+
+.toast--visible {
+    opacity: 1;
+    top: 20px;
+    visibility: visible;
+}
+
+.toast--success {
+    background: #00C02B;
+    border-color: #009D23;
+    color: #ffffff;
+}
+
+.toast--error {
+    background: #D50000;
+    border-color: #BA0000;
+    color: #ffffff;
+}

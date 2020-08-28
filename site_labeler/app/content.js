@@ -1,7 +1,7 @@
 'use strict';
 
 import {Model, FLAG_NAMES} from './js/model.js';
-import {Views} from './js/views.js';
+import {Views} from './js/views/views.js';
 import {KeydownController} from './js/controllers/keydownController.js';
 import {AnalysisController} from './js/controllers/analysisController.js';
 import {VoteButtonController} from './js/controllers/voteButtonController.js'
@@ -22,7 +22,7 @@ views.otherButtons.forEach((button) => {
 
 // TODO figure out what you want to do with this analysis controller thingy
 const ac = new AnalysisController(model, views);
-// views.footerDiv.onclick = (() => ac.onClick());
+views.footerDiv.onclick = (() => views.createToast());
 
 // Add hotkeys
 const keydownController = new KeydownController(model);
