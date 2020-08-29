@@ -14,10 +14,6 @@ class Model {
         this.modelState = new ModelState();
         this.url = window.location.href;
         this.domain = new URL(this.url).hostname;
-        // TODO TEMP
-        if (this.url === null) {
-            console.error("URL is null");
-        }
     }
 
     /**
@@ -82,13 +78,12 @@ class Model {
     }
 
 
-
     /**
      * Compiles all the necessary data into a json object that will be submitted to the labeling
      * backend API.
      */
     assembleLabelForSubmission() {
-        const label = {
+        return {
             webpage: {
                 url: this.url,
                 domain: this.domain
@@ -112,42 +107,51 @@ class Model {
                 isInteresting: this.modelState.flags[3]
             }
         }
-
-        return label;
     }
 
-    /** Validates the current modelState and submits the vote to the backend. */
-    submit() {
-        if (this.modelState.isValidForSubmission()) {
-            console.log("Submitting Vote!");
-            this._submittedLabel = this.assembleLabelForSubmission();
-            this.voteAlreadySubmitted = true;
-            fetch('http://localhost:3000/labels', {
-                method: 'POST',
-                mode: 'cors',
-                body: JSON.stringify(this._submittedLabel),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => {
-                    console.error('Error: ', error);
-                    this.voteAlreadySubmitted = false;
-                    this._submittedLabel = null;
-                })
-
-            // TODO trigger a toast
-
-        } else {
-            console.log("Invalid modelState configuration, no vote submitted");
+    /**
+     * Validates the current modelState and submits the vote to the backend.
+     * @param {Function} callback Returns success/error message.
+     */
+    submit(callback) {
+        if (this.modelState.isValidForSubmission() === false) {
+            callback("Invalid modelState configuration, no vote submitted", false);
+            return;
+        } else if (this.voteAlreadySubmitted) {
+            callback("A vote has already been submitted. To update your vote, undo with" +
+                " backspace/delete and resubmit again");
+            return;
         }
+        console.log("Submitting Vote!");
+        this._submittedLabel = this.assembleLabelForSubmission();
+        this.voteAlreadySubmitted = true;
+        fetch('http://localhost:3000/labels', {
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(this._submittedLabel),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+                callback("Submission Successful!", true);
+            })
+            .catch(error => {
+                console.error('Error: ', error);
+                callback("Submission Error, see console", false);
+                this.voteAlreadySubmitted = false;
+                this._submittedLabel = null;
+            })
     }
 
-    /** Sends a request to the backend to undo the last vote and updates model accordingly */
-    undoLastVote() {
+    /**
+     * Sends a request to the backend to undo the last vote and updates model accordingly
+     * @param {Function} callback Returns a message to be displayed.
+     */
+    undoLastVote(callback) {
         if (this._submittedLabel === null || this.voteAlreadySubmitted !== true) {
-            console.log("A vote does not appear to have been submitted, ignoring undo input");
+            callback("A vote does not appear to have been submitted, ignoring undo input");
             return;
         }
 
@@ -163,11 +167,11 @@ class Model {
                 console.log(data)
                 this._submittedLabel = null;
                 this.voteAlreadySubmitted = false;
-                // TODO toast
+                callback("Vote successfully undone");
             })
             .catch(error => {
                 console.error(error);
-                // TODO error toast
+                callback("Error: Undo unsuccessful. See console for details", true);
             })
     }
 }

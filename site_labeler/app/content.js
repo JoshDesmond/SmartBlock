@@ -25,7 +25,7 @@ const ac = new AnalysisController(model, views);
 views.footerDiv.onclick = (() => views.createSuccessToast("Hello"));
 
 // Add hotkeys
-const keydownController = new KeydownController(model);
+const keydownController = new KeydownController(model, views);
 window.addEventListener('keydown', keydownController);
 
 // Observe the document for mutations, and trigger analysis on mutation

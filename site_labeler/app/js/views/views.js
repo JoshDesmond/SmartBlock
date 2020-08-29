@@ -79,7 +79,7 @@ class Views {
      * @param {String} text Message of the toast to display
      */
     createErrorToast(text) {
-        document.body.appendChild(new Toast(text, true, true).get());
+        document.body.appendChild(new Toast(text, true, false).get());
     }
 
     /**

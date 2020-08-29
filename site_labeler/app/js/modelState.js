@@ -27,7 +27,7 @@ class ModelState {
     }
 
     /** Clears any votes and disables all flags */
-    resetState() {
+    resetState(callback) {
         this.flagState = false;
         this.flags = [false, false, false, false];
         this.isObviousState = false;
@@ -35,6 +35,7 @@ class ModelState {
         this.primaryVote = null;
         this.secondaryVote = null;
         this.update();
+        callback();
     }
 
     /** Handles a voting action.

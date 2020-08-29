@@ -7,9 +7,11 @@ export class KeydownController {
     /**
      * Creates a keydown event handler/listener
      * @param {Model} model
+     * @param {Views} views
      */
-    constructor(model) {
+    constructor(model, views) {
         this._model = model;
+        this._views = views;
     }
 
     /** Event listener for the window 'keydown' event. */
@@ -38,8 +40,13 @@ export class KeydownController {
             case "Backspace":
             case "Delete":
                 e.preventDefault();
-                console.log("undo key pressed");
-                this._model.undoLastVote();
+                this._model.undoLastVote((message, wasError) => {
+                    if (wasError) {
+                        this._views.createErrorToast(message);
+                    } else {
+                        this._views.createNeutralToast(message);
+                    }
+                });
                 break;
             case " ":
                 e.preventDefault();
@@ -64,10 +71,18 @@ export class KeydownController {
                 this._model.modelState.handleObvious();
                 break;
             case "Enter":
-                this._model.submit();
+                this._model.submit((message, wasSuccessful) => {
+                    if (wasSuccessful) {
+                        this._views.createSuccessToast(message);
+                    } else {
+                        this._views.createErrorToast(message);
+                    }
+                });
                 break;
             case "Escape":
-                this._model.modelState.resetState();
+                this._model.modelState.resetState(() => {
+                    this._views.createNeutralToast("Input state cleared");
+                });
                 break;
             default:
                 break;
