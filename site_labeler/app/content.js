@@ -22,7 +22,7 @@ views.otherButtons.forEach((button) => {
 
 // TODO figure out what you want to do with this analysis controller thingy
 const ac = new AnalysisController(model, views);
-views.footerDiv.onclick = (() => views.createToast());
+views.footerDiv.onclick = (() => views.createSuccessToast("Hello"));
 
 // Add hotkeys
 const keydownController = new KeydownController(model);

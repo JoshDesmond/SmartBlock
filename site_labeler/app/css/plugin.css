@@ -22,7 +22,7 @@
     border: 0;
     position: fixed;
     width: 100%;
-    bottom: 0px;
+    bottom: 0;
     background-color: black;
     opacity: 0.85;
     text-align: center;
@@ -68,11 +68,11 @@
     visibility: hidden;
     opacity: 0;
     top: 0;
-    transition: opacity 0.2s, top 0.2s, visibility 0.2;
+    transition: opacity 0.2s, top 0.2s, visibility 0.2s;
 }
 
 .toast--visible {
-    opacity: 1;
+    opacity: .9;
     top: 20px;
     visibility: visible;
 }

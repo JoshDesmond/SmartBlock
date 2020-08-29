@@ -21,7 +21,6 @@ class Views {
         document.body.appendChild(this.footerDiv);
 
 
-
         // Extra styling TODO validate CSS here?
         this.footerDiv.id = 'labeling-footer-div';
         this.footerDiv.style.backgroundColor = 'black';
@@ -57,17 +56,31 @@ class Views {
     }
 
     /**
-     * Creates a toast notification with the given text
-     * @param text
-     * @param isError True if the toast notification should be in red/is an error or warning
+     * Creates a toast notification with the given text. Use createNeutralToast() and
+     * createErrorToast() for other stylings.
+     * @param {String} text Message of the toast to display
      */
-    createToast(text, isError) {
-        if (isError) {
-            // style toast with red notification
-        }
-        document.body.appendChild(new Toast(text).get());
+    createSuccessToast(text) {
+        document.body.appendChild(new Toast(text, false, true).get());
     }
 
+    /**
+     * Creates a toast notification with the given text. Use createSuccessfulToast() and
+     * createErrorToast() for other stylings.
+     * @param {String} text Message of the toast to display
+     */
+    createNeutralToast(text) {
+        document.body.appendChild(new Toast(text, false, false).get());
+    }
+
+    /**
+     * Creates a toast notification with the given text. Use createNeutralToast() and
+     * createErrorToast() for other stylings.
+     * @param {String} text Message of the toast to display
+     */
+    createErrorToast(text) {
+        document.body.appendChild(new Toast(text, true, true).get());
+    }
 
     /**
      * Adds the voting buttons on the bottom of the page.
@@ -167,14 +180,14 @@ class Views {
             if (secondaryVote === null) {
                 return;
             }
-            this._enableButton(this.votingButtons[secondaryVote -1]);
+            this._enableButton(this.votingButtons[secondaryVote - 1]);
         } else {
             // Paint Primary Vote
             const primaryVote = this._model.modelState.primaryVote;
             if (primaryVote === null) {
                 return;
             }
-            this._enableButton(this.votingButtons[primaryVote -1]);
+            this._enableButton(this.votingButtons[primaryVote - 1]);
         }
     }
 

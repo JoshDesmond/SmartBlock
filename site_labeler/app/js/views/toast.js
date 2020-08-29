@@ -1,3 +1,6 @@
+/** Length in milliseconds for a toast message to timeout/disappear */
+const TOAST_TIMEOUT = 2500;
+
 class Toast {
 
     /**
@@ -11,13 +14,14 @@ class Toast {
         if (text === null) throw Error("Toast text can't be null");
 
         this.toast = document.createElement('div');
+        this.toast.className = 'toast';
+        this.toast.innerText = text;
         if (isError) {
             this.toast.className += " toast--error";
         } else if (isSuccess) {
             this.toast.className += " toast--success";
+        } else {
         }
-        this.toast.className = 'toast';
-        this.toast.innerText = text;
     }
 
     /**
@@ -30,7 +34,10 @@ class Toast {
     }
 
     show() {
-        // TODO add the toast-visible tag, start a timer, etc. etc.
+        this.toast.classList.add('toast--visible');
+        setTimeout(() => {
+            this.toast.classList.remove('toast--visible');
+        }, TOAST_TIMEOUT);
     }
 }
 
