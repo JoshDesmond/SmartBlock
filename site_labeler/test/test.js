@@ -1,5 +1,5 @@
 import {strict as assert} from 'assert';
-import {ModelState} from "../app/js/modelState.js";
+import {ModelState} from "../app/js/model/modelState.js";
 
 describe('ModelState', () => {
     describe('#ModelState()', () => {

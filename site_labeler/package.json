@@ -2,7 +2,7 @@
     "name": "site_labeler",
     "version": "1.0.0",
     "description": "Extension to label the site data that powers SmartBlock",
-    "main": "app/content.js",
+    "main": "app/js/content.js",
     "type": "module",
     "devDependencies": {
         "mocha": "^8.1.3",

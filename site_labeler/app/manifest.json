@@ -4,7 +4,7 @@
 	"description": "An extension to label data for use in training SmartBlock",
 	"permissions": ["activeTab", "storage", "declarativeContent"],
 	"background": {
-		"scripts": ["background.js"],
+		"scripts": ["js/background.js"],
 		"persistent": false
 	},
 	"content_scripts": [
@@ -13,7 +13,7 @@
 			"exclude_matches": ["https://en.wikipedia.org/wiki/Main_Page"],
 			"css": ["css/plugin.css"],
 			"js": [
-				"content.js"
+				"js/content.js"
 			]
 		}
 	],

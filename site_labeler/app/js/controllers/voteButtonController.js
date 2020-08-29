@@ -1,4 +1,4 @@
-import {Model} from "../model.js";
+import {Model} from "../model/model.js";
 
 /**
  * Key listener for the standard labeling workflow.

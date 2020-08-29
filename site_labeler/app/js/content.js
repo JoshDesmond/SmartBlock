@@ -1,11 +1,11 @@
 'use strict';
 
-import {Model, FLAG_NAMES} from './js/model.js';
-import {Views} from './js/views/views.js';
-import {KeydownController} from './js/controllers/keydownController.js';
-import {AnalysisController} from './js/controllers/analysisController.js';
-import {VoteButtonController} from './js/controllers/voteButtonController.js'
-import {CertaintyButtonController} from "./js/controllers/certaintyButtonController";
+import {Model, FLAG_NAMES} from './model/model.js';
+import {Views} from './views/views.js';
+import {KeydownController} from './controllers/keydownController.js';
+import {AnalysisController} from './controllers/analysisController.js';
+import {VoteButtonController} from './controllers/voteButtonController.js'
+import {CertaintyButtonController} from "./controllers/certaintyButtonController";
 
 const model = new Model();
 const views = new Views(model);
