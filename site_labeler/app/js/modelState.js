@@ -35,7 +35,7 @@ class ModelState {
         this.primaryVote = null;
         this.secondaryVote = null;
         this.update();
-        callback();
+        if (typeof callback === "function") callback();
     }
 
     /** Handles a voting action.
