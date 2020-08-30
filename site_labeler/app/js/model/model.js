@@ -1,4 +1,5 @@
 import {ModelState, FLAG_NAMES} from "./modelState.js";
+import {extractText} from "./textExtractor.js";
 
 /** The program logic for static text analysis & labeling */
 class Model {
@@ -47,8 +48,7 @@ class Model {
      * @returns {String} The extracted text of the webpage.
      */
     extractText() {
-        // TODO FIXME the .innerText doesn't add any textual separation between elements.
-        this.text = document.body.innerText;
+        this.text = extractText(document.body);
         return this.text;
     }
 
