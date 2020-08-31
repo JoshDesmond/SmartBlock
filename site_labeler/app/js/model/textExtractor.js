@@ -1,12 +1,11 @@
 function extractText(body) {
-    const words = {};
-    body.textContent
-        .trim()
-        .split(/\s/)
-        .filter(x => !~x.search(/[\d\W\s]/))
-        .forEach(word => words[word] = word);
-    console.log(words);
-    return words;
+    let text = "";
+    body.querySelectorAll('*').forEach((el) => {
+
+        text += " " + el.innerText;
+    });
+    console.log(text);
+    return text;
 }
 
 export {extractText}
