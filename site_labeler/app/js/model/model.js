@@ -1,20 +1,24 @@
 import {ModelState, FLAG_NAMES} from "./modelState.js";
-import {extractText} from "./textExtractor.js";
+import {TextScraper} from "./textScraper.js";
 
 /** The program logic for static text analysis & labeling */
 class Model {
 
     /** @type {Number} The maximum number of words that will be analyzed on a given page */
     MAX_WORDS = 1500;
+    /** @type {Boolean} True if the vote has been submitted to the Backend. */
     voteAlreadySubmitted = false;
-    /** @type {} */
+    /** An instance of the label that was submitted, (null if no valid submission performed). */
     _submittedLabel;
+    /** @type {TextScraper} An instance of TextScraper to parse and analysis the text of a page */
+    textScraper;
 
     constructor() {
         this.voteAlreadySubmitted = false;
         this.modelState = new ModelState();
         this.url = window.location.href;
         this.domain = new URL(this.url).hostname;
+        this.textScraper = new TextScraper(document.body);
     }
 
     /**
@@ -30,8 +34,7 @@ class Model {
      * @returns {String} The entire HTML of the webpage
      */
     extractFullHTML() {
-        const html = document.getElementsByTagName('html')[0].innerHTML;
-        return html;
+        return document.getElementsByTagName('html')[0].innerHTML;
     }
 
     /**
@@ -48,7 +51,8 @@ class Model {
      * @returns {String} The extracted text of the webpage.
      */
     extractText() {
-        this.text = extractText(document.body);
+        // TODO refactor caching to textScraper?
+        this.text = this.textScraper.extractText();
         return this.text;
     }
 
@@ -70,11 +74,6 @@ class Model {
     /** Returns the last/cached result of extractText() */
     getLatestTextContent() {
         return this.text;
-    }
-
-    /** Toggles the status of whether flags are enabled or not **/
-    toggleFlags() {
-        this.modelState.toggleFlags();
     }
 
 

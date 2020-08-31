@@ -1,4 +1,5 @@
 import {strict as assert} from 'assert';
+import {TextScraper} from "../app/js/model/textScraper.js";
 import {ModelState} from "../app/js/model/modelState.js";
 
 describe('ModelState', () => {
@@ -26,6 +27,7 @@ describe('ModelState', () => {
 
 describe('TextExtractor', () => {
     it("Should extract words from simple p elements", () => {
+        const scraper = new TextScraper();
         // TODO
     });
 
