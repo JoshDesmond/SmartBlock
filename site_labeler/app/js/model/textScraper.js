@@ -1,5 +1,9 @@
 
 class TextScraper {
+
+    /**
+     * @param {HTMLElement} body
+     */
     constructor(body) {
         this.body = body;
         // TODO set up on listen events
@@ -8,9 +12,8 @@ class TextScraper {
     extractText() {
         let text = "";
         this.body.querySelectorAll('*').forEach((el) => {
-            text += " " + el.innerText;
+            text += " " + el.textContent;
         });
-        console.log(text);
         return text;
     }
 }

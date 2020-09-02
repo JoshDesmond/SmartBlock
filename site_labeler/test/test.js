@@ -1,6 +1,8 @@
 import {strict as assert} from 'assert';
+import jsdom from 'jsdom';
 import {TextScraper} from "../app/js/model/textScraper.js";
 import {ModelState} from "../app/js/model/modelState.js";
+const {JSDOM} = jsdom; // Suggested by documentation, what does this actually do?
 
 describe('ModelState', () => {
     it("should create a new ModelState and apply vote", () => {
@@ -26,9 +28,14 @@ describe('ModelState', () => {
 });
 
 describe('TextExtractor', () => {
-    it("Should extract words from simple p elements", () => {
-        const scraper = new TextScraper();
-        // TODO
+    it("Should extract words from simple p elements", (done) => {
+        const options = { pretendToBeVisual: true }
+        JSDOM.fromFile("./test/test_doc.html", options).then(dom => {
+            const body = dom.window.document.body; // TODO, how do I import an HTML?
+            const scraper = new TextScraper(body);
+            assert.equal(scraper.extractText().includes("seventy"), true);
+            done();
+        });
     });
 
     it("Should have spaces between text from different elements", () => {
