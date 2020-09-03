@@ -30,7 +30,7 @@ describe('ModelState', () => {
 
 describe('TextExtractor', () => {
     it("Should extract the correct text from test document", (done) => {
-        const options = {pretendToBeVisual: true}
+        const options = {pretendToBeVisual: true};
         JSDOM.fromFile("./test/test_doc.html", options).then(dom => {
             // Extract text
             const body = dom.window.document.body;
@@ -55,7 +55,4 @@ describe('TextExtractor', () => {
         });
     });
 
-    it("Should have spaces between text from different elements", () => {
-        // TODO
-    });
 });

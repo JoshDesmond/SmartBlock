@@ -12,6 +12,8 @@ class Model {
     _submittedLabel;
     /** @type {TextScraper} An instance of TextScraper to parse and analysis the text of a page */
     textScraper;
+    /** @type {String} For now, a constant username for submission to the backend */
+    username = "DeveloperDesmond";
 
     constructor() {
         this.voteAlreadySubmitted = false;
@@ -106,6 +108,7 @@ class Model {
                 isNotTextual: this.modelState.flags[2],
                 isInteresting: this.modelState.flags[3]
             }
+
         }
     }
 

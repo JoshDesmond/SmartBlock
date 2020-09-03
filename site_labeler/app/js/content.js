@@ -22,7 +22,6 @@ views.otherButtons.forEach((button) => {
 
 // TODO figure out what you want to do with this analysis controller thingy
 const ac = new AnalysisController(model, views);
-views.footerDiv.onclick = (() => views.createSuccessToast("Hello"));
 
 // Add hotkeys
 const keydownController = new KeydownController(model, views);
@@ -102,6 +101,8 @@ const mutationCallback = function (mutationsList, observer) {
     analyzedFlag = true;
     ac.analyze();
 };
+
+// TODO see https://dom.spec.whatwg.org/#mutationrecord when refactoring
 
 const observer = new MutationObserver(mutationCallback);
 observer.observe(targetNode, config);
