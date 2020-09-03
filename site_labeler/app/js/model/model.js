@@ -62,6 +62,7 @@ class Model {
      */
     countWords() {
         const text = this.extractText();
+        console.log(this.textScraper.getDictionary(text));
         this.words = text.split(/\s+/g);
         return this.words.length;
     }

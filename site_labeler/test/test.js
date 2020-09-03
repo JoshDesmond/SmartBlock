@@ -32,14 +32,25 @@ describe('TextExtractor', () => {
     it("Should extract the correct text from test document", (done) => {
         const options = {pretendToBeVisual: true}
         JSDOM.fromFile("./test/test_doc.html", options).then(dom => {
-            const body = dom.window.document.body; // TODO, how do I import an HTML?
+            // Extract text
+            const body = dom.window.document.body;
             const scraper = new TextScraper(body);
             const text = scraper.extractText();
+
             // Test for specific word in text
             assert.equal(text.includes("seventy"), true);
+
             // Test that the word count is exactly 72
             const wordCount = text.split(" ").length;
             assert.equal(wordCount, 72);
+
+            // Test that ,'s and ...'s are stripped from the text
+            assert.equal(text.includes("laboris"), true);
+            assert.equal(text.includes("amet"), true);
+
+            // Test that casing is lowered
+            assert.equal(text.includes("column"), true);
+
             done();
         });
     });
