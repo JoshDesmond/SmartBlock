@@ -13,6 +13,7 @@ class Model {
         this.createWebpage(data.webpage);
         // TODO convert this to use promises or something, (nested callbacks are ugly).
         // TODO create flags
+        // TODO use username (data.label.username)
         this.createSnapshot(data.snapshot, url, (snapshotId) => {
             this.createLabel(data.label, snapshotId, (labelId) => {
                 const responseJSON = {

@@ -100,13 +100,14 @@ class Model {
                 secondaryVote: this.modelState.secondaryVote,
                 isObvious: this.modelState.isObviousState,
                 isAmbiguous: this.modelState.isAmbiguousState,
-                topic: null
+                topic: null,
+                username: this.username
             },
             flags: {
-                isVeryAmbiguous: this.modelState.flags[0],
+                isDynamicContent: this.modelState.flags[0],
                 isReviewable: this.modelState.flags[1],
                 isNotTextual: this.modelState.flags[2],
-                isInteresting: this.modelState.flags[3]
+                isCounterIntuitive: this.modelState.flags[3]
             }
 
         }

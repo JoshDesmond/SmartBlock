@@ -14,7 +14,7 @@ class Toast {
         if (text === null) throw Error("Toast text can't be null");
 
         this.toast = document.createElement('div');
-        this.toast.className = 'toast';
+        this.toast.className = 'toast SmartBlockPluginElement';
         this.toast.innerText = text;
         if (isError) {
             this.toast.className += " toast--error";

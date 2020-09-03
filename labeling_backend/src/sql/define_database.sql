@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Flags(
     IsDynamicContent INTEGER DEFAULT 0, --Boolean
     IsReviewable INTEGER DEFAULT 0, --Boolean
     IsNotTextual INTEGER DEFAULT 0, --Boolean
-    IsInteresting INTEGER DEFAULT 0, --Boolean
+    IsCounterIntuitive INTEGER DEFAULT 0, --Boolean
     Url VARCHAR NOT NULL,
     UserId INTEGER NOT NULL,
     FOREIGN KEY (UserId) REFERENCES Users(UserId),
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS Flags(
     CHECK (IsDynamicContent <= 1 AND
            IsReviewable <= 1 AND
            IsNotTextual <= 1 AND
-           IsInteresting <= 1)
+           IsCounterIntuitive <= 1)
 );
 
 CREATE TABLE IF NOT EXISTS Users(

@@ -7,8 +7,13 @@
 <body>
 
 <style>
-    h1 {color:red;}
-    p {color:blue;}
+    h1 {
+        color: red;
+    }
+
+    p {
+        color: blue;
+    }
 </style>
 
 <div class="jumbotron text-center">
@@ -38,6 +43,23 @@
     </div>
 </div>
 
+<div id="labeling-footer-div" style="background-color: black">
+    <p class="SmartBlockPluginElement" style="z-index: 10001; color: rgb(220, 220, 220);
+    --darkreader-inline-color:#d2cec8;" data-darkreader-inline-color="">This page has 942 words</p>
+    <button data-action="isAmbiguous" class="footerButton SmartBlockPluginElement">
+        Ambiguous
+    </button>
+    <button class="footerButton SmartBlockPluginElement">Unproductive</button>
+    <button class="footerButton SmartBlockPluginElement">Unproductive</button>
+    <button class="footerButton SmartBlockPluginElement">Productive</button>
+    <button class="footerButton SmartBlockPluginElement"
+            style="width: 10em; background-color: green;"
+            data-darkreader-inline-bgcolor="">Very Productive
+    </button>
+    <button data-action="isObvious" class="footerButton SmartBlockPluginElement"
+            data-darkreader-inline-bgcolor="">Obvious
+    </button>
+</div>
 
 </body>
 </html>

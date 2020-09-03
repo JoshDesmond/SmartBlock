@@ -19,7 +19,7 @@ class TextScraper {
     extractText() {
         let text = "";
 
-        const nodes = this.body.querySelectorAll('*');
+        const nodes = this.body.querySelectorAll(':not(.SmartBlockPluginElement)');
 
         nodes.forEach((node) => {
             const tag = node.tagName;

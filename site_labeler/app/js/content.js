@@ -19,6 +19,9 @@ views.otherButtons.forEach((button) => {
     button.addEventListener('click', new CertaintyButtonController(model));
 });
 
+views.footerDiv.addEventListener('click', () => {
+    console.log(model.textScraper.getDictionary());
+});
 
 // TODO figure out what you want to do with this analysis controller thingy
 const ac = new AnalysisController(model, views);
