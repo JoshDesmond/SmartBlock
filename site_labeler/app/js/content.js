@@ -6,6 +6,7 @@ import {KeydownController} from './controllers/keydownController.js';
 import {AnalysisController} from './controllers/analysisController.js';
 import {VoteButtonController} from './controllers/voteButtonController.js'
 import {CertaintyButtonController} from "./controllers/certaintyButtonController";
+import {MutationController} from "./controllers/mutationController.js";
 
 const model = new Model();
 const views = new Views(model);
@@ -30,14 +31,19 @@ const ac = new AnalysisController(model, views);
 const keydownController = new KeydownController(model, views);
 window.addEventListener('keydown', keydownController);
 
-// Observe the document for mutations, and trigger analysis on mutation
-// Code below from: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
-// Select the html node that will be observed for mutations
-const targetNode = document.body;
-// Options for the observer (which mutations to observe)
-const config = {childList: true, subtree: true};
+// Mutation observations
+
+const targetNode = document.body; // Select the html node that will be observed for mutations
+const config = {
+    childList: true,
+    subtree: true,
+    characterData: true,
+    characterDataOldValue: false,
+    attributes: false,
+};
 let analyzedFlag = false; // to prevent infinite loops
 let readyForAnalysis = true; // to rate limit analysis
+
 
 // Callback function to execute when mutations are observed
 const mutationCallback = function (mutationsList, observer) {
@@ -107,5 +113,5 @@ const mutationCallback = function (mutationsList, observer) {
 
 // TODO see https://dom.spec.whatwg.org/#mutationrecord when refactoring
 
-const observer = new MutationObserver(mutationCallback);
+const observer = new MutationObserver(MutationController);
 observer.observe(targetNode, config);

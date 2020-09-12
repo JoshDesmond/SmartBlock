@@ -25,7 +25,7 @@ class Views {
         this.footerDiv.id = 'labeling-footer-div';
         this.footerDiv.style.backgroundColor = 'black';
 
-        this.displayWordCount(this._model.countWords());
+        // this.displayWordCount(this._model.countWords());
         this.votingButtons = [];
         this.otherButtons = [];
         this.addVotingButtons();
