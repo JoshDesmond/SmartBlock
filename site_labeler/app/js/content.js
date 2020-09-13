@@ -31,19 +31,22 @@ const ac = new AnalysisController(model, views);
 const keydownController = new KeydownController(model, views);
 window.addEventListener('keydown', keydownController);
 
-// Mutation observations
 
-const targetNode = document.body; // Select the html node that will be observed for mutations
+let analyzedFlag = false; // to prevent infinite loops
+let readyForAnalysis = true; // to rate limit analysis
+
+// Mutation observations
 const config = {
     childList: true,
     subtree: true,
     characterData: true,
-    characterDataOldValue: false,
+    characterDataOldValue: true,
     attributes: false,
 };
-let analyzedFlag = false; // to prevent infinite loops
-let readyForAnalysis = true; // to rate limit analysis
 
+const targetNode = document.body;
+const observer = new MutationObserver(MutationController);
+observer.observe(targetNode, config);
 
 // Callback function to execute when mutations are observed
 const mutationCallback = function (mutationsList, observer) {
@@ -112,6 +115,3 @@ const mutationCallback = function (mutationsList, observer) {
 };
 
 // TODO see https://dom.spec.whatwg.org/#mutationrecord when refactoring
-
-const observer = new MutationObserver(MutationController);
-observer.observe(targetNode, config);

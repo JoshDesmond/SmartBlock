@@ -55,4 +55,9 @@ describe('TextExtractor', () => {
         });
     });
 
+    it("Should handle a non-breaking space ", (done) => {
+        // TODO
+        const element = "<p>hello&nbsp;world!</p>"; // should be two words
+    });
+
 });

@@ -1,11 +1,19 @@
+import {MutationController} from "../controllers/mutationController";
+
 class TextScraper {
 
     /**
      * @param {HTMLElement} body
      */
     constructor(body) {
+        if (body === null || body === undefined) {
+            throw TypeError;
+        }
         this.body = body;
         // TODO set up on listen events
+
+
+
     }
 
     ignorableTags = ["SCRIPT", "NOSCRIPT", "APPLET", "EMBED", "OBJECT", "PARAM", "HEAD",
