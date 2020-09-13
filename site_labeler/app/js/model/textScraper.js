@@ -1,19 +1,7 @@
-import {MutationController} from "../controllers/mutationController";
 
 class TextScraper {
 
-    /**
-     * @param {HTMLElement} body
-     */
-    constructor(body) {
-        if (body === null || body === undefined) {
-            throw TypeError;
-        }
-        this.body = body;
-        // TODO set up on listen events
-
-
-
+    constructor() {
     }
 
     ignorableTags = ["SCRIPT", "NOSCRIPT", "APPLET", "EMBED", "OBJECT", "PARAM", "HEAD",
@@ -22,12 +10,16 @@ class TextScraper {
 
     /**
      * Extracts the text from the body HTMLElement the instance of this class was made with.
+     * @param {HTMLElement} element The tag to traverse for text extraction
      * @return {string} A single string containing the text of the document's body
      */
-    extractText() {
+    extractText(element) {
+        if (!element) {
+            throw new TypeError();
+        }
         let text = "";
 
-        const nodes = this.body.querySelectorAll(':not(.SmartBlockPluginElement)');
+        const nodes = element.querySelectorAll(':not(.SmartBlockPluginElement)');
 
         nodes.forEach((node) => {
             const tag = node.tagName;
@@ -37,12 +29,21 @@ class TextScraper {
             }
         });
 
+
+        return this.cleanString(text);
+    }
+
+    /**
+     * Fixes spacing and removes symbols
+     * @param {String} text
+     */
+    cleanString(text) {
         text = text.trim();
         text = text.replace(/(\r\n|\n|\r)/gm, ""); // Remove linebreaks
         text = text.toLowerCase();
+        text = text.replace(/[./–;?!)(]/g, ' ');
         text = text.replace(/[^a-z0-9 ]/g, ''); // Remove all but alphanumerics
         text = text.replace(/ +(?= )/g, ''); // Remove sequences of spaces
-
         return text;
     }
 

@@ -29,13 +29,14 @@ describe('ModelState', () => {
 });
 
 describe('TextExtractor', () => {
+    const textScraper = new TextScraper();
+
     it("Should extract the correct text from test document", (done) => {
         const options = {pretendToBeVisual: true};
         JSDOM.fromFile("./test/test_doc.html", options).then(dom => {
             // Extract text
             const body = dom.window.document.body;
-            const scraper = new TextScraper(body);
-            const text = scraper.extractText();
+            const text = textScraper.extractText(body);
 
             // Test for specific word in text
             assert.equal(text.includes("seventy"), true);
@@ -57,7 +58,13 @@ describe('TextExtractor', () => {
 
     it("Should handle a non-breaking space ", (done) => {
         // TODO
+        done();
         const element = "<p>hello&nbsp;world!</p>"; // should be two words
     });
 
+    it("cleanString should remove sequences of spaces", (done) => {
+        const cleanedText = textScraper.cleanString(" hello    world      hi ");
+        assert.equal(cleanedText, "hello world hi");
+        done();
+    });
 });

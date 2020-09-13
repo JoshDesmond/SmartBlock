@@ -1,50 +1,66 @@
 import {TextScraper} from "../model/textScraper.js";
+import {AnalysisController} from "./analysisController.js";
 
-
-/**
- *
- * @implements MutationCallback
- * @param {MutationRecord[]} mutations
- * @param {MutationObserver} observer
- * @return {void}
- */
-function MutationController(mutations, observer) {
+class MutationController {
 
     /**
-     * - Text mutation
-     * - ChildListMutation
+     *
+     * @param {Model} model
+     * @param {AnalysisController} analysisController
      */
-
-    console.log(observer);
-    let x = 0;
-    for (const mutation of mutations) {
-        if (mutation.type === "characterData") {
-            if (mutation.oldValue) {
-                console.log("Removing:" + mutation.oldValue);
-            }
-
-
-
-        } else if (mutation.type === "childList") { // childList
-            mutation.addedNodes.forEach((node) => {
-                if (node instanceof Text) {
-                    // parse node.data
-                } else {
-                    const textScraper = new TextScraper(node);
-                    console.log(textScraper.extractText());
-                }
-            });
-        } else {
-            console.error(mutation.type);
-            console.log(mutation);
-        }
-
-        //console.log(mutation);
+    constructor(model, analysisController) {
+        this.model = model;
+        this.ac = analysisController;
     }
 
-    // TODO if wordCount > maxwords,
-    // observer.disconnect
+    /**
+     *
+     * @implements MutationCallback
+     * @param {MutationRecord[]} mutations
+     * @param {MutationObserver} observer
+     * @return {void}
+     */
+    mutationCallback(mutations, observer) {
 
+        /**
+         * - Text mutation
+         * - ChildListMutation
+         */
+
+        const textScraper = new TextScraper();
+
+        for (const mutation of mutations) {
+            if (mutation.type === "characterData") {
+                const newText = textScraper.cleanString(mutation.target.data);
+                if (mutation.oldValue) {
+                    const old = textScraper.cleanString(mutation.oldValue);
+                    this.model.textState.replaceText(old, newText);
+                } else {
+                    this.model.textState.addText(newText);
+                }
+
+            } else if (mutation.type === "childList") { // childList
+                mutation.addedNodes.forEach((node) => {
+                    if (node instanceof Text) {
+                        // parse node.data
+                    } else {
+                        this.model.textState.addText(textScraper.extractText(node));
+                    }
+                });
+                this.ac.analyze();
+            } else {
+                console.error(mutation.type);
+                console.log(mutation);
+            }
+
+            //console.log(mutation);
+        }
+
+
+        // TODO if wordCount > maxwords,
+        // observer.disconnect
+
+    }
 }
 
 export {MutationController};

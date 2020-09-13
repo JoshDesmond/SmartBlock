@@ -23,10 +23,9 @@ export class AnalysisController {
     }
 
     analyze() {
-        const lastWordCount = this._model.getLatestWordCount();
-        const wordCount = this._model.countWords();
-        if (lastWordCount !== wordCount) { // Only update if there's been a change
-            this._views.displayWordCount(wordCount);
-        }
+        // TODO prevent infinite analysis
+        //this._views.displayWordCount(wordCount);
+        // console.log(this._model.countWords());
+        // console.log(this._model.textState.words);
     }
 }

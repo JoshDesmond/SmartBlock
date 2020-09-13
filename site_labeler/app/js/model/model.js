@@ -1,5 +1,6 @@
 import {ModelState, FLAG_NAMES} from "./modelState.js";
 import {TextScraper} from "./textScraper.js";
+import {TextState} from "./textState.js";
 
 /** The program logic for static text analysis & labeling */
 class Model {
@@ -14,6 +15,8 @@ class Model {
     textScraper;
     /** @type {String} For now, a constant username for submission to the backend */
     username = "DeveloperDesmond";
+    /** @type {TextState} Contains parsed text. */
+    textState;
 
     constructor() {
         this.voteAlreadySubmitted = false;
@@ -21,6 +24,7 @@ class Model {
         this.url = window.location.href;
         this.domain = new URL(this.url).hostname;
         this.textScraper = new TextScraper(document.body);
+        this.textState = new TextState();
     }
 
     /**
@@ -49,13 +53,11 @@ class Model {
     }
 
     /**
-     * Parse the textual content of the current webpage.
+     * Returns the currently parsed textual content of the current webpage.
      * @returns {String} The extracted text of the webpage.
      */
     extractText() {
-        // TODO refactor caching to textScraper?
-        this.text = this.textScraper.extractText();
-        return this.text;
+        return this.textState.words;
     }
 
     /**
@@ -63,10 +65,10 @@ class Model {
      * @return {Number} The word count of document
      */
     countWords() {
+        // return this.textState.wordCount;
         const text = this.extractText();
-        console.log(this.textScraper.getDictionary(text));
-        this.words = text.split(/\s+/g);
-        return this.words.length;
+        // console.log(this.textScraper.getDictionary(text));
+        return text.split(/\s+/g).length;
     }
 
     /** Returns the last/cached result of countWords() */
@@ -76,7 +78,7 @@ class Model {
 
     /** Returns the last/cached result of extractText() */
     getLatestTextContent() {
-        return this.text;
+        return this.textState.words;
     }
 
 

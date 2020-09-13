@@ -31,10 +31,10 @@ class Views {
         this.addVotingButtons();
         this.addCertaintyButtons();
         this.votingButtons.forEach((button) => {
-            button.setAttribute('class', "footerButton");
+            button.setAttribute('class', "footerButton SmartBlockPluginElement");
         });
         this.otherButtons.forEach((button) => {
-            button.setAttribute('class', "footerButton");
+            button.setAttribute('class', "footerButton SmartBlockPluginElement");
         });
         this.addTextualAnalysisButton();
     }

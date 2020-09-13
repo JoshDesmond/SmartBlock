@@ -21,7 +21,7 @@ views.otherButtons.forEach((button) => {
 });
 
 views.footerDiv.addEventListener('click', () => {
-    console.log(model.textScraper.getDictionary());
+    console.log(model.textScraper.getDictionary(model.textState.words));
 });
 
 // TODO figure out what you want to do with this analysis controller thingy
@@ -31,6 +31,7 @@ const ac = new AnalysisController(model, views);
 const keydownController = new KeydownController(model, views);
 window.addEventListener('keydown', keydownController);
 
+model.textState.addText(model.textScraper.extractText(document.body));
 
 let analyzedFlag = false; // to prevent infinite loops
 let readyForAnalysis = true; // to rate limit analysis
@@ -44,8 +45,10 @@ const config = {
     attributes: false,
 };
 
+const mc = new MutationController(model, ac);
+
 const targetNode = document.body;
-const observer = new MutationObserver(MutationController);
+const observer = new MutationObserver(mc.mutationCallback.bind(mc));
 observer.observe(targetNode, config);
 
 // Callback function to execute when mutations are observed
