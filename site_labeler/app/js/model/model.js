@@ -48,6 +48,7 @@ class Model {
      * @returns {string}
      */
     extractTitle() {
+        console.log(document.head.getElementsByTagName("title"));
         const titleTags = document.head.getElementsByTagName("title");
         return this.textScraper.cleanString(titleTags[0].text);
     }

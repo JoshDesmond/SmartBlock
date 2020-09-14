@@ -7,6 +7,7 @@ class TextState {
     wordCount;
     /** @type {String} */
     words;
+
     constructor() {
         this.words = "";
         this.wordCount = 0;
@@ -17,12 +18,13 @@ class TextState {
     }
 
     addText(text) {
+        if (this.words.length !== 0 && !this.words.endsWith(" ")) {
+            this.words += " ";
+        }
+
         this.wordCount += this.countWordsInString(text);
         if (text) {
             this.words += text;
-            if (!this.words.endsWith(" ")) {
-                this.words += " ";
-            }
         }
     }
 
