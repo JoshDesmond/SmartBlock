@@ -6,7 +6,7 @@ import {TextState} from "./textState.js";
 class Model {
 
     /** @type {Number} The maximum number of words that will be analyzed on a given page */
-    MAX_WORDS = 1500;
+    MAX_WORDS = 2000;
     /** @type {Boolean} True if the vote has been submitted to the Backend. */
     voteAlreadySubmitted = false;
     /** An instance of the label that was submitted, (null if no valid submission performed). */
@@ -49,7 +49,7 @@ class Model {
      */
     extractTitle() {
         const titleTags = document.head.getElementsByTagName("title");
-        return titleTags[0].text;
+        return this.textScraper.cleanString(titleTags[0].text);
     }
 
     /**
@@ -65,10 +65,8 @@ class Model {
      * @return {Number} The word count of document
      */
     countWords() {
-        // return this.textState.wordCount;
-        const text = this.extractText();
-        // console.log(this.textScraper.getDictionary(text));
-        return text.split(/\s+/g).length;
+        return this.textState.wordCount;
+
     }
 
     /** Returns the last/cached result of countWords() */

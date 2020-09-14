@@ -53,6 +53,10 @@ class MutationController {
                 console.log(mutation);
             }
 
+            if (this.model.textState.wordCount > this.model.MAX_WORDS) {
+                observer.disconnect();
+                console.log("MAXWORDS reached, ending mutation observations");
+            }
             //console.log(mutation);
         }
 
