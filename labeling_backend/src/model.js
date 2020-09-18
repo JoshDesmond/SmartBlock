@@ -178,6 +178,22 @@ class Model {
 
     }
 
+    getUserIdOfUsername(username, callback) {
+        const sqlString = `SELECT UserId
+                           FROM Users
+                           WHERE Username = ?`
+        this.db.get(sqlString, [username], function(err, row) {
+            if (err) {
+                console.log(err.message);
+            }
+
+            console.log(row);
+
+            callback(row.UserId);
+        });
+
+    }
+
     createFlags() {
 
     }

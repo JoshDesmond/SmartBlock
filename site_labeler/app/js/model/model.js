@@ -25,6 +25,7 @@ class Model {
         this.domain = new URL(this.url).hostname;
         this.textScraper = new TextScraper(document.body);
         this.textState = new TextState();
+        this.userId = this.getUserIdOfUsername(this.username);
     }
 
     /**
@@ -177,6 +178,28 @@ class Model {
             .catch(error => {
                 console.error(error);
                 callback("Error: Undo unsuccessful. See console for details", true);
+            })
+    }
+
+    getUserIdOfUsername(username) {
+        fetch('http://localhost:3000/userid', {
+            method: 'FETCH',
+            mode: 'cors',
+            body: JSON.stringify({username: username}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+                this.userId = data.userId;
+                console.log(this.userId);
+            })
+            .catch(error => {
+                console.error('Error: ', error);
+                callback("Submission Error, see console", false);
+                this.voteAlreadySubmitted = false;
+                this._submittedLabel = null;
             })
     }
 }

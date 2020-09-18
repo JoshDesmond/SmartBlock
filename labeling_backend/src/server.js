@@ -20,6 +20,14 @@ app.get('/labels', (request, response) => {
 	})
 });
 
+app.post('/userid', (request, response) => {
+    model.getUserIdOfUsername(request.body.username, (userId) => {
+        response.json({
+            userId: userId
+        });
+    });
+});
+
 // TODO create a get endpoint for extracting relevant information to a url
 
 
