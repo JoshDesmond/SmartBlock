@@ -2,11 +2,11 @@ import sqlite3 from 'sqlite3';
 
 
 class Model {
+
     constructor() {
         console.log("Constructing a model, hello world!");
         this.db = new sqlite3.Database('labels.sqlite');
     }
-
 
     postSnapshotLabel(data, response) {
         const url = data.webpage.url;
@@ -52,8 +52,12 @@ class Model {
                 if (err) return console.error(err.message);
             })
 
-            const sqlWebpagesString = `DELETE FROM Webpages WHERE Url = ?`;
-            const sqlFlagsString = `DELETE FROM Flags WHERE Url = ?`;
+            const sqlWebpagesString = `DELETE
+                                       FROM Webpages
+                                       WHERE Url = ?`;
+            const sqlFlagsString = `DELETE
+                                    FROM Flags
+                                    WHERE Url = ?`;
 
             // The url is enough information to retrieve the Webpages and Flags entries, however,
             // these should only be deleted if there now exist no labels for the url
@@ -64,10 +68,10 @@ class Model {
                 }
 
                 // Since there is no url, delete the entry in Urls and Flags
-                this.db.run(sqlWebpagesString, [data.webpage.url], function(err) {
+                this.db.run(sqlWebpagesString, [data.webpage.url], function (err) {
                     if (err) return console.error(err.message);
                 });
-                this.db.run(sqlFlagsString, [data.webpage.url], function(err) {
+                this.db.run(sqlFlagsString, [data.webpage.url], function (err) {
                     if (err) return console.error(err.message);
 
                     response.json({status: "Undo Success!"});
@@ -105,7 +109,7 @@ class Model {
         const sqlString = `SELECT SnapshotId
                            FROM Snapshots
                            WHERE Url = ?`
-        this.db.get(sqlString, [data.webpage.url], function(err, row) {
+        this.db.get(sqlString, [data.webpage.url], function (err, row) {
             if (err) {
                 return console.error(err.message);
             }
@@ -163,10 +167,10 @@ class Model {
     createLabel(label, snapshotId, callback) {
         console.log(`creating label with snapshotId === ${snapshotId}`);
         const sqlString = `INSERT INTO Labels(PrimaryVote, SecondaryVote, IsObvious,
-                                              IsAmbiguous, Topic, SnapshotId)
-                           VALUES (?, ?, ?, ?, ?, ?)`;
+                                              IsAmbiguous, Topic, SnapshotId, UserId)
+                           VALUES (?, ?, ?, ?, ?, ?, ?)`;
         const params = [label.primaryVote, label.secondaryVote, label.isObvious,
-            label.isAmbiguous, label.topic, snapshotId];
+            label.isAmbiguous, label.topic, snapshotId, label.userId];
 
         this.db.run(sqlString, params, function (err) {
             if (err) {
@@ -175,28 +179,41 @@ class Model {
 
             callback(this.lastID);
         });
+    }
 
+    /**
+     * Adds a new username to the database, and returns the userID via the callback
+     * @param {String} username
+     * @param {Function} callback
+     */
+    createUser(username, callback) {
+        const sqlString = `INSERT INTO Users(Username)
+                           VALUES (?)`;
+        this.db.run(sqlString, [username], function (err) {
+            if (err) {
+                console.log(err.message);
+            }
+
+            console.log(this.lastID);
+
+            callback(this.lastID);
+        });
     }
 
     getUserIdOfUsername(username, callback) {
         const sqlString = `SELECT UserId
                            FROM Users
                            WHERE Username = ?`
-        this.db.get(sqlString, [username], function(err, row) {
+        this.db.get(sqlString, [username], function (err, row) {
             if (err) {
                 console.log(err.message);
             }
-
-            console.log(row);
 
             callback(row.UserId);
         });
 
     }
 
-    createFlags() {
-
-    }
 
     /**
      * Console logs the entire database
@@ -235,7 +252,6 @@ class Model {
         this.db.run(`DELETE
                      FROM Flags`);
     }
-
 }
 
 export {Model}

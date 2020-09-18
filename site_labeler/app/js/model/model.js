@@ -19,13 +19,13 @@ class Model {
     textState;
 
     constructor() {
+        this.userId = this.getUserIdOfUsername(this.username);
         this.voteAlreadySubmitted = false;
         this.modelState = new ModelState();
         this.url = window.location.href;
         this.domain = new URL(this.url).hostname;
         this.textScraper = new TextScraper(document.body);
         this.textState = new TextState();
-        this.userId = this.getUserIdOfUsername(this.username);
     }
 
     /**
@@ -87,6 +87,7 @@ class Model {
      * backend API.
      */
     assembleLabelForSubmission() {
+        console.log("userId: " + this.userId);
         return {
             webpage: {
                 url: this.url,
@@ -103,7 +104,7 @@ class Model {
                 isObvious: this.modelState.isObviousState,
                 isAmbiguous: this.modelState.isAmbiguousState,
                 topic: null,
-                username: this.username
+                userId: this.userId
             },
             flags: {
                 isDynamicContent: this.modelState.flags[0],
@@ -182,8 +183,8 @@ class Model {
     }
 
     getUserIdOfUsername(username) {
-        fetch('http://localhost:3000/userid', {
-            method: 'FETCH',
+        fetch('http://localhost:3000/username', {
+            method: 'POST',
             mode: 'cors',
             body: JSON.stringify({username: username}),
             headers: {
