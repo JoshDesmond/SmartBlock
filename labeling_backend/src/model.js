@@ -10,7 +10,7 @@ class Model {
 
     postSnapshotLabel(data, response) {
         const url = data.webpage.url;
-        this.createWebpage(data.webpage);
+        this.createWebpage(data.webpage); // TODO handle duplicate websites
         // TODO convert this to use promises or something, (nested callbacks are ugly).
         // TODO create flags
         // TODO use username (data.label.username)

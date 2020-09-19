@@ -50,7 +50,11 @@ class Model {
      */
     extractTitle() {
         console.log(document.head.getElementsByTagName("title"));
-        const titleTags = document.head.getElementsByTagName("title");
+        let titleTags = document.head.getElementsByTagName("title");
+        if (titleTags[0] === undefined) {
+            titleTags = document.body.getElementsByTagName("title");
+        }
+        console.log("title: " + titleTags[0].text);
         return this.textScraper.cleanString(titleTags[0].text);
     }
 
