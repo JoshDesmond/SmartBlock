@@ -1,16 +1,20 @@
-# This is a sample Python script.
+import sqlite3
+from sqlite3 import Error
 
-# Press <no shortcut> to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+db_file = "c:/code/personal/smartblock/labeling_backend/labels.sqlite"
 
+def connect_db():
+    try:
+        conn = sqlite3.connect(db_file)
+        print(sqlite3.version)
+        for row in conn.execute("SELECT * FROM Labels"):
+            print(row)
+        conn.commit()
+    except Error as e:
+        print(e)
+    finally:
+        if conn:
+            conn.close()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press <no shortcut> to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    connect_db()
