@@ -1,10 +1,12 @@
 import sqlite3
 from sqlite3 import Error
 
-# This is just a temporary reference file, will be deleted probably
 db_file = "c:/code/personal/smartblock/labeling_backend/labels.sqlite"
 
-def connect_db():
+def load_tuples() -> List[Tuple[str, float]]:
+    """
+    Loads the text data from the database, and returns the list of tuples
+    """
     try:
         conn = sqlite3.connect(db_file)
         print(sqlite3.version)
@@ -19,5 +21,4 @@ def connect_db():
         if conn:
             conn.close()
 
-if __name__ == '__main__':
-    connect_db()
+    return None

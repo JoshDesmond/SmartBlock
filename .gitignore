@@ -34,6 +34,9 @@ Thumbs.db
 *.db
 *.sqlite
 
+# Other
+glove.6B.100d.txt
+
 #======================
 #==== Editor Files ====
 #======================

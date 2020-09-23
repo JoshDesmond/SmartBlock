@@ -1,0 +1,84 @@
+from collections import Counter
+from typing import Dict
+import numpy as np
+
+
+def load_glove(glove_path: str) -> Dict[str, np.ndarray]:
+    """
+    Loads the given GloVe embedding matrix and creates a dictionary
+
+    Args:
+        glove_path (str): The filepath of the GloVe embedding matrix
+
+    Returns:
+        Dict[str, np.ndarray]: A dictionary where each word maps to an n-dimensional vector
+    """
+    embeddings_index = {}
+    with open(glove_path, encoding="utf-8") as f:
+        for line in f:
+            word, coefficients = line.split(maxsplit=1)
+            coefficients = np.fromstring(coefficients, 'f', sep=' ')
+            embeddings_index[word] = coefficients
+
+    assert len(embeddings_index) > 1000  # quick sanity check, 1000 is arbitrary
+    return embeddings_index
+
+
+class TextToNumpyConverter:
+
+    def __init__(self, glove_path="glove/glove.6B.100d.txt", max_num_words=100000, max_sequence_length=500,
+                 embedding_dimensions=100, sort_by_frequency=True):
+        """
+        Loads glove into memory and initializes a text -> matrix converter.
+
+        Args:
+            glove_path (str): Path of glove embeddings to load
+            max_num_words (int): Only the first max_num_words will be considered in the article
+            max_sequence_length: The width of the matrix
+            embedding_dimensions: Number of dimensions in the glove embeddings
+            sort_by_frequency: False if the matrix should be in the original word order
+        """
+        self.max_num_words = max_num_words
+        self.max_sequence_length = max_sequence_length
+        self.embeddings_index = load_glove(glove_path)
+        self.embedding_dimensions = embedding_dimensions
+        self.sort_by_frequency = sort_by_frequency
+        self.unknown_word_vector = np.full(embedding_dimensions, fill_value=0.01)  # word vector to use for unknown word
+
+    def get_vector_of_word(self, word: str) -> np.ndarray:
+        return self.embeddings_index.get(word)
+
+    def convert_text_to_matrix(self, text: str, sort_text=True) -> np.ndarray:
+        """
+        Converts a string of text into an numerical matrix representation. The dimensions of the matrix are
+        determined by max_num_words, and embedding_dimensions. Note that class property sort_by_frequency is
+        used.
+
+        Args:
+            text (str): The text content of the page to process
+            sort_text (bool): True if the text should be ordered by word frequency. True by default.
+
+        Returns:
+            (np.ndarray): A matrix of floats with dimensions max_sequence_length x embedding_dimensions
+        """
+        if self.sort_by_frequency:
+            dictionary = Counter(text.lower().split())
+            dictionary = sorted(dictionary, reverse=True)
+        else:
+            dictionary = text.lower().split()
+
+        output_matrix = np.zeros((self.max_sequence_length, self.embedding_dimensions))
+        i = 0
+        for word in dictionary:
+            if i >= self.max_sequence_length:
+                break
+
+            vector_of_word = self.embeddings_index.get(word)
+            if vector_of_word is not None:
+                output_matrix[i] = vector_of_word
+            else:
+                # words not found in embedding index will be 0.01s.
+                output_matrix[i] = self.unknown_word_vector
+            i += 1
+
+        return output_matrix
