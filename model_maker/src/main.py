@@ -8,6 +8,8 @@ def connect_db():
         conn = sqlite3.connect(db_file)
         print(sqlite3.version)
         for row in conn.execute("SELECT * FROM Labels"):
+            for val in conn.execute(f"SELECT * FROM Snapshots WHERE SnapshotId = {row[6]}"):
+                print(val)
             print(row)
         conn.commit()
     except Error as e:
