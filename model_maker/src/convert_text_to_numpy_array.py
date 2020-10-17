@@ -1,9 +1,10 @@
 from collections import Counter
 from typing import Dict
 import numpy as np
+from pymagnitude import *
 
 
-def load_glove(glove_path: str) -> Dict[str, np.ndarray]:
+def load_glove(glove_path: str) -> Magnitude:
     """
     Loads the given GloVe embedding matrix and creates a dictionary
 
@@ -13,20 +14,11 @@ def load_glove(glove_path: str) -> Dict[str, np.ndarray]:
     Returns:
         Dict[str, np.ndarray]: A dictionary where each word maps to an n-dimensional vector
     """
-    embeddings_index = {}
-    with open(glove_path, encoding="utf-8") as f:
-        for line in f:
-            word, coefficients = line.split(maxsplit=1)
-            coefficients = np.fromstring(coefficients, 'f', sep=' ')
-            embeddings_index[word] = coefficients
-
-    assert len(embeddings_index) > 1000  # quick sanity check, 1000 is arbitrary
-    return embeddings_index
+    return Magnitude("/path/to/vectors.magnitude")
 
 
 class TextToNumpyConverter:
-
-    def __init__(self, glove_path="glove/glove.6B.100d.txt", max_num_words=100000, max_sequence_length=500,
+    def __init__(self, glove_path="glove-lemmatized.6B.100d.magnitude", max_num_words=100000, max_sequence_length=500,
                  embedding_dimensions=100, sort_by_frequency=True):
         """
         Loads glove into memory and initializes a text -> matrix converter.
@@ -40,13 +32,13 @@ class TextToNumpyConverter:
         """
         self.max_num_words = max_num_words
         self.max_sequence_length = max_sequence_length
-        self.embeddings_index = load_glove(glove_path)
+        self.vector = Magnitude(glove_path)
         self.embedding_dimensions = embedding_dimensions
         self.sort_by_frequency = sort_by_frequency
         self.unknown_word_vector = np.full(embedding_dimensions, fill_value=0.01)  # word vector to use for unknown word
 
     def get_vector_of_word(self, word: str) -> np.ndarray:
-        return self.embeddings_index.get(word)
+        return self.vector.query(word)
 
     def convert_text_to_matrix(self, text: str, sort_text=True) -> np.ndarray:
         """
@@ -73,7 +65,7 @@ class TextToNumpyConverter:
             if i >= self.max_sequence_length:
                 break
 
-            vector_of_word = self.embeddings_index.get(word)
+            vector_of_word = self.vector.query(word)
             if vector_of_word is not None:
                 output_matrix[i] = vector_of_word
             else:
