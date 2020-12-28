@@ -13,6 +13,7 @@ def load_tuples() -> List[Tuple[str, float]]:
         print(sqlite3.version)
         for row in conn.execute("SELECT * FROM Labels"):
             for val in conn.execute(f"SELECT * FROM Snapshots WHERE SnapshotId = {row[6]}"):
+                # TODO Return the tuple?
                 print(val)
             print(row)
         conn.commit()

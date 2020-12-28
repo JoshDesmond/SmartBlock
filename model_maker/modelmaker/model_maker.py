@@ -106,7 +106,6 @@ if __name__ == '__main__':
     # TextToNumpyConverter() takes ~15 seconds to initialize, and is done once here.
     dims = 100
     converter = convert_text_to_numpy_array.TextToNumpyConverter(sort_by_frequency=False,
-                                                                 glove_path=f"glove/glove.6B.{dims}d.txt",
                                                                  embedding_dimensions=dims)
     print_with_time("Converter Enabled")
     # The following two lines are for reading a model to disk
