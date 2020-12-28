@@ -1,7 +1,7 @@
 import gc
 
 import numpy
-from src import convert_text_to_numpy_array, numpy_utils, neural_network
+from modelmaker import convert_text_to_numpy_array, numpy_utils, load_db_to_tuples
 from timeit import default_timer as timer
 from datetime import timedelta
 from pathlib import Path

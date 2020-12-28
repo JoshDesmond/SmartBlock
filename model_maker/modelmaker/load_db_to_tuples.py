@@ -1,4 +1,5 @@
 import sqlite3
+from typing import List, Tuple
 from sqlite3 import Error
 
 db_file = "c:/code/personal/smartblock/labeling_backend/labels.sqlite"

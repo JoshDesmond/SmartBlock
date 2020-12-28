@@ -1,11 +1,11 @@
 import keras.initializers
 import numpy
 import numpy as np
+from modelmaker import convert_text_to_numpy_array
 from keras import Sequential, Model, Input
 from keras.layers import Dense, Flatten, Conv1D, MaxPooling1D, Dropout, LSTM
 from keras.models import load_model
 
-from modelmaker import convert_text_to_numpy_array
 
 
 class NeuralNetworkMaker:
