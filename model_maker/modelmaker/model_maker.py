@@ -88,7 +88,6 @@ def convert_tuple_list_to_matrices(list_of_duples: List[Tuple[str, float]]) -> \
     return matrix_of_matrices, vector_of_labels
 
 
-
 def data_path(filename: str) -> str:
     """
     Retrieves the absolute file path of a file in the SmartBlock/data/ folder
@@ -103,10 +102,8 @@ def data_path(filename: str) -> str:
 
 
 if __name__ == '__main__':
-    # TextToNumpyConverter() takes ~15 seconds to initialize, and is done once here.
     dims = 100
-    converter = convert_text_to_numpy_array.TextToNumpyConverter(sort_by_frequency=False,
-                                                                 embedding_dimensions=dims)
+    converter = convert_text_to_numpy_array.TextToNumpyConverter(embedding_dimensions=dims)
     print_with_time("Converter Enabled")
     # The following two lines are for reading a model to disk
     # neural = neural_network.NeuralNetworkMaker(validation_split=0.2, word_dimensions=50)
