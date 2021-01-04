@@ -19,22 +19,20 @@ def load_glove(glove_path: str) -> Magnitude:
 
 class TextToNumpyConverter:
     def __init__(self, glove_path="C:\code\personal\SmartBlock\model_maker\glove\glove-lemmatized.6B.100d.magnitude", max_num_words=100000, max_sequence_length=500,
-                 embedding_dimensions=100, sort_by_frequency=True):
+                 embedding_dimensions=100):
         """
         Loads glove into memory and initializes a text -> matrix converter.
 
         Args:
             glove_path (str): Path of glove embeddings to load
             max_num_words (int): Only the first max_num_words will be considered in the article
-            max_sequence_length: The width of the matrix
+            max_sequence_length: The width of the matrix, (the n number of words to consider)
             embedding_dimensions: Number of dimensions in the glove embeddings
-            sort_by_frequency: False if the matrix should be in the original word order
         """
         self.max_num_words = max_num_words
         self.max_sequence_length = max_sequence_length
         self.vector = Magnitude(glove_path)
         self.embedding_dimensions = embedding_dimensions
-        self.sort_by_frequency = sort_by_frequency
         self.unknown_word_vector = np.full(embedding_dimensions, fill_value=0.01)  # word vector to use for unknown word
 
     def get_vector_of_word(self, word: str) -> np.ndarray:
@@ -53,11 +51,8 @@ class TextToNumpyConverter:
         Returns:
             (np.ndarray): A matrix of floats with dimensions max_sequence_length x embedding_dimensions
         """
-        if self.sort_by_frequency:
-            dictionary = Counter(text.lower().split())
-            dictionary = sorted(dictionary, reverse=True)
-        else:
-            dictionary = text.lower().split()
+        dictionary = Counter(text.lower().split())
+        dictionary = sorted(dictionary, reverse=True)
 
         output_matrix = np.zeros((self.max_sequence_length, self.embedding_dimensions))
         i = 0
