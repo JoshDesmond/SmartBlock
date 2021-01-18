@@ -18,7 +18,7 @@ def load_glove(glove_path: str) -> Magnitude:
 
 
 class TextToNumpyConverter:
-    def __init__(self, glove_path="C:\code\personal\SmartBlock\model_maker\glove\glove-lemmatized.6B.100d.magnitude", max_num_words=100000, max_sequence_length=500,
+    def __init__(self, glove_path="C:\code\personal\SmartBlock\model_maker\glove\glove-lemmatized.6B.100d.magnitude", max_num_words=100000, max_sequence_length=100,
                  embedding_dimensions=100):
         """
         Loads glove into memory and initializes a text -> matrix converter.

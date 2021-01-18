@@ -30,6 +30,9 @@ Thumbs.db
 # Logs
 *.log
 
+# Data
+*.hdf5
+
 # Database
 *.db
 *.sqlite

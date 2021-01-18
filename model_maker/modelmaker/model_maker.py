@@ -1,6 +1,7 @@
 import gc
 
 import numpy
+import neural_network
 from modelmaker import convert_text_to_numpy_array, numpy_utils, load_db_to_tuples
 from timeit import default_timer as timer
 from datetime import timedelta
@@ -21,7 +22,7 @@ def main(dims=100):
     main() is the standard script of logic that trains a model and saves it to disk. See the bottom of the file
     for main()'s invocation.
     """
-    test_split = 0.01
+    test_split = 0.15
     validation_split = 0.20
 
     # Load tuples from disk
@@ -31,12 +32,10 @@ def main(dims=100):
 
     # Split the tuples according to test_split
     random.shuffle(list_of_tuples)
-    list_of_duples = get_duples_of_tuples(list_of_tuples)
-    print_with_time(f"Filtered tuples down to {len(list_of_duples)} duples")
     split_index = int(test_split * num_total_tuples)
-    test_tuples = list_of_duples[0: split_index]
-    list_of_duples = list_of_duples[split_index: num_total_tuples]
-    training_data = convert_tuple_list_to_matrices(list_of_duples)
+    test_tuples = list_of_tuples[0: split_index]
+    list_of_tuples = list_of_tuples[split_index: num_total_tuples]
+    training_data = convert_tuple_list_to_matrices(list_of_tuples)
     testing_data = convert_tuple_list_to_matrices(test_tuples)
 
     # Get NeuralNetworkMaker ready, and then train the model.
@@ -46,7 +45,7 @@ def main(dims=100):
     neural.graph_history_loss()  # Create those graphs of loss/accuracy
 
     # Save the model to disk
-    neural.write_model_to_disk(data_path("temp_model"))
+    # neural.write_model_to_disk(data_path("temp_model"))
 
     # Test the model using the testing_data.
     eval_loss = neural.model.evaluate(testing_data[0], testing_data[1], use_multiprocessing=True)
@@ -54,27 +53,16 @@ def main(dims=100):
     print_with_time(f"{neural.model.metrics_names[1]}: {eval_loss[1]}")
 
 
-def get_duples_of_tuples(list_of_tuples: List[Tuple]):
-    """
-    Converts the list of text, vote, title, username, etc. tuple to just the data tuple
-    Returns: list of two-dimensional tuples
-    """
-    duple_list = []
-    for tup in list_of_tuples:
-        if tup[2] == "programming":  # TODO temp
-            duple_list.append((tup[0], tup[1]))
-    return duple_list
-
-
 def convert_tuple_list_to_matrices(list_of_duples: List[Tuple[str, float]]) -> \
         Tuple[numpy.ndarray, numpy.ndarray]:
-    list_of_labels = []  # This is the label input into the neural network
-    list_of_matrices = []
-    i = 0
     label_len = len(list_of_duples)
-    gc.disable()
+    if label_len == 0:
+        raise ValueError("Must have more than a single tuple")
+    list_of_labels = []  # This is the label input into the neural network
+    list_of_matrices = list()
+    i = 0
     for vote in list_of_duples:
-        if i % 100 == 1:
+        if i % 10 == 1:
             print_with_time(f"Processed {i} of {label_len} articles/labels")
 
         matrix = converter.convert_text_to_matrix(vote[0])
@@ -82,7 +70,6 @@ def convert_tuple_list_to_matrices(list_of_duples: List[Tuple[str, float]]) -> \
         list_of_labels.append(vote[1])
         i += 1
 
-    gc.enable()
     matrix_of_matrices = numpy.stack(list_of_matrices, axis=0)
     vector_of_labels = numpy.asarray(list_of_labels)
     return matrix_of_matrices, vector_of_labels
