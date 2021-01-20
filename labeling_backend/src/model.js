@@ -5,7 +5,12 @@ class Model {
 
     constructor() {
         console.log("Constructing a model, hello world!");
-        this.db = new sqlite3.Database('labels.sqlite');
+        const dbPath = "../labels.sqlite";
+        const dbFile = File(dbPath);
+        if (dbFile.exists() === false) {
+            console.error(`No database file found at ${dbPath}`)
+        }
+        this.db = new sqlite3.Database(dbPath);
     }
 
     postSnapshotLabel(data, response) {
