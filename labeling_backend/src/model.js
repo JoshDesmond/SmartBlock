@@ -1,16 +1,11 @@
 import sqlite3 from 'sqlite3';
 
-
 class Model {
 
     constructor() {
         console.log("Constructing a model, hello world!");
         const dbPath = "../labels.sqlite";
-        const dbFile = File(dbPath);
-        if (dbFile.exists() === false) {
-            console.error(`No database file found at ${dbPath}`)
-        }
-        this.db = new sqlite3.Database(dbPath);
+        this.db = new sqlite3.Database(dbPath); // TODO test for existence of file first
     }
 
     postSnapshotLabel(data, response) {
