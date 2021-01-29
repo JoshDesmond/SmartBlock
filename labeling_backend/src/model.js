@@ -4,8 +4,9 @@ class Model {
 
     constructor() {
         console.log("Constructing a model, hello world!");
-        const dbPath = "../labels.sqlite";
+        const dbPath = "labels.sqlite";
         this.db = new sqlite3.Database(dbPath); // TODO test for existence of file first
+        // The path changes depending on where you launch the file
     }
 
     postSnapshotLabel(data, response) {
