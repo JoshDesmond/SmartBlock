@@ -7,7 +7,6 @@ from keras.layers import Dense, Flatten, Conv1D, MaxPooling1D, Dropout, LSTM
 from keras.models import load_model
 
 
-
 class NeuralNetworkMaker:
     def __init__(self, validation_split=.05, max_words=500, word_dimensions=100):
         self.validation_split = validation_split
@@ -16,7 +15,7 @@ class NeuralNetworkMaker:
 
     def fit_model_to_data(self, input_matrix: np.ndarray, label_matrix: np.ndarray, epochs=10) -> None:
         self.model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])
-        self.history = self.model.fit(input_matrix, label_matrix, epochs=epochs, batch_size=80,
+        self.history = self.model.fit(input_matrix, label_matrix, epochs=epochs, batch_size=50,
                                       use_multiprocessing=True,
                                       validation_split=self.validation_split)
         self.model.summary()
@@ -34,72 +33,6 @@ class NeuralNetworkMaker:
         simple.add(Dropout(0.2))
         simple.add(Dense(1, activation='tanh'))
         return simple
-
-    def initialize_CMpDNNDo(self, max_words):
-        """
-        Initialize Model with a CNN w/ max pooling, and a DNN w/ .2 dropout layers
-        :return:
-        """
-        self.model = Sequential()
-        self.model.add(Conv1D(200, kernel_size=20, strides=2, input_shape=(max_words, 300)))
-        self.model.add(MaxPooling1D(pool_size=3))
-        self.model.add(Conv1D(150, kernel_size=5, strides=1))
-        self.model.add(MaxPooling1D(pool_size=2))
-        self.model.add(Conv1D(100, kernel_size=3, strides=1))
-        self.model.add(MaxPooling1D(pool_size=2))
-
-        self.model.add(Flatten())
-        self.model.add(Dense(1000, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(500, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(500, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(100, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(1, activation='tanh'))
-
-    def initialize_LSTM(self, max_words):
-        """
-        Get LSTM Model
-        :return: Initialized LSTM Model
-        """
-        self.model = Sequential()
-
-        self.model.add(LSTM(150, input_shape=(max_words, 300), activation="relu", dropout=.2, ))
-
-        self.model.add(Dense(500, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(500, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(500, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(100, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(1, activation='tanh'))
-
-    def initialize_convolutional_LSTM(self, max_words):
-        """
-        Get LSTM Model
-        :return: Initialized LSTM Model
-        """
-        self.model = Sequential()
-        self.model.add(Conv1D(200, kernel_size=20, strides=2, input_shape=(max_words, 300)))
-        self.model.add(MaxPooling1D(pool_size=3))
-        self.model.add(Conv1D(150, kernel_size=5, strides=1))
-        self.model.add(MaxPooling1D(pool_size=2))
-
-        self.model.add(LSTM(150, activation="relu", dropout=.2))
-
-        self.model.add(Dense(500, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(500, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(500, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(100, activation='relu'))
-        self.model.add(Dropout(0.2))
-        self.model.add(Dense(1, activation='tanh'))
 
     def initialize_context_based(self, max_words):
         """

@@ -17,7 +17,7 @@ def print_with_time(message: str):
     print(f"{message} ({delta})")
 
 
-def main(dims=100):
+def main(dims=100, max_num_words=100):
     """
     main() is the standard script of logic that trains a model and saves it to disk. See the bottom of the file
     for main()'s invocation.
@@ -39,9 +39,9 @@ def main(dims=100):
     testing_data = convert_tuple_list_to_matrices(test_tuples)
 
     # Get NeuralNetworkMaker ready, and then train the model.
-    neural = neural_network.NeuralNetworkMaker(validation_split=validation_split, word_dimensions=dims)
+    neural = neural_network.NeuralNetworkMaker(validation_split=validation_split, word_dimensions=dims, max_words=max_num_words)
     neural.converter = converter
-    neural.fit_model_to_data(training_data[0], training_data[1], epochs=20)
+    neural.fit_model_to_data(training_data[0], training_data[1], epochs=50)
     neural.graph_history_loss()  # Create those graphs of loss/accuracy
 
     # Save the model to disk
@@ -52,6 +52,10 @@ def main(dims=100):
     print_with_time(f"{neural.model.metrics_names[0]}: {eval_loss[0]}")
     print_with_time(f"{neural.model.metrics_names[1]}: {eval_loss[1]}")
 
+    for t in test_tuples:
+        print(neural.classify_text(t[0]), end="")
+        print(", ", end="")
+        print(t[1])
 
 def convert_tuple_list_to_matrices(list_of_duples: List[Tuple[str, float]]) -> \
         Tuple[numpy.ndarray, numpy.ndarray]:
@@ -90,7 +94,8 @@ def data_path(filename: str) -> str:
 
 if __name__ == '__main__':
     dims = 100
-    converter = convert_text_to_numpy_array.TextToNumpyConverter(embedding_dimensions=dims)
+    max_num_words = 100
+    converter = convert_text_to_numpy_array.TextToNumpyConverter(embedding_dimensions=dims, max_num_words=max_num_words)
     print_with_time("Converter Enabled")
     # The following two lines are for reading a model to disk
     # neural = neural_network.NeuralNetworkMaker(validation_split=0.2, word_dimensions=50)
@@ -98,4 +103,4 @@ if __name__ == '__main__':
     # neural.load_model_from_disk(data_path("temp_model"))
     # Uncomment below if you want to update the test_wiki_articles.
     # read_and_store_test_wiki_articles()
-    main(dims)
+    main(dims, max_num_words)

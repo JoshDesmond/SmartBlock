@@ -15,7 +15,8 @@ def load_tuples() -> List[Tuple[str, float]]:
         print(sqlite3.version)
         for row in conn.execute("SELECT * FROM Labels"):
             for val in conn.execute(f"SELECT * FROM Snapshots WHERE SnapshotId = {row[6]}"):
-                tuples.append([val[4], row[1]]) # TODO this is just using primary vote, a temp solution
+                vote = convert_vote_to_decimal(row[1])
+                tuples.append([val[4], vote])  # TODO this is just using primary vote, a temp solution
         conn.commit()
         return tuples
     except Error as e:
@@ -25,3 +26,8 @@ def load_tuples() -> List[Tuple[str, float]]:
             conn.close()
 
     return None
+
+
+# This just converts the values [1,2,3,4] to [-1, -.33, .33, 1] so as to normalize them for the nn
+def convert_vote_to_decimal(vote) -> int:
+    return 2.0/3.0 * vote - (5.0/3.0)
