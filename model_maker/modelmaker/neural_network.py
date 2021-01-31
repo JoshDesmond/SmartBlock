@@ -3,15 +3,16 @@ import numpy
 import numpy as np
 from modelmaker import convert_text_to_numpy_array
 from keras import Sequential, Model, Input
-from keras.layers import Dense, Flatten, Conv1D, MaxPooling1D, Dropout, LSTM
+from keras.layers import Dense, Flatten, Conv1D, MaxPooling1D, Dropout
 from keras.models import load_model
+import tensorflow_probability as tfp
 
 
 class NeuralNetworkMaker:
     def __init__(self, validation_split=.05, max_words=500, word_dimensions=100):
         self.validation_split = validation_split
         self.converter = None
-        self.model = self.initialize_simple(max_words, word_dimensions)
+        self.model = self.initialize_convolution(max_words, word_dimensions)
 
     def fit_model_to_data(self, input_matrix: np.ndarray, label_matrix: np.ndarray, epochs=10) -> None:
         self.model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])
@@ -34,47 +35,22 @@ class NeuralNetworkMaker:
         simple.add(Dense(1, activation='tanh'))
         return simple
 
-    def initialize_context_based(self, max_words):
+    def initialize_convolution(self, max_words, word_dimensions):
         """
-        Initialize Model with a CNN w/ max pooling, and a DNN w/ .2 dropout layers,
-        which merges the context word vector with the flattened output of the CN
+        Initialize Model with 1D convolutions applied to individual words
         :return:
         """
         encoder_model = Sequential()
-        encoder_model.add(Conv1D(125, kernel_size=25, strides=4, input_shape=(max_words, 300)))
-        encoder_model.add(Conv1D(125, kernel_size=25, strides=4))
-        encoder_model.add(MaxPooling1D(pool_size=2))
-        encoder_model.add(Conv1D(75, kernel_size=4, strides=2))
-        encoder_model.add(Conv1D(75, kernel_size=4, strides=2))
-        encoder_model.add(MaxPooling1D(pool_size=2))
-        encoder_model.add(Conv1D(30, kernel_size=3, strides=2))
-        encoder_model.add(Conv1D(30, kernel_size=3, strides=2))
-        encoder_model.add(MaxPooling1D(pool_size=2))
+        shape = (max_words, word_dimensions)
+        encoder_model.add(Conv1D(max_words*5, kernel_size=word_dimensions, strides=word_dimensions, input_shape=shape))
         encoder_model.add(Flatten())
+        encoder_model.add(Dense(500, activation='relu', kernel_initializer='he_uniform'))
+        encoder_model.add(Dropout(0.2))
+        encoder_model.add(Dense(500, activation='relu', kernel_initializer='he_uniform'))
+        encoder_model.add(Dropout(0.2))
+        encoder_model.add(Dense(1, activation='tanh'))
 
-        text_input = Input(shape=(max_words, 300))
-        encoded_text = encoder_model(text_input)
-
-        context_input = Input(shape=(300,))
-
-        merged = keras.layers.concatenate([context_input, encoded_text])
-
-        model_combined = Sequential()
-        model_combined.add(Dense(1000, activation='relu'))
-        model_combined.add(Dropout(0.2))
-        model_combined.add(Dense(500, activation='relu'))
-        model_combined.add(Dropout(0.2))
-        model_combined.add(Dense(500, activation='relu'))
-        model_combined.add(Dropout(0.2))
-        model_combined.add(Dense(100, activation='relu'))
-        model_combined.add(Dropout(0.2))
-        model_combined.add(Dense(1, activation='tanh'))
-
-        output = model_combined(merged)
-
-        self.model = Model(inputs=[text_input, context_input], outputs=output)
-
-
+        return encoder_model
 
     def write_model_to_disk(self, filepath: str):
         """
