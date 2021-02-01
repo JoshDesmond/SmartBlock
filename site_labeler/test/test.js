@@ -69,6 +69,19 @@ describe('TextExtractor', () => {
         });
     });
 
+    it("Should extract text from wiki-like test document", (done) => {
+
+        const options = {pretendToBeVisual: true};
+        JSDOM.fromFile("./test/test_wiki_like.html", options).then(dom => {
+            const body = dom.window.document.body;
+            const text = textScraper.extractText(body);
+
+            // Test for specific word in text
+            assert.equal(text.includes("created"), true, "The text 'created' should be found");
+            assert.equal(text.includes("visible"), true);
+        });
+    });
+
     it("Should extract text correctly from wikipedia document", (done) => {
         const options = {pretendToBeVisual: true};
         JSDOM.fromURL("https://en.wikipedia.org/w/index.php?title=Catwalk_(Australian_TV_series)&oldid=978884033", options).then(dom => {

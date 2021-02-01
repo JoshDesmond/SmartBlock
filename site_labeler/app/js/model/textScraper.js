@@ -1,4 +1,3 @@
-
 class TextScraper {
 
     constructor() {
@@ -21,11 +20,15 @@ class TextScraper {
 
         const nodes = element.querySelectorAll(':not(.SmartBlockPluginElement):not([style*="display:none"]):not([style*="display: none"])');
 
+        // TODO use functional programming to iteratively descend and find textual trees, and
+        //  only count the entire content of those tree's once to be parsed for text
         nodes.forEach((node) => {
             const tag = node.tagName;
-            // Only select nodes with no children and that aren't in the ignorableTags list
-            if (node.children.length === 0 && !this.ignorableTags.includes(tag)) {
-                text += node.textContent + " ";
+            // Only select nodes that aren't in the ignorableTags list
+            if (!this.ignorableTags.includes(tag)) {
+                if (node.children.length === 0) { // (Control node length/size of children?)
+                    text += node.textContent + " ";
+                }
             }
         });
 
