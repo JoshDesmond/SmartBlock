@@ -1,0 +1,11 @@
+{
+  "name": "smart_block",
+  "version": "1.0.0",
+  "description": "Extension to block web sites based on the relevancy and productiveness of its contents",
+  "main": "app/js/content.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "J. Desmond",
+  "license": "GPL-3.0"
+}
