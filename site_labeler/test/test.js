@@ -56,6 +56,36 @@ describe('TextExtractor', () => {
         });
     });
 
+    it("Should not extract text that has display: none", (done) => {
+        const options = {pretendToBeVisual: true};
+        JSDOM.fromFile("./test/test_display_none_text.html", options).then(dom => {
+            const body = dom.window.document.body;
+            const text = textScraper.extractText(body);
+
+            // Test for specific word in text
+            assert.equal(text.includes("visible"), true);
+            assert.equal(text.includes("invisible"), false);
+            done();
+        });
+    });
+
+    it("Should extract text correctly from wikipedia document", (done) => {
+        const options = {pretendToBeVisual: true};
+        JSDOM.fromURL("https://en.wikipedia.org/w/index.php?title=Catwalk_(Australian_TV_series)&oldid=978884033", options).then(dom => {
+            // Extract text
+            const body = dom.window.document.body;
+            const text = textScraper.extractText(body);
+
+            // Test for specific words in text
+            assert.equal(text.includes("created"), true, "The text 'created' should be found");
+            assert.equal(text.includes("oldid978884033"), false);
+            assert.equal(text.includes("oldid"), false);
+            assert.equal(text.includes("978884033"), false);
+
+            done();
+        });
+    });
+
     it("Should handle a non-breaking space ", (done) => {
         // TODO
         done();
