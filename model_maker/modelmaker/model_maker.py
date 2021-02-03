@@ -45,17 +45,26 @@ def main(dims=100, max_num_words=100):
     neural.graph_history_loss()  # Create those graphs of loss/accuracy
 
     # Save the model to disk
-    # neural.write_model_to_disk(data_path("temp_model"))
+    neural.write_model_to_disk(data_path("temp_model"))
 
     # Test the model using the testing_data.
     eval_loss = neural.model.evaluate(testing_data[0], testing_data[1], use_multiprocessing=True)
     print_with_time(f"{neural.model.metrics_names[0]}: {eval_loss[0]}")
     print_with_time(f"{neural.model.metrics_names[1]}: {eval_loss[1]}")
 
+    diffs = 0
+    count = 0
     for t in test_tuples:
-        print(neural.classify_text(t[0]), end="")
+        guess = neural.classify_text(t[0])
+        print(guess, end="")
         print(", ", end="")
-        print(t[1])
+        print(t[1], end="")
+        print(": ", end="")
+        print(guess - t[1])
+        count += 1
+        diffs += abs(guess - t[1])
+    print("The average difference was:")
+    print(diffs/count)
 
 def convert_tuple_list_to_matrices(list_of_duples: List[Tuple[str, float]]) -> \
         Tuple[numpy.ndarray, numpy.ndarray]:

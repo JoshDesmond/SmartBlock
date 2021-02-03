@@ -12,7 +12,7 @@ class NeuralNetworkMaker:
     def __init__(self, validation_split=.05, max_words=500, word_dimensions=100):
         self.validation_split = validation_split
         self.converter = None
-        self.model = self.initialize_convolution(max_words, word_dimensions)
+        self.model = self.initialize_simple(max_words, word_dimensions)
 
     def fit_model_to_data(self, input_matrix: np.ndarray, label_matrix: np.ndarray, epochs=10) -> None:
         self.model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])
@@ -30,8 +30,15 @@ class NeuralNetworkMaker:
         simple.add(Dropout(0.2))
         simple.add(Dense(500, activation='relu', kernel_initializer='he_uniform'))
         simple.add(Dropout(0.2))
-        simple.add(Dense(500, activation='relu', kernel_initializer='he_uniform'))
+        simple.add(Dense(400, activation='relu', kernel_initializer='he_uniform'))
         simple.add(Dropout(0.2))
+        simple.add(Dense(300, activation='relu', kernel_initializer='he_uniform'))
+        simple.add(Dropout(0.1))
+        simple.add(Dense(200, activation='relu', kernel_initializer='he_uniform'))
+        simple.add(Dropout(0.1))
+        simple.add(Dense(50, activation='relu', kernel_initializer='he_uniform'))
+        simple.add(Dropout(0.05))
+        simple.add(Dense(5, activation='relu', kernel_initializer='he_uniform'))
         simple.add(Dense(1, activation='tanh'))
         return simple
 
