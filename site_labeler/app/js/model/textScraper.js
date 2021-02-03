@@ -22,8 +22,6 @@ class TextScraper {
 
         const nodes = element.querySelectorAll(':not(.SmartBlockPluginElement):not([style*="display:none"]):not([style*="display: none"])');
 
-        const textualNodes = new Set();
-
         // TODO use functional programming to iteratively descend and find textual trees, and
         //  only count the entire content of those tree's once to be parsed for text
         for (const node of nodes) {
