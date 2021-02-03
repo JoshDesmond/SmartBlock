@@ -3,7 +3,17 @@
   "version": "1.0.0",
   "description": "Extension to block web sites based on the relevancy and productiveness of its contents",
   "main": "app/js/content.js",
+  "type": "module",
+  "devDependencies": {
+    "jsdom": "^16.4.0",
+    "mocha": "^8.2.1",
+    "rollup": "^2.38.4",
+    "rollup-plugin-chrome-extension": "^3.5.2",
+    "rollup-plugin-delete": "^2.0.0"
+  },
   "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
     "test": "mocha"
   },
   "author": "J. Desmond",
