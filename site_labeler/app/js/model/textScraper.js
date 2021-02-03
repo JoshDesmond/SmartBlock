@@ -7,6 +7,8 @@ class TextScraper {
         "META", "BASE", "STYLE", "DIALOG", "DATA", "FOOTER", "AUDIO", "SOURCE", "TRACK", "VIDEO",
         "IMG", "MAP", "AREA", "CANVAS", "PICTURE", "SVG", "TEXTAREA"];
 
+    formattingTags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS", "SUB", "SUP"];
+
     /**
      * Extracts the text from the body HTMLElement the instance of this class was made with.
      * @param {HTMLElement} element The tag to traverse for text extraction
@@ -20,21 +22,63 @@ class TextScraper {
 
         const nodes = element.querySelectorAll(':not(.SmartBlockPluginElement):not([style*="display:none"]):not([style*="display: none"])');
 
+        const textualNodes = new Set();
+
         // TODO use functional programming to iteratively descend and find textual trees, and
         //  only count the entire content of those tree's once to be parsed for text
-        nodes.forEach((node) => {
+        for (const node of nodes) {
             const tag = node.tagName;
-            // Only select nodes that aren't in the ignorableTags list
-            if (!this.ignorableTags.includes(tag)) {
-                if (node.children.length === 0) { // (Control node length/size of children?)
-                    text += node.textContent + " ";
-                }
-            }
-        });
 
+            // Only select nodes that aren't in the ignorableTags or formatting list
+            if (this.ignorableTags.includes(tag) || this.formattingTags.includes(tag)) {
+                continue;
+            }
+
+            if (this.isTextualLeaf(node)) {
+                text += node.textContent + " ";
+            }
+        }
 
         console.log(this.cleanString(text));
         return this.cleanString(text);
+    }
+
+    /**
+     * Determines if the node is a textual leaf. A textual leaf contains only children nodes
+     * that are formatting elements, (or no children at all).
+     * @param {HTMLElement} element The node to inspect
+     */
+    isTextualLeaf(element) {
+        if (this.ignorableTags.includes(element.tagName)) {
+            return false;
+        }
+
+        if (element.children.length === 0) {
+            return true;
+        }
+
+        for (const node of element.children) {
+            if (!this.isFormattingLeaf(node)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    isFormattingLeaf(element) {
+        if (this.formattingTags.includes(element.tagName)) {
+            return true;
+        } else if (element.tagName === "SPAN") {
+            console.log("Ignoring SPAN element");
+            // TODO, iterate through all children and return true if they are all formatting leaves
+            return false; // For now text formatted with Span will be ignored.
+        } else if (element.tagName === "A") { // Handle text with embedded links
+            return true;
+            // TODO this will currently double count links I believe?, as they aren't ignored
+        }
+
+        return false;
     }
 
     /**

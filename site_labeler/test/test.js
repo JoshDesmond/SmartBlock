@@ -78,7 +78,10 @@ describe('TextExtractor', () => {
 
             // Test for specific word in text
             assert.equal(text.includes("created"), true, "The text 'created' should be found");
-            assert.equal(text.includes("visible"), true);
+            assert.equal(text.includes("1971"), true);
+            assert.equal(text.includes("tony"), true);
+            assert.equal(text.includes("australian"), true);
+            done();
         });
     });
 
@@ -91,9 +94,10 @@ describe('TextExtractor', () => {
 
             // Test for specific words in text
             assert.equal(text.includes("created"), true, "The text 'created' should be found");
-            assert.equal(text.includes("oldid978884033"), false);
-            assert.equal(text.includes("oldid"), false);
-            assert.equal(text.includes("978884033"), false);
+            assert.equal(text.includes("oldid978884033"), false, "The text oldid978... should" +
+                " not be found");
+            assert.equal(text.includes("oldid"), false, "The text oldid should not be found");
+            assert.equal(text.includes("978884033"), false, "The text 978.. should not be found");
 
             done();
         });
