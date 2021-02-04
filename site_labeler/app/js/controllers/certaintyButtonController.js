@@ -23,7 +23,6 @@ export class CertaintyButtonController {
      * @param {Event} e
      */
     handleEvent(e) {
-        // this.isObviousButton.setAttribute("data-action", 'isObvious');
         /** @type {HTMLButtonElement} */
         const button = e.target;
         switch (button.getAttribute('data-action')) {

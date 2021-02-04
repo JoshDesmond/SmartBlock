@@ -1,6 +1,3 @@
-// TODO refactor to model? (Because the other constant is there?)
-const FLAG_NAMES = ["isVeryAmbiguous", "isReviewable", "isNotTextual", "isInteresting"]
-
 /**
  * The ModelState contains all of the observable state information used in the labeling workflow.
  *
@@ -100,9 +97,7 @@ class ModelState {
     isValidForSubmission() {
         if (this.primaryVote === null) return false;
         if (this.secondaryVote === this.primaryVote) return false;
-        if (this.isAmbiguousState && this.isObviousState) return false;
-
-        return true;
+        return !(this.isAmbiguousState && this.isObviousState);
     }
 
     /**
@@ -126,4 +121,4 @@ class ModelState {
     }
 }
 
-export {ModelState, FLAG_NAMES};
+export {ModelState};

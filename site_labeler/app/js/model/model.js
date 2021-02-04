@@ -1,4 +1,4 @@
-import {ModelState, FLAG_NAMES} from "./modelState.js";
+import {ModelState} from "./modelState.js";
 import {TextScraper} from "./textScraper.js";
 import {TextState} from "./textState.js";
 
@@ -58,33 +58,10 @@ class Model {
         return this.textScraper.cleanString(titleTags[0].text);
     }
 
-    /**
-     * Returns the currently parsed textual content of the current webpage.
-     * @returns {String} The extracted text of the webpage.
-     */
-    extractText() {
-        return this.textState.words;
-    }
-
-    /**
-     * Counts how many words there are in the readable text of document
-     * @return {Number} The word count of document
-     */
-    countWords() {
-        return this.textState.wordCount;
-
-    }
-
-    /** Returns the last/cached result of countWords() */
-    getLatestWordCount() {
-        return this.words.length;
-    }
-
     /** Returns the last/cached result of extractText() */
     getLatestTextContent() {
         return this.textState.words;
     }
-
 
     /**
      * Compiles all the necessary data into a json object that will be submitted to the labeling
@@ -131,6 +108,10 @@ class Model {
         } else if (this.voteAlreadySubmitted) {
             callback("A vote has already been submitted. To update your vote, undo with" +
                 " backspace/delete and resubmit again");
+            return;
+        } else if (this.userId === undefined) {
+            callback("UserId is not set - cancelling submission. Perhaps the backend is not" +
+                " running?", false);
             return;
         }
         console.log("Submitting Vote!");
@@ -186,6 +167,11 @@ class Model {
             })
     }
 
+    /**
+     * Retrieves the userid of the given username from the database/backend, and (currently)
+     * sets the model to store that userId in this.userId
+     * @param {String} username
+     */
     getUserIdOfUsername(username) {
         fetch('http://localhost:3000/username', {
             method: 'POST',
@@ -201,12 +187,13 @@ class Model {
                 console.log(this.userId);
             })
             .catch(error => {
+                console.error("Unable to retrieve userId from username: " + username);
                 console.error('Error: ', error);
-                callback("Submission Error, see console", false);
+                // callback("Submission Error, see console", false);
                 this.voteAlreadySubmitted = false;
                 this._submittedLabel = null;
             })
     }
 }
 
-export {Model, FLAG_NAMES};
+export {Model};

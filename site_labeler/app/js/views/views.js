@@ -3,8 +3,6 @@ import {Toast} from "./toast.js";
 /** The GUI overlay shown when labeling sites */
 class Views {
 
-    /** */
-    firstWordCount = true;
     /** @type {HTMLButtonElement[]} Access to the four likert scale voting buttons */
     votingButtons;
     /** @type {HTMLButtonElement[]} Buttons for isAmbiguous, isObvious, and flags */
@@ -39,21 +37,6 @@ class Views {
         this.addTextualAnalysisButton();
     }
 
-    /**
-     * Updates the footer to display the page's current word count.
-     */
-    displayWordCount(wordCount) {
-        if (this.firstWordCount) {
-            this.wordCountText = document.createElement('p');
-            this.wordCountText.style.zIndex = '10001' // Arbitrarily larger number
-            this.wordCountText.style.color = '#dcdcdc'
-            this.wordCountText.innerText = "This page has " + wordCount.toString() + " words";
-            this.footerDiv.appendChild(this.wordCountText);
-            this.firstWordCount = false;
-        }
-
-        this.wordCountText.innerText = "This page has " + wordCount.toString() + " words";
-    }
 
     /**
      * Creates a toast notification with the given text. Use createNeutralToast() and
@@ -209,7 +192,7 @@ class Views {
      * analysis view
      */
     addTextualAnalysisButton() {
-
+        // TODO
     }
 
     /**
@@ -218,8 +201,6 @@ class Views {
     notify() {
         this.repaintModel();
     }
-
-
 }
 
 export {Views};

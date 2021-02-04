@@ -1,16 +1,13 @@
 import {TextScraper} from "../model/textScraper.js";
-import {AnalysisController} from "./analysisController.js";
 
 class MutationController {
 
     /**
      *
      * @param {Model} model
-     * @param {AnalysisController} analysisController
      */
-    constructor(model, analysisController) {
+    constructor(model) {
         this.model = model;
-        this.ac = analysisController;
     }
 
     /**
@@ -56,7 +53,6 @@ class MutationController {
                         this.model.textState.addText(textScraper.extractText(node));
                     }
                 });
-                this.ac.analyze();
             } else {
                 console.error(mutation.type);
                 console.log(mutation);
@@ -64,5 +60,7 @@ class MutationController {
         }
     }
 }
+
+// See https://dom.spec.whatwg.org/#mutationrecord when refactoring
 
 export {MutationController};

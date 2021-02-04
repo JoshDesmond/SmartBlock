@@ -1,9 +1,8 @@
 'use strict';
 
-import {Model, FLAG_NAMES} from './model/model.js';
+import {Model} from './model/model.js';
 import {Views} from './views/views.js';
 import {KeydownController} from './controllers/keydownController.js';
-import {AnalysisController} from './controllers/analysisController.js';
 import {VoteButtonController} from './controllers/voteButtonController.js'
 import {CertaintyButtonController} from "./controllers/certaintyButtonController";
 import {MutationController} from "./controllers/mutationController.js";
@@ -24,19 +23,12 @@ views.footerDiv.addEventListener('click', () => {
     console.log(model.textScraper.getDictionary(model.textState.words));
 });
 
-// TODO figure out what you want to do with this analysis controller thingy
-const ac = new AnalysisController(model, views);
-
 // Add hotkeys
 const keydownController = new KeydownController(model, views);
 window.addEventListener('keydown', keydownController);
-
 model.textState.addText(model.textScraper.extractText(document.body));
 
-let analyzedFlag = false; // to prevent infinite loops
-let readyForAnalysis = true; // to rate limit analysis
-
-// Mutation observations
+// Add mutation observer
 const config = {
     childList: true,
     subtree: true,
@@ -44,77 +36,8 @@ const config = {
     characterDataOldValue: true,
     attributes: false,
 };
-
-const mc = new MutationController(model, ac);
-
+const mc = new MutationController(model);
 const targetNode = document.body;
 const observer = new MutationObserver(mc.mutationCallback.bind(mc));
 observer.observe(targetNode, config);
 
-// Callback function to execute when mutations are observed
-const mutationCallback = function (mutationsList, observer) {
-    /**
-     * TODO create a method that causes the cessation of analysis
-     * TODO refactor into controller
-     */
-
-    console.log("Mutation observed, running investigation");
-    /** Check the type of mutation to see if there was a childList mutation */
-    let wasThereAChildListMutation = false;
-    for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-            wasThereAChildListMutation = true;
-        }
-    }
-    if (wasThereAChildListMutation === false) {
-        console.log("False alarm");
-        return;
-    } else {
-        console.log("There was a childList mutation"); // TODO temp
-    }
-
-    if (model.getLatestWordCount() > model.MAX_WORDS) {
-        console.log("Maxwords already reached, halting analysis");
-        return;
-    }
-
-    if (model.voteAlreadySubmitted) {
-        console.log("Vote already submitted, halting analysis")
-    }
-
-    /**
-     * If the document is not ready, wait at least 1000ms since the last analysis before running
-     * analysis again.
-     */
-    if (document.readyState !== "complete" && readyForAnalysis === false) {
-        console.log("Skipping analysis because readyForAnalysis is false and the Document no rdy");
-        setTimeout(() => {
-            readyForAnalysis = true
-        }, 1000);
-        return;
-    }
-
-    /**
-     * If the analyzed flag is true, (-> analysis was just run), then halt any analysis on this
-     * invocation, as running analysis can trigger a mutation in the document and
-     * would therefore continue to trigger analysis in an infinite loop.
-     *
-     * // TODO this logic currently prevents every other invocation of analysis, and might
-     * // potentially prevent the last ?
-     */
-    if (analyzedFlag) {
-        console.log("Skipping analysis was just run");
-        analyzedFlag = false;
-        return;
-    }
-
-    if (document.readyState !== "complete") {
-        console.log("Turning readyForAnalysis back off since document no rdy");
-        readyForAnalysis = false;
-    }
-    console.log("Running analysis and toggling on the analyzed flag");
-    analyzedFlag = true;
-    ac.analyze();
-};
-
-// TODO see https://dom.spec.whatwg.org/#mutationrecord when refactoring
