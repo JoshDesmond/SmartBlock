@@ -6,6 +6,7 @@ import del from 'rollup-plugin-delete';
 
 /** @noinspection */
 export default {
+    context: 'this',
     input: ['app/manifest.json'],
     output: {
         dir: 'build',

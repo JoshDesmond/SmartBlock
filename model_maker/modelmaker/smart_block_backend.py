@@ -12,7 +12,7 @@ app = flask.Flask(__name__)
 def text():
     # Get request.body.text
     text = request.get_json().get('text')
-    return jsonify(converter.convert_text_to_matrix(text))
+    return jsonify(converter.convert_text_to_matrix(text).tolist())
 
 
 if __name__ == '__main__':

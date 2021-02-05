@@ -22,11 +22,11 @@ def main(dims=100, max_num_words=100):
     main() is the standard script of logic that trains a model and saves it to disk. See the bottom of the file
     for main()'s invocation.
     """
-    test_split = 0.15
+    test_split = 0.05
     validation_split = 0.20
 
     # Load tuples from disk
-    list_of_tuples = load_db_to_tuples.load_tuples()  # TODO
+    list_of_tuples = load_db_to_tuples.load_tuples()
     num_total_tuples = len(list_of_tuples)
     print_with_time(f"{num_total_tuples} tuples loaded")
 
@@ -41,11 +41,11 @@ def main(dims=100, max_num_words=100):
     # Get NeuralNetworkMaker ready, and then train the model.
     neural = neural_network.NeuralNetworkMaker(validation_split=validation_split, word_dimensions=dims, max_words=max_num_words)
     neural.converter = converter
-    neural.fit_model_to_data(training_data[0], training_data[1], epochs=50)
+    neural.fit_model_to_data(training_data[0], training_data[1], epochs=70)
     neural.graph_history_loss()  # Create those graphs of loss/accuracy
 
     # Save the model to disk
-    neural.write_model_to_disk(data_path("temp_model"))
+    # neural.write_model_to_disk(data_path("model"))
 
     # Test the model using the testing_data.
     eval_loss = neural.model.evaluate(testing_data[0], testing_data[1], use_multiprocessing=True)

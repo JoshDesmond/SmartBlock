@@ -1,0 +1,3 @@
+*.min.js
+app/model/*
+temp_reference/*
