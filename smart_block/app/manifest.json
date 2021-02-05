@@ -2,7 +2,7 @@
 	"name": "SmartBlock",
 	"version": "1.0",
 	"description": "An extension to block distracting websites",
-	"permissions": ["activeTab", "declarativeContent"],
+	"permissions": ["activeTab", "declarativeContent", "http://localhost:8000/*"],
 	"background": {
 		"scripts": ["js/background.js"],
 		"persistent": false
