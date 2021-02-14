@@ -6,6 +6,7 @@ import {KeydownController} from './controllers/keydownController.js';
 import {VoteButtonController} from './controllers/voteButtonController.js'
 import {CertaintyButtonController} from "./controllers/certaintyButtonController";
 import {MutationController} from "./controllers/mutationController.js";
+import { UrlChangeController } from './controllers/urlChangeController.js';
 
 const model = new Model();
 const views = new Views(model);
@@ -26,9 +27,11 @@ views.footerDiv.addEventListener('click', () => {
 // Add hotkeys
 const keydownController = new KeydownController(model, views);
 window.addEventListener('keydown', keydownController);
+
+// Run an initial text analysis
 model.textState.addText(model.textScraper.extractText(document.body));
 
-// Add mutation observer
+// Add mutation observer to watch for future changes to text content of the page
 const config = {
     childList: true,
     subtree: true,
@@ -41,3 +44,6 @@ const targetNode = document.body;
 const observer = new MutationObserver(mc.mutationCallback.bind(mc));
 observer.observe(targetNode, config);
 
+// Add controller to watch for URL changes
+const urlChangeController = new UrlChangeController(model);
+window.addEventListener('hashchange', urlChangeController, true);
