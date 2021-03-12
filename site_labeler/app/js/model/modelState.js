@@ -5,18 +5,18 @@
  */
 class ModelState {
     /** True when flag-mode is enabled */
-    flagState = false;
+    //flagState = false;
     /** Status of individual flags. Flag names are given by FLAG_NAMES */
-    flags = [false, false, false, false];
+    //flags = [false, false, false, false];
     /** True when the isObvious toggle is enabled. Exclusive in relation to isAmbiguousState. */
-    isObviousState = false;
+    //isObviousState = false;
     /** True when the isAmbiguous toggle is enabled. Exclusive in relation to isObviousState. */
-    isAmbiguousState = false;
-    primaryVote = null;
+    //isAmbiguousState = false;
+    //primaryVote = null;
     /** Optional */
-    secondaryVote = null;
+    //secondaryVote = null;
     /** List of observers to notify on update */
-    observers;
+    //observers;
 
 
     constructor() {

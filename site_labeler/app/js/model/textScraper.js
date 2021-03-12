@@ -1,13 +1,12 @@
 class TextScraper {
 
     constructor() {
+        this.ignorableTags = ["SCRIPT", "NOSCRIPT", "APPLET", "EMBED", "OBJECT", "PARAM", "HEAD",
+            "META", "BASE", "STYLE", "DIALOG", "DATA", "FOOTER", "AUDIO", "SOURCE", "TRACK", "VIDEO",
+            "IMG", "MAP", "AREA", "CANVAS", "PICTURE", "SVG", "TEXTAREA"];
+        this.formattingTags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS", "SUB", "SUP"];
     }
 
-    ignorableTags = ["SCRIPT", "NOSCRIPT", "APPLET", "EMBED", "OBJECT", "PARAM", "HEAD",
-        "META", "BASE", "STYLE", "DIALOG", "DATA", "FOOTER", "AUDIO", "SOURCE", "TRACK", "VIDEO",
-        "IMG", "MAP", "AREA", "CANVAS", "PICTURE", "SVG", "TEXTAREA"];
-
-    formattingTags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS", "SUB", "SUP"];
 
     /**
      * Extracts the text from the body HTMLElement the instance of this class was made with.
@@ -123,4 +122,4 @@ class TextScraper {
     }
 }
 
-export {TextScraper}
+export { TextScraper }

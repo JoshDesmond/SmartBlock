@@ -1,24 +1,25 @@
-import {ModelState} from "./modelState.js";
-import {TextScraper} from "./textScraper.js";
-import {TextState} from "./textState.js";
+import { ModelState } from "./modelState.js";
+import { TextScraper } from "./textScraper.js";
+import { TextState } from "./textState.js";
 
 /** The program logic for static text analysis & labeling */
 class Model {
 
     /** @type {Number} The maximum number of words that will be analyzed on a given page */
-    MAX_WORDS = 2000;
+    //MAX_WORDS = 2000;
     /** @type {Boolean} True if the vote has been submitted to the Backend. */
-    voteAlreadySubmitted = false;
+    //voteAlreadySubmitted = false;
     /** An instance of the label that was submitted, (null if no valid submission performed). */
-    _submittedLabel;
+    //_submittedLabel;
     /** @type {TextScraper} An instance of TextScraper to parse and analysis the text of a page */
-    textScraper;
+    //textScraper;
     /** @type {String} For now, a constant username for submission to the backend */
-    username = "DeveloperDesmond";
+    //username = "DeveloperDesmond";
     /** @type {TextState} Contains parsed text. */
-    textState;
+    //textState;
 
     constructor() {
+        this.MAX_WORDS = 2000;
         this.userId = this.getUserIdOfUsername(this.username);
         this.voteAlreadySubmitted = false;
         this.modelState = new ModelState();
@@ -26,6 +27,7 @@ class Model {
         this.domain = new URL(this.url).hostname;
         this.textScraper = new TextScraper(document.body);
         this.textState = new TextState();
+        this.username = "DeveloperDesmond";
     }
 
     /**
@@ -176,7 +178,7 @@ class Model {
         fetch('http://localhost:3000/username', {
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify({username: username}),
+            body: JSON.stringify({ username: username }),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -196,4 +198,4 @@ class Model {
     }
 }
 
-export {Model};
+export { Model };

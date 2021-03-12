@@ -4,9 +4,9 @@
 class TextState {
 
     /** @type {Number} */
-    wordCount;
+    //wordCount;
     /** @type {String} */
-    words;
+    //words;
 
     constructor() {
         this.words = "";

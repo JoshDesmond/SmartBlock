@@ -4,9 +4,9 @@ import {Toast} from "./toast.js";
 class Views {
 
     /** @type {HTMLButtonElement[]} Access to the four likert scale voting buttons */
-    votingButtons;
+    //votingButtons;
     /** @type {HTMLButtonElement[]} Buttons for isAmbiguous, isObvious, and flags */
-    otherButtons;
+    //otherButtons;
 
     /**
      * Creates a new View and appends the GUI to the tab associated with this script

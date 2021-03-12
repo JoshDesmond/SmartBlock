@@ -7,7 +7,7 @@ import {Model} from '../model/model';
 export class CertaintyButtonController {
 
     /** @type {Model} */
-    _model;
+    //_model;
 
     /**
      * Creates a controller for a given button

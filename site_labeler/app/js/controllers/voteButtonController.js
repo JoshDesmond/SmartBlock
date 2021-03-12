@@ -7,9 +7,9 @@ import {Model} from "../model/model.js";
 export class VoteButtonController {
 
     /** @type {Number} */
-    value;
+    //value;
     /** @type {Model} */
-    model;
+    //model;
 
     /**
      * Creates a controller for a given voting button
