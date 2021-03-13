@@ -1,4 +1,4 @@
-import { Model } from '../model/model';
+import { Model } from '../model/model.js';
 
 /**
  * Controller for the isAmbiguous and isObvious labeling buttons

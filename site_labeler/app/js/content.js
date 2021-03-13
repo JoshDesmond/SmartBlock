@@ -4,7 +4,7 @@ import { Model } from './model/model.js';
 import { Views } from './views/views.js';
 import { KeydownController } from './controllers/keydownController.js';
 import { VoteButtonController } from './controllers/voteButtonController.js'
-import { CertaintyButtonController } from "./controllers/certaintyButtonController";
+import { CertaintyButtonController } from "./controllers/certaintyButtonController.js";
 import { MutationController } from "./controllers/mutationController.js";
 import { UrlChangeController } from './controllers/urlChangeController.js';
 

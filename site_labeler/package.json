@@ -3,8 +3,9 @@
     "version": "1.0.0",
     "description": "Extension to label the site data that powers SmartBlock",
     "main": "app/js/content.js",
+    "type":"module",
     "scripts": {
-        "build": "webpack --config webpack.config.js",
+        "build": "webpack --config webpack.config.cjs",
         "test": "mocha"
     },
     "author": "J. Desmond",
