@@ -46,6 +46,7 @@ class TextScraper {
      * @param {HTMLElement} element The node to inspect
      */
     isTextualLeaf(element) {
+        if (!element) { throw new TypeError(); }
         if (this.ignorableTags.includes(element.tagName)) {
             return false;
         }
@@ -64,6 +65,7 @@ class TextScraper {
     }
 
     isFormattingLeaf(element) {
+        if (!element) { throw new TypeError(); }
         if (this.formattingTags.includes(element.tagName)) {
             return true;
         } else if (element.tagName === "SPAN") {
@@ -83,6 +85,7 @@ class TextScraper {
      * @param {String} text
      */
     cleanString(text) {
+        if (typeof text !== 'string') { throw new TypeError() }
         text = text.replace(/(\r\n|\n|\r)/gm, ""); // Remove linebreaks
         text = text.toLowerCase();
         text = text.replace(/[./–;?!)(]/g, ' ');
@@ -95,9 +98,10 @@ class TextScraper {
 
     /**
      * Converts a string of text into a dictionary of words by frequency
-     * @param text A long string of text
+     * @param {String} text A long string of text
      */
     getDictionary(text) {
+        if (typeof text !== 'string') { throw new TypeError() }
         let dict = {};
         const splitText = text.split(' ');
         for (let s of splitText) {

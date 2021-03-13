@@ -4,23 +4,22 @@
  * Implements Observable
  */
 class ModelState {
-    /** True when flag-mode is enabled */
-    //flagState = false;
-    /** Status of individual flags. Flag names are given by FLAG_NAMES */
-    //flags = [false, false, false, false];
-    /** True when the isObvious toggle is enabled. Exclusive in relation to isAmbiguousState. */
-    //isObviousState = false;
-    /** True when the isAmbiguous toggle is enabled. Exclusive in relation to isObviousState. */
-    //isAmbiguousState = false;
-    //primaryVote = null;
-    /** Optional */
-    //secondaryVote = null;
-    /** List of observers to notify on update */
-    //observers;
 
 
     constructor() {
         this.observers = [];
+        /** Status of individual flags. Flag names are given by FLAG_NAMES */
+        this.flags = [false, false, false, false];
+        /** True when flag-mode is enabled */
+        this.flagState = false;
+        /** True when the isObvious toggle is enabled. Exclusive in relation to isAmbiguousState. */
+        this.isObviousState = false;
+        /** True when the isAmbiguous toggle is enabled. Exclusive in relation to isObviousState. */
+        this.isAmbiguousState = false;
+        /** @type {?Number} Primary vote on a page. Required for submission(?) */
+        this.primaryVote = null;
+        /** @type {?Number} */
+        this.secondaryVote = null;
     }
 
     /** Clears any votes and disables all flags */
@@ -107,6 +106,9 @@ class ModelState {
      * updates
      */
     registerObserver(observer) {
+        if (!observer) {
+            throw new TypeError(`Illegal observer passed ${observer}`);
+        }
         this.observers.push(observer);
     }
 
@@ -116,9 +118,8 @@ class ModelState {
             observer.notify();
         }
 
-        console.log("Updating");
-        console.log(this);
+        console.log(`Updating model state: ${this}`);
     }
 }
 
-export {ModelState};
+export { ModelState };

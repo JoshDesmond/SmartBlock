@@ -10,8 +10,8 @@ class Toast {
      * opposed to something neutral).
      */
     constructor(text, isError, isSuccess) {
-        if (isError && isSuccess) throw Error("Toast can't be both a success and an error");
-        if (text === null) throw Error("Toast text can't be null");
+        if (isError && isSuccess) throw new TypeError("Toast can't be both a success and an error");
+        if (!text) throw new TypeError(`Illegal empty toast text value ${text}`);
 
         this.toast = document.createElement('div');
         this.toast.className = 'toast SmartBlockPluginElement';

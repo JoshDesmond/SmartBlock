@@ -1,4 +1,4 @@
-import {TextScraper} from "../model/textScraper.js";
+import { TextScraper } from "../model/textScraper.js";
 
 class MutationController {
 
@@ -63,4 +63,4 @@ class MutationController {
 
 // See https://dom.spec.whatwg.org/#mutationrecord when refactoring
 
-export {MutationController};
+export { MutationController };

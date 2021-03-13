@@ -1,4 +1,4 @@
-import {Model} from "../model/model.js";
+import { Model } from "../model/model.js";
 
 /**
  * Key listener for the standard labeling workflow.
@@ -6,10 +6,6 @@ import {Model} from "../model/model.js";
  */
 export class VoteButtonController {
 
-    /** @type {Number} */
-    //value;
-    /** @type {Model} */
-    //model;
 
     /**
      * Creates a controller for a given voting button

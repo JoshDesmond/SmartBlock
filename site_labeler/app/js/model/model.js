@@ -5,29 +5,23 @@ import { TextState } from "./textState.js";
 /** The program logic for static text analysis & labeling */
 class Model {
 
-    /** @type {Number} The maximum number of words that will be analyzed on a given page */
-    //MAX_WORDS = 2000;
-    /** @type {Boolean} True if the vote has been submitted to the Backend. */
-    //voteAlreadySubmitted = false;
-    /** An instance of the label that was submitted, (null if no valid submission performed). */
-    //_submittedLabel;
-    /** @type {TextScraper} An instance of TextScraper to parse and analysis the text of a page */
-    //textScraper;
-    /** @type {String} For now, a constant username for submission to the backend */
-    //username = "DeveloperDesmond";
-    /** @type {TextState} Contains parsed text. */
-    //textState;
 
     constructor() {
+        /** The maximum number of words that will be analyzed on a given page */
         this.MAX_WORDS = 2000;
-        this.userId = this.getUserIdOfUsername(this.username);
+        /** @type {String}  now, a constant username for submission to the backend */
+        this.username = "DeveloperDesmond";
+        this.getUserIdOfUsername(this.username); // sets this.userId
+        /** @type {Boolean} True if the vote has been submitted to the Backend. */
         this.voteAlreadySubmitted = false;
         this.modelState = new ModelState();
         this.url = window.location.href;
         this.domain = new URL(this.url).hostname;
+        /** @type {TextScraper} An instance of TextScraper to parse and analysis the text of a page */
         this.textScraper = new TextScraper(document.body);
+        /** @type {TextState} Contains parsed text. */
         this.textState = new TextState();
-        this.username = "DeveloperDesmond";
+        this._submittedLabel = null;
     }
 
     /**
@@ -175,6 +169,9 @@ class Model {
      * @param {String} username
      */
     getUserIdOfUsername(username) {
+        if (!username) {
+            throw new TypeError("No username provided");
+        }
         fetch('http://localhost:3000/username', {
             method: 'POST',
             mode: 'cors',

@@ -1,12 +1,8 @@
-import {Toast} from "./toast.js";
+import { ValidationError } from "webpack";
+import { Toast } from "./toast.js";
 
 /** The GUI overlay shown when labeling sites */
 class Views {
-
-    /** @type {HTMLButtonElement[]} Access to the four likert scale voting buttons */
-    //votingButtons;
-    /** @type {HTMLButtonElement[]} Buttons for isAmbiguous, isObvious, and flags */
-    //otherButtons;
 
     /**
      * Creates a new View and appends the GUI to the tab associated with this script
@@ -18,14 +14,15 @@ class Views {
         this.footerDiv = document.createElement('div'); // TODO refactor to html
         document.body.appendChild(this.footerDiv);
 
-
-        // Extra styling TODO validate CSS here?
+        // Extra styling
         this.footerDiv.id = 'labeling-footer-div';
         this.footerDiv.style.backgroundColor = 'black';
 
-        // this.displayWordCount(this._model.countWords());
+        /** @type {HTMLButtonElement[]} Access to the four likert scale voting buttons */
         this.votingButtons = [];
+        /** @type {HTMLButtonElement[]} Buttons for isAmbiguous, isObvious, and flags */
         this.otherButtons = [];
+
         this.addVotingButtons();
         this.addCertaintyButtons();
         this.votingButtons.forEach((button) => {
@@ -71,18 +68,15 @@ class Views {
     addVotingButtons() {
         const votes = this._model.getStandardVotingActions();
         for (let action of votes) {
-
             const button = document.createElement('button');
             this.votingButtons.push(button);
-            // TODO delete this?
-            // button.setAttribute("data-action", action);
             button.innerHTML = action;
             button.style.width = "10em";
             this.footerDiv.appendChild(button);
             if (action.toString() === "Productive") {
-                button.style.marginLeft = '2em';
-            } else if (action.toString() === "Productive") {
-                button.style.marginRight = '2em';
+                button.style.marginLeft = '1em';
+            } else if (action.toString() === "Unproductive") {
+                button.style.marginRight = '1em';
             }
         }
 
@@ -133,11 +127,17 @@ class Views {
 
     /** Resets a button element to its default color */
     _resetButton(button) {
+        if (!button) {
+            throw new TypeError(`Illegal button argument input ${button}`);
+        }
         button.style.backgroundColor = 'whitesmoke';
     };
 
     /** Colors the given button element to indicate that it's selected */
     _enableButton(button) {
+        if (!button) {
+            throw new TypeError(`Illegal button argument input ${button}`);
+        }
         button.style.backgroundColor = 'green';
     };
 
@@ -203,4 +203,4 @@ class Views {
     }
 }
 
-export {Views};
+export { Views };

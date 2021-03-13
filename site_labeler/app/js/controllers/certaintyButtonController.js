@@ -1,13 +1,10 @@
-import {Model} from '../model/model';
+import { Model } from '../model/model';
 
 /**
  * Controller for the isAmbiguous and isObvious labeling buttons
  * @implements {EventListenerObject}
  */
 export class CertaintyButtonController {
-
-    /** @type {Model} */
-    //_model;
 
     /**
      * Creates a controller for a given button
