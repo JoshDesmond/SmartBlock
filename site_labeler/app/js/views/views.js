@@ -1,4 +1,3 @@
-import { ValidationError } from "webpack";
 import { Toast } from "./toast.js";
 
 /** The GUI overlay shown when labeling sites */
