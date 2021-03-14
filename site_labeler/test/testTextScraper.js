@@ -1,38 +1,14 @@
-import {strict as assert} from 'assert';
+import { TextScraper } from "../app/js/model/textScraper.js";
+import { strict as assert } from 'assert';
 import jsdom from 'jsdom';
-import {TextScraper} from "../app/js/model/textScraper.js";
-import {ModelState} from "../app/js/model/modelState.js";
 
-const {JSDOM} = jsdom; // Suggested by documentation, what does this actually do?
-
-describe('ModelState', () => {
-    it("should create a new ModelState and apply vote", () => {
-        const modelState = new ModelState();
-        modelState.handleVote(2);
-        assert.equal(modelState.primaryVote, 2);
-    });
-
-    it("ModelState without primary vote should be invalid", () => {
-        const modelState = new ModelState();
-        modelState.toggleFlags();
-        modelState.handleVote(3);
-        modelState.handleAmbiguous();
-        assert.equal(modelState.isValidForSubmission(), false);
-    });
-
-    it("ModelState should be invalid for submission after clearing inputs", () => {
-        const modelState = new ModelState();
-        modelState.handleVote(3);
-        modelState.resetState();
-        assert.equal(modelState.isValidForSubmission(), false);
-    });
-});
+const { JSDOM } = jsdom; // Suggested by documentation, what does this actually do?
 
 describe('TextExtractor', () => {
     const textScraper = new TextScraper();
 
     it("Should extract the correct text from test document", (done) => {
-        const options = {pretendToBeVisual: true};
+        const options = { pretendToBeVisual: true };
         JSDOM.fromFile("./test/test_doc.html", options).then(dom => {
             // Extract text
             const body = dom.window.document.body;
@@ -57,7 +33,7 @@ describe('TextExtractor', () => {
     });
 
     it("Should not extract text that has display: none", (done) => {
-        const options = {pretendToBeVisual: true};
+        const options = { pretendToBeVisual: true };
         JSDOM.fromFile("./test/test_display_none_text.html", options).then(dom => {
             const body = dom.window.document.body;
             const text = textScraper.extractText(body);
@@ -71,7 +47,7 @@ describe('TextExtractor', () => {
 
     it("Should extract text from wiki-like test document", (done) => {
 
-        const options = {pretendToBeVisual: true};
+        const options = { pretendToBeVisual: true };
         JSDOM.fromFile("./test/test_wiki_like.html", options).then(dom => {
             const body = dom.window.document.body;
             const text = textScraper.extractText(body);
@@ -86,7 +62,7 @@ describe('TextExtractor', () => {
     });
 
     it("Should extract text correctly from wikipedia document", (done) => {
-        const options = {pretendToBeVisual: true};
+        const options = { pretendToBeVisual: true };
         JSDOM.fromURL("https://en.wikipedia.org/w/index.php?title=Catwalk_(Australian_TV_series)&oldid=978884033", options).then(dom => {
             // Extract text
             const body = dom.window.document.body;
