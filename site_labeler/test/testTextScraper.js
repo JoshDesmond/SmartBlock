@@ -81,8 +81,14 @@ describe('TextExtractor', () => {
 
     it("Should handle a non-breaking space ", (done) => {
         // TODO
+        const dom = new JSDOM(`<!DOCTYPE html><body><p>Hello&nbsp;world!</p></body>`); // should be two words
+
+        const text = textScraper.extractText(dom.window.document.body);
+
+        // Test that the word count is exactly 72
+        const wordCount = text.split(" ").length;
+        assert.equal(wordCount, 2);
         done();
-        const element = "<p>hello&nbsp;world!</p>"; // should be two words
     });
 
     it("cleanString should remove sequences of spaces", (done) => {
