@@ -39,7 +39,7 @@ const config = {
     characterDataOldValue: true,
     attributes: false,
 };
-const mc = new MutationController(model);
+const mc = new MutationController(model.textState);
 const targetNode = document.body;
 const observer = new MutationObserver(mc.mutationCallback.bind(mc));
 observer.observe(targetNode, config);
