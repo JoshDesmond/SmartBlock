@@ -36,28 +36,27 @@ describe('TextExtractor', () => {
         let testDom = undefined;
 
         before(() => {
-            testDom = await JSDOM.fromFile("./test/test_display_none_text.html", options);
+            const options = { pretendToBeVisual: true };
+            return JSDOM.fromFile("./test/test_display_none_text.html", options).then((dom) => {
+                testDom = dom;
+            })
         });
 
 
         it("Should not extract text that has display: none", (done) => {
-            const options = { pretendToBeVisual: true };
-            JSDOM.fromFile("./test/test_display_none_text.html", options).then(dom => {
-                const body = dom.window.document.body;
-                const text = textScraper.extractText(body);
+            const body = testDom.window.document.body;
+            const text = textScraper.extractText(body);
 
-                // Test for specific word in text
-                assert.equal(text.includes("visible"), true);
-                assert.equal(text.includes("invisible"), false);
-                done();
-            });
+            // Test for specific word in text
+            assert.equal(text.includes("hippy"), true);
+            assert.equal(text.includes("boogy"), false);
+            done();
         });
 
-        it("Should not extract text whose parent's parent has display: none", (done) => {
+        it("Should not extract text whose parent's parent has display: none", () => {
             // resources: "usable" allows jsdom to load stylesheets
             const options = { pretendToBeVisual: true, resources: "usable" };
 
-            JSDOM.fromFile("")
         });
     });
 
