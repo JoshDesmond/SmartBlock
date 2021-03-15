@@ -32,16 +32,32 @@ describe('TextExtractor', () => {
         });
     });
 
-    it("Should not extract text that has display: none", (done) => {
-        const options = { pretendToBeVisual: true };
-        JSDOM.fromFile("./test/test_display_none_text.html", options).then(dom => {
-            const body = dom.window.document.body;
-            const text = textScraper.extractText(body);
+    describe("test_display_none_doc", () => {
+        let testDom = undefined;
 
-            // Test for specific word in text
-            assert.equal(text.includes("visible"), true);
-            assert.equal(text.includes("invisible"), false);
-            done();
+        before(() => {
+            testDom = await JSDOM.fromFile("./test/test_display_none_text.html", options);
+        });
+
+
+        it("Should not extract text that has display: none", (done) => {
+            const options = { pretendToBeVisual: true };
+            JSDOM.fromFile("./test/test_display_none_text.html", options).then(dom => {
+                const body = dom.window.document.body;
+                const text = textScraper.extractText(body);
+
+                // Test for specific word in text
+                assert.equal(text.includes("visible"), true);
+                assert.equal(text.includes("invisible"), false);
+                done();
+            });
+        });
+
+        it("Should not extract text whose parent's parent has display: none", (done) => {
+            // resources: "usable" allows jsdom to load stylesheets
+            const options = { pretendToBeVisual: true, resources: "usable" };
+
+            JSDOM.fromFile("")
         });
     });
 
@@ -61,31 +77,13 @@ describe('TextExtractor', () => {
         });
     });
 
-    it("Should extract text correctly from wikipedia document", (done) => {
-        const options = { pretendToBeVisual: true };
-        JSDOM.fromURL("https://en.wikipedia.org/w/index.php?title=Catwalk_(Australian_TV_series)&oldid=978884033", options).then(dom => {
-            // Extract text
-            const body = dom.window.document.body;
-            const text = textScraper.extractText(body);
-
-            // Test for specific words in text
-            assert.equal(text.includes("created"), true, "The text 'created' should be found");
-            assert.equal(text.includes("oldid978884033"), false, "The text oldid978... should" +
-                " not be found");
-            assert.equal(text.includes("oldid"), false, "The text oldid should not be found");
-            assert.equal(text.includes("978884033"), false, "The text 978.. should not be found");
-
-            done();
-        });
-    });
-
     it("Should handle a non-breaking space ", (done) => {
         // TODO
         const dom = new JSDOM(`<!DOCTYPE html><body><p>Hello&nbsp;world!</p></body>`); // should be two words
 
         const text = textScraper.extractText(dom.window.document.body);
 
-        // Test that the word count is exactly 72
+        // Test that the word count is exactly 2
         const wordCount = text.split(" ").length;
         assert.equal(wordCount, 2);
         done();
