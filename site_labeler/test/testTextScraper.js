@@ -8,7 +8,7 @@ describe('TextExtractor', () => {
     const textScraper = new TextScraper();
 
     it("Should extract the correct text from test document", (done) => {
-        const options = { pretendToBeVisual: true };
+        const options = { pretendToBeVisual: true }; // (resources: "usable" allows jsdom to load stylesheets)
         JSDOM.fromFile("./test/test_doc.html", options).then(dom => {
             // Extract text
             const body = dom.window.document.body;
@@ -33,18 +33,18 @@ describe('TextExtractor', () => {
     });
 
     describe("test_display_none_doc", () => {
-        let testDom = undefined;
+        let testDom, body;
 
         before(() => {
             const options = { pretendToBeVisual: true };
             return JSDOM.fromFile("./test/test_display_none_text.html", options).then((dom) => {
                 testDom = dom;
+                body = testDom.window.document.body;
             })
         });
 
 
         it("Should not extract text that has display: none", (done) => {
-            const body = testDom.window.document.body;
             const text = textScraper.extractText(body);
 
             // Test for specific word in text
@@ -53,10 +53,20 @@ describe('TextExtractor', () => {
             done();
         });
 
-        it("Should not extract text whose parent's parent has display: none", () => {
-            // resources: "usable" allows jsdom to load stylesheets
-            const options = { pretendToBeVisual: true, resources: "usable" };
+        it("Should not extract text whose parent has display: none", (done) => {
+            const text = textScraper.extractText(body);
 
+            assert.equal(text.includes("potato"), false);
+            done();
+        });
+
+
+        it("Should not extract text whose parent's parent has display: none", (done) => {
+            const text = textScraper.extractText(body);
+
+            assert.equal(text.includes("hoot"), true);
+            assert.equal(text.includes("toot"), false);
+            done();
         });
     });
 
