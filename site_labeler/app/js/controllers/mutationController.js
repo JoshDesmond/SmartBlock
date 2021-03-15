@@ -8,6 +8,7 @@ class MutationController {
      */
     constructor(model) {
         this.model = model;
+        this.textScraper = new TextScraper();
     }
 
     /**
@@ -24,36 +25,46 @@ class MutationController {
          * - ChildListMutation
          */
 
-        const textScraper = new TextScraper();
 
 
         for (const mutation of mutations) {
+            // First check if max word count has been reached and halt if so
             if (this.model.textState.wordCount > this.model.MAX_WORDS) {
                 observer.disconnect();
                 console.log("MAXWORDS reached, ending mutation observations");
                 return;
             }
-            if (mutation.type === "characterData") {
-                const newText = textScraper.cleanString(mutation.target.data);
+
+            if (mutation.type === "characterData") { // When text changes in existing text
+                const newText = this.textScraper.cleanString(mutation.target.data);
                 if (mutation.oldValue) {
-                    const old = textScraper.cleanString(mutation.oldValue);
+                    const old = this.textScraper.cleanString(mutation.oldValue);
                     this.model.textState.replaceText(old, newText);
                 } else {
                     this.model.textState.addText(newText);
                 }
+            }
 
-            } else if (mutation.type === "childList") { // childList
+            /** 
+             * TODO I think the logic below will duplicate its work on nodes and end up doubles of text.
+             * This hypothesis requires testing.
+             * 
+             * The corrected logic will need to consider wonky nests of divs, spans, and text
+             */
+            else if (mutation.type === "childList") { // When html elements are added/removed
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        this.model.textState.addText(textScraper.cleanString(node.textContent));
+                        this.model.textState.addText(this.textScraper.cleanString(node.textContent));
                     } else if (node.nodeType === Node.COMMENT_NODE) {
                         // Ignore it
                     } else {
-                        // TODO there might still be issues with casting Node's to HTML elements
-                        this.model.textState.addText(textScraper.extractText(node));
+                        // (there might be issues with casting Nodes to HTML elements, but it appears to be fine)
+                        this.model.textState.addText(this.textScraper.extractText(node));
                     }
                 });
-            } else {
+            }
+
+            else {
                 console.error(mutation.type);
                 console.log(mutation);
             }
