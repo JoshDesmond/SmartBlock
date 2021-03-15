@@ -88,6 +88,9 @@ describe('TextExtractor', () => {
             assert.equal(text.includes("world"), true);
             // <!-- Text with two formatting elements -->
             assert.equal(text.includes("planet"), true);
+            // <!-- Text formatted with a span element -->
+            assert.equal(text.includes("spam"), true);
+            assert.equal(text.includes("meat"), true);
             done();
         });
     });
