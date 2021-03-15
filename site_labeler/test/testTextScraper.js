@@ -32,7 +32,7 @@ describe('TextExtractor', () => {
         });
     });
 
-    describe("test_display_none_doc", () => {
+    describe("Should handle hidden text", () => {
         let testDom, body;
 
         before(() => {
@@ -70,24 +70,29 @@ describe('TextExtractor', () => {
         });
     });
 
-    it("Should extract text from wiki-like test document", (done) => {
+    describe("Should handle nested formatting tags", () => {
 
-        const options = { pretendToBeVisual: true };
-        JSDOM.fromFile("./test/test_wiki_like.html", options).then(dom => {
-            const body = dom.window.document.body;
+        let body;
+
+        before(() => {
+            const options = { pretendToBeVisual: true };
+            return JSDOM.fromFile("./test/test_formatted_text.html", options).then(dom => {
+                body = dom.window.document.body;
+            });
+        });
+
+        it("Should extract text with formatting tags", (done) => {
             const text = textScraper.extractText(body);
 
-            // Test for specific word in text
-            assert.equal(text.includes("created"), true, "The text 'created' should be found");
-            assert.equal(text.includes("1971"), true);
-            assert.equal(text.includes("tony"), true);
-            assert.equal(text.includes("australian"), true);
+            // <!-- Text with single formatting element -->
+            assert.equal(text.includes("world"), true);
+            // <!-- Text with two formatting elements -->
+            assert.equal(text.includes("planet"), true);
             done();
         });
     });
 
     it("Should handle a non-breaking space ", (done) => {
-        // TODO
         const dom = new JSDOM(`<!DOCTYPE html><body><p>Hello&nbsp;world!</p></body>`); // should be two words
 
         const text = textScraper.extractText(dom.window.document.body);
