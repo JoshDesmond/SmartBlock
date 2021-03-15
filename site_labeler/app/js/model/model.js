@@ -7,8 +7,7 @@ class Model {
 
 
     constructor() {
-        /** The maximum number of words that will be analyzed on a given page */
-        this.MAX_WORDS = 2000;
+        
         /** @type {String}  now, a constant username for submission to the backend */
         this.username = "DeveloperDesmond";
         this.getUserIdOfUsername(this.username); // sets this.userId

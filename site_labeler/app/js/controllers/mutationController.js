@@ -1,13 +1,14 @@
 import { TextScraper } from "../model/textScraper.js";
+import { TextState } from "../model/textState.js";
 
 class MutationController {
 
     /**
      *
-     * @param {Model} model
+     * @param {TextState} textState
      */
-    constructor(model) {
-        this.model = model;
+    constructor(textState) {
+        this.textState = textState;
         this.textScraper = new TextScraper();
     }
 
@@ -20,16 +21,9 @@ class MutationController {
      */
     mutationCallback(mutations, observer) {
 
-        /**
-         * - Text mutation
-         * - ChildListMutation
-         */
-
-
-
         for (const mutation of mutations) {
             // First check if max word count has been reached and halt if so
-            if (this.model.textState.wordCount > this.model.MAX_WORDS) {
+            if (this.textState.wordCount > this.textState.MAX_WORDS) {
                 observer.disconnect();
                 console.log("MAXWORDS reached, ending mutation observations");
                 return;
@@ -39,9 +33,9 @@ class MutationController {
                 const newText = this.textScraper.cleanString(mutation.target.data);
                 if (mutation.oldValue) {
                     const old = this.textScraper.cleanString(mutation.oldValue);
-                    this.model.textState.replaceText(old, newText);
+                    this.textState.replaceText(old, newText);
                 } else {
-                    this.model.textState.addText(newText);
+                    this.textState.addText(newText);
                 }
             }
 
@@ -54,12 +48,12 @@ class MutationController {
             else if (mutation.type === "childList") { // When html elements are added/removed
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        this.model.textState.addText(this.textScraper.cleanString(node.textContent));
+                        this.textState.addText(this.textScraper.cleanString(node.textContent));
                     } else if (node.nodeType === Node.COMMENT_NODE) {
                         // Ignore it
                     } else {
                         // (there might be issues with casting Nodes to HTML elements, but it appears to be fine)
-                        this.model.textState.addText(this.textScraper.extractText(node));
+                        this.textState.addText(this.textScraper.extractText(node));
                     }
                 });
             }

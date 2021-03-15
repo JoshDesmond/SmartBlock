@@ -4,6 +4,8 @@
 class TextState {
 
     constructor() {
+        /** The maximum number of words that will be analyzed on a given page */
+        this.MAX_WORDS = 2000;
         /** @type {String} */
         this.words = "";
         this.wordCount = 0;
