@@ -19,10 +19,12 @@ class TextScraper {
         }
         let text = "";
 
+        // TODO querySelectorAll does not include the root element itself. This is fine for body, but not when passing in <p> elements!
         const nodes = element.querySelectorAll(':not(.SmartBlockPluginElement):not([style*="display:none"]):not([style*="display: none"])');
 
         // TODO use functional programming to iteratively descend and find textual trees, and
         //  only count the entire content of those tree's once to be parsed for text
+        // TODO edit: scratch that, just use document.body.innertext for the first round
         for (const node of nodes) {
             const tag = node.tagName;
 

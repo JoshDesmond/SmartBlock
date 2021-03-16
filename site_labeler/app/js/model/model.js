@@ -7,7 +7,6 @@ class Model {
 
 
     constructor() {
-        
         /** @type {String}  now, a constant username for submission to the backend */
         this.username = "DeveloperDesmond";
         this.getUserIdOfUsername(this.username); // sets this.userId

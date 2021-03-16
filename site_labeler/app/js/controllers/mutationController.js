@@ -30,6 +30,8 @@ class MutationController {
             }
 
             if (mutation.type === "characterData") { // When text changes in existing text
+                // TODO don't clean first, save the uncleaned string in textState and only clean at the end
+                // (for both hypothetical optimization / clean code reasons)
                 const newText = this.textScraper.cleanString(mutation.target.data);
                 if (mutation.oldValue) {
                     const old = this.textScraper.cleanString(mutation.oldValue);
@@ -40,21 +42,18 @@ class MutationController {
             }
 
             /** 
-             * TODO I think the logic below will duplicate its work on nodes and end up doubles of text.
+             * // TODO I think the logic below will duplicate its work on nodes and end up doubles of text.
              * This hypothesis requires testing.
              * 
              * The corrected logic will need to consider wonky nests of divs, spans, and text
              */
             else if (mutation.type === "childList") { // When html elements are added/removed
                 mutation.addedNodes.forEach((node) => {
-                    if (node.nodeType === Node.TEXT_NODE) {
-                        this.textState.addText(this.textScraper.cleanString(node.textContent));
-                    } else if (node.nodeType === Node.COMMENT_NODE) {
-                        // Ignore it
-                    } else {
-                        // (there might be issues with casting Nodes to HTML elements, but it appears to be fine)
-                        this.textState.addText(this.textScraper.extractText(node));
-                    }
+                    this.textState.addText(this.textScraper.extractText(node));
+                });
+
+                mutation.removedNodes.forEach((node) => {
+                    // TODO
                 });
             }
 

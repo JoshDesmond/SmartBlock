@@ -4,6 +4,8 @@ import jsdom from 'jsdom';
 
 const { JSDOM } = jsdom; // Suggested by documentation, what does this actually do?
 
+// TODO consider using JSDOM's fragment class instead of full on dom emulation for efficiency
+
 describe('TextExtractor', () => {
     const textScraper = new TextScraper();
 
