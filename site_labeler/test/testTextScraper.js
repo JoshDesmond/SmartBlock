@@ -1,4 +1,4 @@
-import { TextScraper } from "../app/js/model/textScraper.js";
+import { extractText, cleanString } from "../app/js/model/textScraper.js";
 import { strict as assert } from 'assert';
 import jsdom from 'jsdom';
 
@@ -7,14 +7,13 @@ const { JSDOM } = jsdom; // Suggested by documentation, what does this actually 
 // TODO consider using JSDOM's fragment class instead of full on dom emulation for efficiency
 
 describe('TextExtractor', () => {
-    const textScraper = new TextScraper();
 
     it("Should extract the correct text from test document", (done) => {
         const options = { pretendToBeVisual: true }; // (resources: "usable" allows jsdom to load stylesheets)
         JSDOM.fromFile("./test/test_doc.html", options).then(dom => {
             // Extract text
             const body = dom.window.document.body;
-            const text = textScraper.extractText(body);
+            const text = extractText(body);
 
             // Test for specific word in text
             assert.equal(text.includes("seventy"), true);
@@ -47,7 +46,7 @@ describe('TextExtractor', () => {
 
 
         it("Should not extract text that has display: none", (done) => {
-            const text = textScraper.extractText(body);
+            const text = extractText(body);
 
             // Test for specific word in text
             assert.equal(text.includes("hippy"), true);
@@ -56,7 +55,7 @@ describe('TextExtractor', () => {
         });
 
         it("Should not extract text whose parent has display: none", (done) => {
-            const text = textScraper.extractText(body);
+            const text = extractText(body);
 
             assert.equal(text.includes("potato"), false);
             done();
@@ -64,7 +63,7 @@ describe('TextExtractor', () => {
 
 
         it("Should not extract text whose parent's parent has display: none", (done) => {
-            const text = textScraper.extractText(body);
+            const text = extractText(body);
 
             assert.equal(text.includes("hoot"), true);
             assert.equal(text.includes("toot"), false);
@@ -84,7 +83,7 @@ describe('TextExtractor', () => {
         });
 
         it("Should extract text with formatting tags", (done) => {
-            const text = textScraper.extractText(body);
+            const text = extractText(body);
 
             // <!-- Text with single formatting element -->
             assert.equal(text.includes("world"), true);
@@ -100,7 +99,7 @@ describe('TextExtractor', () => {
     it("Should handle a non-breaking space ", (done) => {
         const dom = new JSDOM(`<!DOCTYPE html><body><p>Hello&nbsp;world!</p></body>`); // should be two words
 
-        const text = textScraper.extractText(dom.window.document.body);
+        const text = TextScraper.extractText(dom.window.document.body);
 
         // Test that the word count is exactly 2
         const wordCount = text.split(" ").length;
@@ -109,7 +108,7 @@ describe('TextExtractor', () => {
     });
 
     it("cleanString should remove sequences of spaces", (done) => {
-        const cleanedText = textScraper.cleanString(" hello    world      hi ");
+        const cleanedText = cleanString(" hello    world      hi ");
         assert.equal(cleanedText, "hello world hi");
         done();
     });

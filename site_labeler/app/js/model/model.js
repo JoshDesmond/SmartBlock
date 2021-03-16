@@ -1,5 +1,5 @@
 import { ModelState } from "./modelState.js";
-import { TextScraper } from "./textScraper.js";
+import { cleanString } from "./textScraper.js";
 import { TextState } from "./textState.js";
 
 /** The program logic for static text analysis & labeling */
@@ -15,8 +15,6 @@ class Model {
         this.modelState = new ModelState();
         this.url = window.location.href;
         this.domain = new URL(this.url).hostname;
-        /** @type {TextScraper} An instance of TextScraper to parse and analysis the text of a page */
-        this.textScraper = new TextScraper(document.body);
         /** @type {TextState} Contains parsed text. */
         this.textState = new TextState();
         this._submittedLabel = null;
@@ -49,7 +47,7 @@ class Model {
             titleTags = document.body.getElementsByTagName("title");
         }
         console.log("title: " + titleTags[0].text);
-        return this.textScraper.cleanString(titleTags[0].text);
+        return cleanString(titleTags[0].text);
     }
 
     /** Returns the last/cached result of extractText() */

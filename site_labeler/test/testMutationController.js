@@ -1,4 +1,3 @@
-import { TextScraper } from "../app/js/model/textScraper.js";
 import { MutationController } from "../app/js/controllers/mutationController.js";
 import { strict as assert } from 'assert';
 import jsdom from 'jsdom';
@@ -7,7 +6,6 @@ import { TextState } from "../app/js/model/textState.js";
 const { JSDOM } = jsdom;
 
 describe('MutationController', () => {
-    const textScraper = new TextScraper();
     const textState = new TextState();
 
     /** @type {Document} */

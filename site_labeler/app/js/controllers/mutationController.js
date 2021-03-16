@@ -1,4 +1,4 @@
-import { TextScraper } from "../model/textScraper.js";
+import { cleanString, extractText } from "../model/textScraper.js";
 import { TextState } from "../model/textState.js";
 
 class MutationController {
@@ -9,7 +9,6 @@ class MutationController {
      */
     constructor(textState) {
         this.textState = textState;
-        this.textScraper = new TextScraper();
     }
 
     /**
@@ -32,9 +31,9 @@ class MutationController {
             if (mutation.type === "characterData") { // When text changes in existing text
                 // TODO don't clean first, save the uncleaned string in textState and only clean at the end
                 // (for both hypothetical optimization / clean code reasons)
-                const newText = this.textScraper.cleanString(mutation.target.data);
+                const newText = cleanString(mutation.target.data);
                 if (mutation.oldValue) {
-                    const old = this.textScraper.cleanString(mutation.oldValue);
+                    const old = cleanString(mutation.oldValue);
                     this.textState.replaceText(old, newText);
                 } else {
                     this.textState.addText(newText);
@@ -49,7 +48,7 @@ class MutationController {
              */
             else if (mutation.type === "childList") { // When html elements are added/removed
                 mutation.addedNodes.forEach((node) => {
-                    this.textState.addText(this.textScraper.extractText(node));
+                    this.textState.addText(extractText(node));
                 });
 
                 mutation.removedNodes.forEach((node) => {
