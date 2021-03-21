@@ -52,4 +52,7 @@ describe('MutationController', () => {
 
         done();
     });
+
+    it("Should avoid extracting text from .SmartBlockPluginElement elements");
+
 });

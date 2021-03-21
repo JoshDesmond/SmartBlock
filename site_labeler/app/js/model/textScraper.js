@@ -4,80 +4,42 @@ const ignorableTags = ["SCRIPT", "NOSCRIPT", "APPLET", "EMBED", "OBJECT", "PARAM
 const formattingTags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS", "SUB", "SUP"];
 
 
-
 /**
- * Extracts the text from the body HTMLElement the instance of this class was made with.
- * @param {HTMLElement} element The tag to traverse for text extraction
- * @return {string} A single string containing the text of the document's body
+ * Extracts the text from the given HTMLElement
+ * @param {HTMLElement} element The tag to extract text from
+ * @return {string} A single string containing the text of the element. Uses .innerText 
  */
 function extractText(element) {
-    if (!element) {
-        throw new TypeError();
+    if (!element || (!element instanceof HTMLElement)) {
+        throw new TypeError(`Cannot extract text from given element ${element}`);
     }
-    let text = "";
 
-    // TODO querySelectorAll does not include the root element itself. This is fine for body, but not when passing in <p> elements!
-    const nodes = element.querySelectorAll(':not(.SmartBlockPluginElement):not([style*="display:none"]):not([style*="display: none"])');
+    /**
+     * If an element is the body, return the innerText of all its children except
+     * .SmartBlockPluginElement elements. Otherwise, just return the elements innerText
+     */
+    if (element.tagName.toUpperCase() === "BODY") {
+        let text = "";
+        for (const node of element.children) {
+            // Select the children but ignore the .SmartBlockPluginElement
+            if (node.classList.contains(".SmartBlockPluginElement")) {
+                continue;
+            }
 
-    // TODO use functional programming to iteratively descend and find textual trees, and
-    //  only count the entire content of those tree's once to be parsed for text
-    // TODO edit: scratch that, just use document.body.innertext for the first round
-    for (const node of nodes) {
-        const tag = node.tagName;
-
-        // Only select nodes that aren't in the ignorableTags or formatting list
-        if (ignorableTags.includes(tag) || formattingTags.includes(tag)) {
-            continue;
+            console.log(node.innerText);
+            text += node.innerText + " ";
         }
 
-        if (isTextualLeaf(node)) {
-            text += node.textContent + " ";
+        return text;
+    } else {
+        if (element.classList.contains(".SmartBlockPluginElement")) {
+            throw new TypeError(`A SmartBlockPluginElement, ${element}, was passed into extractText().`);
         }
-    }
 
-    console.log(cleanString(text));
-    return cleanString(text);
+        return element.innerText;
+    }
 }
 
-/**
- * Determines if the node is a textual leaf. A textual leaf contains only children nodes
- * that are formatting elements, (or no children at all).
- * @param {HTMLElement} element The node to inspect
- */
-function isTextualLeaf(element) {
-    if (!element) { throw new TypeError(); }
-    if (ignorableTags.includes(element.tagName)) {
-        return false;
-    }
-
-    if (element.children.length === 0) {
-        return true;
-    }
-
-    for (const node of element.children) {
-        if (!isFormattingLeaf(node)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-function isFormattingLeaf(element) {
-    if (!element) { throw new TypeError(); }
-    if (formattingTags.includes(element.tagName)) {
-        return true;
-    } else if (element.tagName === "SPAN") {
-        console.log("Ignoring SPAN element");
-        // TODO, iterate through all children and return true if they are all formatting leaves
-        return false; // For now text formatted with Span will be ignored.
-    } else if (element.tagName === "A") { // Handle text with embedded links
-        return true;
-        // TODO this will currently double count links I believe?, as they aren't ignored
-    }
-
-    return false;
-}
 
 /**
  * Fixes spacing and removes symbols
@@ -124,4 +86,4 @@ function getDictionary(text) {
     return items;
 }
 
-export { getDictionary, extractText, cleanString}
+export { getDictionary, extractText, cleanString }

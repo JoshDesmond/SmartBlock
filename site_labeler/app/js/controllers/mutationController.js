@@ -1,4 +1,4 @@
-import { cleanString, extractText } from "../model/textScraper.js";
+import { extractText } from "../model/textScraper.js";
 import { TextState } from "../model/textState.js";
 
 class MutationController {
@@ -21,6 +21,8 @@ class MutationController {
     mutationCallback(mutations, observer) {
 
         for (const mutation of mutations) {
+            // TODO Ignore mutations from .SmartBlockPluginElement elements
+
             // First check if max word count has been reached and halt if so
             if (this.textState.wordCount > this.textState.MAX_WORDS) {
                 observer.disconnect();
@@ -29,11 +31,10 @@ class MutationController {
             }
 
             if (mutation.type === "characterData") { // When text changes in existing text
-                // TODO don't clean first, save the uncleaned string in textState and only clean at the end
-                // (for both hypothetical optimization / clean code reasons)
-                const newText = cleanString(mutation.target.data);
+                console.log()
+                const newText = mutation.target.data;
                 if (mutation.oldValue) {
-                    const old = cleanString(mutation.oldValue);
+                    const old = mutation.oldValue;
                     this.textState.replaceText(old, newText);
                 } else {
                     this.textState.addText(newText);
