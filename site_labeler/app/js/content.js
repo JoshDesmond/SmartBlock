@@ -28,10 +28,7 @@ views.footerDiv.addEventListener('click', () => {
 const keydownController = new KeydownController(model, views);
 window.addEventListener('keydown', keydownController);
 
-// Run an initial text analysis
-model.textState.addText(model.textScraper.extractText(document.body));
-
-// Add mutation observer to watch for future changes to text content of the page
+// Creates & configures mutation observer to watch for future changes to text
 const config = {
     childList: true,
     subtree: true,
@@ -42,6 +39,11 @@ const config = {
 const mc = new MutationController(model.textState);
 const targetNode = document.body;
 const observer = new MutationObserver(mc.mutationCallback.bind(mc));
+
+// Run an initial text analysis
+model.textState.addText(model.textScraper.extractText(document.body));
+
+// Runs the mutation observer
 observer.observe(targetNode, config);
 
 // Add controller to watch for URL changes
