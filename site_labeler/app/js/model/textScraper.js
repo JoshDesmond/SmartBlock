@@ -10,7 +10,7 @@ const formattingTags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS",
  * @return {string} A single string containing the text of the element. Uses .innerText 
  */
 function extractText(element) {
-    if (!element || (!element instanceof HTMLElement)) {
+    if (!element || !(element instanceof HTMLElement)) {
         throw new TypeError(`Cannot extract text from given element ${element}`);
     }
 

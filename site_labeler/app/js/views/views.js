@@ -15,6 +15,7 @@ class Views {
 
         // Extra styling
         this.footerDiv.id = 'labeling-footer-div';
+        this.footerDiv.setAttribute('class', "SmartBlockPluginElement");
         this.footerDiv.style.backgroundColor = 'black';
 
         /** @type {HTMLButtonElement[]} Access to the four likert scale voting buttons */

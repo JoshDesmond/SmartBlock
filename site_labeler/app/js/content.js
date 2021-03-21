@@ -7,6 +7,7 @@ import { VoteButtonController } from './controllers/voteButtonController.js'
 import { CertaintyButtonController } from "./controllers/certaintyButtonController.js";
 import { MutationController } from "./controllers/mutationController.js";
 import { UrlChangeController } from './controllers/urlChangeController.js';
+import { extractText, getDictionary } from './model/textScraper.js';
 
 const model = new Model();
 const views = new Views(model);
@@ -21,7 +22,7 @@ views.otherButtons.forEach((button) => {
 });
 
 views.footerDiv.addEventListener('click', () => {
-    console.log(model.textScraper.getDictionary(model.textState.words));
+    console.log(getDictionary(model.textState.words));
 });
 
 // Add hotkeys
@@ -41,7 +42,7 @@ const targetNode = document.body;
 const observer = new MutationObserver(mc.mutationCallback.bind(mc));
 
 // Run an initial text analysis
-model.textState.addText(model.textScraper.extractText(document.body));
+model.textState.addText(extractText(document.body));
 
 // Runs the mutation observer
 observer.observe(targetNode, config);
