@@ -1,54 +1,40 @@
 import { extractText, cleanString } from "../app/js/model/textScraper.js";
-import { strict as assert } from 'assert';
-import jsdom from 'jsdom';
 
-// The following snippet allows text extract to check instanceof HTMLElement without causing
-// ReferenceError: HTMLElement is not defined
-global.window = new jsdom.JSDOM().window;
-global.document = window.document;
-global.HTMLElement = window.HTMLElement;
-
-const { JSDOM } = jsdom; // Suggested by documentation, what does this actually do?
-
-// TODO consider using JSDOM's fragment class instead of full on dom emulation for efficiency
 
 describe('TextExtractor', () => {
 
     it("Should extract the correct text from test document", (done) => {
-        const options = { pretendToBeVisual: true }; // (resources: "usable" allows jsdom to load stylesheets)
-        JSDOM.fromFile("./test/test_doc.html", options).then(dom => {
-            // Extract text
-            const body = dom.window.document.body;
-            const text = cleanString(extractText(body));
+        "./test/test_doc.html" // TODO load this
 
-            // Test for specific word in text
-            assert.equal(text.includes("seventy"), true);
+        // Extract text
+        const body = dom.window.document.body;
+        const text = cleanString(extractText(body));
 
-            // Test that the word count is exactly 72
-            const wordCount = text.split(" ").length;
-            assert.equal(wordCount, 72);
+        // Test for specific word in text
+        assert.equal(text.includes("seventy"), true);
 
-            // Test that ,'s and ...'s are stripped from the text
-            assert.equal(text.includes("laboris"), true);
-            assert.equal(text.includes("amet"), true);
+        // Test that the word count is exactly 72
+        const wordCount = text.split(" ").length;
+        assert.equal(wordCount, 72);
 
-            // Test that casing is lowered
-            assert.equal(text.includes("column"), true);
+        // Test that ,'s and ...'s are stripped from the text
+        assert.equal(text.includes("laboris"), true);
+        assert.equal(text.includes("amet"), true);
 
-            done();
-        });
+        // Test that casing is lowered
+        assert.equal(text.includes("column"), true);
+
+        done();
     });
 
     describe("Should handle hidden text", () => {
         let testDom, body;
 
         before(() => {
-            const options = { pretendToBeVisual: true };
-            return JSDOM.fromFile("./test/test_display_none_text.html", options).then((dom) => {
-                testDom = dom;
-                body = testDom.window.document.body;
-            })
-        });
+            "./test/test_display_none_text.html" // TODO load this
+            testDom = dom;
+            body = testDom.window.document.body;
+        })
 
 
         it("Should not extract text that has display: none", (done) => {
@@ -83,10 +69,8 @@ describe('TextExtractor', () => {
         let body;
 
         before(() => {
-            const options = { pretendToBeVisual: true };
-            return JSDOM.fromFile("./test/test_formatted_text.html", options).then(dom => {
-                body = dom.window.document.body;
-            });
+            "./test/test_formatted_text.html" // TODO load this
+            body = dom.window.document.body;
         });
 
         it("Should extract text with formatting tags", (done) => {
@@ -104,7 +88,8 @@ describe('TextExtractor', () => {
     });
 
     it("Should handle a non-breaking space ", (done) => {
-        const dom = new JSDOM(`<!DOCTYPE html><body><p>Hello&nbsp;world!</p></body>`); // should be two words
+        // TODO load this
+        `<!DOCTYPE html><body><p>Hello&nbsp;world!</p></body>`; // should be two words 
 
         const text = cleanString(extractText(dom.window.document.body));
 
