@@ -9,7 +9,7 @@ describe('MutationController', () => {
     const textState = new TextState();
 
     before(() => {
-        // Inject the test_doc's html into the live document
+        // Inject the test_doc's html into the live document. Syntax is from the html2js plugin.
         document.body.innerHTML = __html__['test/test_doc.html'];
 
         // Add mutation observer to watch for future changes to text content of the page
@@ -46,7 +46,11 @@ describe('MutationController', () => {
     it("Should add spaces between text from seperate elements if multiple are added at once");
 });
 
-// sleep time expects milliseconds
+/**
+ * 
+ * @param {Number} time Time in millaseconds to sleep
+ * @returns {Promise} promise that resolves after sleeping
+ */
 function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }

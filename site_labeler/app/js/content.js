@@ -39,6 +39,8 @@ const config = {
 };
 const mc = new MutationController(model.textState);
 const targetNode = document.body;
+// The mutation observer will call mc.mutationcallback() on events, 
+// and when called, the functions 'this' will be bound to the context of mc itself
 const observer = new MutationObserver(mc.mutationCallback.bind(mc));
 
 // Run an initial text analysis

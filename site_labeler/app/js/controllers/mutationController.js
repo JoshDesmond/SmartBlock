@@ -1,6 +1,9 @@
 import { extractText } from "../model/textScraper.js";
 import { TextState } from "../model/textState.js";
 
+/**
+ * @implements {MutationCallback}
+ */
 class MutationController {
 
     /**
@@ -12,8 +15,11 @@ class MutationController {
     }
 
     /**
-     *
-     * @implements MutationCallback
+     * Function that is called when mutations occur.
+     * 
+     * When passed to the MutationObserver, this function must be bound to its MutationController instance in order
+     * that `this` in the function below refers to this mutationController & its textState.
+     * 
      * @param {MutationRecord[]} mutations
      * @param {MutationObserver} observer
      * @return {void}
@@ -21,8 +27,6 @@ class MutationController {
     mutationCallback(mutations, observer) {
 
         for (const mutation of mutations) {
-            // TODO Ignore mutations from .SmartBlockPluginElement elements
-
             // First check if max word count has been reached and halt if so
             if (this.textState.wordCount > this.textState.MAX_WORDS) {
                 observer.disconnect();
@@ -31,7 +35,6 @@ class MutationController {
             }
 
             if (mutation.type === "characterData") { // When text changes in existing text
-                console.log()
                 const newText = mutation.target.data;
                 if (mutation.oldValue) {
                     const old = mutation.oldValue;

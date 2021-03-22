@@ -16,9 +16,7 @@ function extractText(element) {
 
     if (ignorableTags.includes(element.tagName)) {
         return "";
-    }
-
-    if (element.classList.contains("SmartBlockPluginElement")) {
+    } else if (element.classList.contains("SmartBlockPluginElement")) {
         return "";
     }
 
@@ -29,7 +27,7 @@ function extractText(element) {
 
     /**
      * If an element is the body, return the innerText of all its children except
-     * .SmartBlockPluginElement elements. Otherwise, just return the elements innerText
+     * to avoid extracting from .SmartBlockPluginElement elements.
      */
     if (element.tagName === "BODY") {
         let text = "";

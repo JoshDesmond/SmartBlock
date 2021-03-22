@@ -14,7 +14,6 @@ describe('TextExtractor', () => {
     it("Should extract the correct text from test document", (done) => {
         document.body.innerHTML = __html__['test/test_doc.html'];
 
-        // Extract text
         const text = cleanString(extractText(document.body));
 
         // Test for specific word in text
@@ -25,8 +24,8 @@ describe('TextExtractor', () => {
         assert.equal(wordCount, 72);
 
         // Test that ,'s and ...'s are stripped from the text
-        assert.equal(text.includes("laboris"), true);
-        assert.equal(text.includes("amet"), true);
+        assert.equal(text.includes(" laboris "), true);
+        assert.equal(text.includes(" amet "), true);
 
         // Test that casing is lowered
         assert.equal(text.includes("column"), true);
@@ -34,7 +33,7 @@ describe('TextExtractor', () => {
         done();
     });
 
-    describe("Should handle hidden text", () => {
+    describe("Should handle hidden & invisible text.", () => {
 
         before(() => {
             document.body.innerHTML = __html__['test/test_display_none_text.html'];

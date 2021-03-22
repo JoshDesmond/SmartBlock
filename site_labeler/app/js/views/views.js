@@ -5,7 +5,7 @@ class Views {
 
     /**
      * Creates a new View and appends the GUI to the tab associated with this script
-     * @param {!Model} model The model object in use by the plugin.
+     * @param {Model} model The model object in use by the plugin.
      */
     constructor(model) {
         this._model = model;
@@ -25,12 +25,7 @@ class Views {
 
         this.addVotingButtons();
         this.addCertaintyButtons();
-        this.votingButtons.forEach((button) => {
-            button.setAttribute('class', "footerButton SmartBlockPluginElement");
-        });
-        this.otherButtons.forEach((button) => {
-            button.setAttribute('class', "footerButton SmartBlockPluginElement");
-        });
+
         this.addTextualAnalysisButton();
     }
 
@@ -80,7 +75,9 @@ class Views {
             }
         }
 
-
+        this.votingButtons.forEach((button) => {
+            button.setAttribute('class', "footerButton SmartBlockPluginElement");
+        });
     }
 
     /** Adds the isObvious and isAmbiguous buttons to the UI */
@@ -105,6 +102,11 @@ class Views {
 
         this.otherButtons.push(this.isAmbiguousButton);
         this.otherButtons.push(this.isObviousButton);
+
+        this.otherButtons.forEach((button) => {
+            button.setAttribute('class', "footerButton SmartBlockPluginElement");
+        });
+
     }
 
     repaintModel() {
@@ -116,7 +118,7 @@ class Views {
     /**
      * Updates the display of the footer to reflect the current status of whether or not flags
      * are selected.
-     * */
+     **/
     repaintFlagState() {
         if (this._model.modelState.flagState) {
             this.footerDiv.style.backgroundColor = 'red';
@@ -149,14 +151,6 @@ class Views {
             this._resetButton(b);
         }
 
-        /**
-         * TODO redo this such that the secondary vote causes a range of buttons to be highlighted.
-         * The primary vote will be the brightest green, but the secondary one will be a faded
-         * green.
-         * If primary vote is 4, and secondary is 2, then button 4 will be bright green, and
-         * buttons 2 and 3 will be faded green, so as to indicate that you think it could be
-         * anywhere from 2 to 4.
-         */
         if (this._model.modelState.flagState) {
             // Paint Secondary Vote
             const secondaryVote = this._model.modelState.secondaryVote;

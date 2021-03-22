@@ -6,7 +6,6 @@ import { Model } from "../model/model.js";
  */
 export class VoteButtonController {
 
-
     /**
      * Creates a controller for a given voting button
      * @param model {Model} model object to control
