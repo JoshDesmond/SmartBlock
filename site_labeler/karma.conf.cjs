@@ -4,8 +4,7 @@ module.exports = function (config) {
     config.set({
         frameworks: ['mocha', 'chai'],
         files: [
-            { pattern: './test/testModelState.js', type: 'module' },
-            { pattern: './test/testMutationController.js', type: 'module' },
+            { pattern: './test/*.js', type: 'module' },
             { pattern: './app/**/*.js', type: 'module', included: false },
             { pattern: './test/*.html' }
         ],

@@ -4,11 +4,11 @@ import { extractText, cleanString } from "../app/js/model/textScraper.js";
 describe('TextExtractor', () => {
 
     it("Should extract the correct text from test document", (done) => {
-        "./test/test_doc.html" // TODO load this
+        document.body.innerHTML = __html__['test/test_doc.html'];
 
         // Extract text
-        const body = dom.window.document.body;
-        const text = cleanString(extractText(body));
+        const text = cleanString(extractText(document.body));
+        console.log(text);
 
         // Test for specific word in text
         assert.equal(text.includes("seventy"), true);
@@ -28,17 +28,14 @@ describe('TextExtractor', () => {
     });
 
     describe("Should handle hidden text", () => {
-        let testDom, body;
 
         before(() => {
-            "./test/test_display_none_text.html" // TODO load this
-            testDom = dom;
-            body = testDom.window.document.body;
+            document.body.innerHTML = __html__['test/test_display_none_text.html'];
         })
 
 
         it("Should not extract text that has display: none", (done) => {
-            const text = cleanString(extractText(body));
+            const text = cleanString(extractText(document.body));
 
             // Test for specific word in text
             assert.equal(text.includes("hippy"), true);
@@ -47,7 +44,7 @@ describe('TextExtractor', () => {
         });
 
         it("Should not extract text whose parent has display: none", (done) => {
-            const text = cleanString(extractText(body));
+            const text = cleanString(extractText(document.body));
 
             assert.equal(text.includes("hippy"), true);
             assert.equal(text.includes("potato"), false);
@@ -56,7 +53,7 @@ describe('TextExtractor', () => {
 
 
         it("Should not extract text whose parent's parent has display: none", (done) => {
-            const text = cleanString(extractText(body));
+            const text = cleanString(extractText(document.body));
 
             assert.equal(text.includes("hoot"), true);
             assert.equal(text.includes("toot"), false);
@@ -66,15 +63,12 @@ describe('TextExtractor', () => {
 
     describe("Should handle nested formatting tags", () => {
 
-        let body;
-
         before(() => {
-            "./test/test_formatted_text.html" // TODO load this
-            body = dom.window.document.body;
+            document.body.innerHTML = __html__['test/test_formatted_text.html'];
         });
 
         it("Should extract text with formatting tags", (done) => {
-            const text = cleanString(extractText(body));
+            const text = cleanString(extractText(document.body));
 
             // <!-- Text with single formatting element -->
             assert.equal(text.includes("world"), true);
@@ -89,9 +83,9 @@ describe('TextExtractor', () => {
 
     it("Should handle a non-breaking space ", (done) => {
         // TODO load this
-        `<!DOCTYPE html><body><p>Hello&nbsp;world!</p></body>`; // should be two words 
+        document.body.innerHTML = `<p>Hello&nbsp;world!</p>`; // should be two words 
 
-        const text = cleanString(extractText(dom.window.document.body));
+        const text = cleanString(extractText(document.body));
 
         // Test that the word count is exactly 2
         const wordCount = text.split(" ").length;

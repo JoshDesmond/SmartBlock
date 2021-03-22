@@ -14,28 +14,28 @@ function extractText(element) {
         throw new TypeError(`Cannot extract text from given element ${element}`);
     }
 
+    if (ignorableTags.includes(element.tagName)) {
+        return "";
+    }
+
+    if (element.classList.contains("SmartBlockPluginElement")) {
+        return "";
+    }
+
     /**
      * If an element is the body, return the innerText of all its children except
      * .SmartBlockPluginElement elements. Otherwise, just return the elements innerText
      */
-    if (element.tagName.toUpperCase() === "BODY") {
+    if (element.tagName === "BODY") {
         let text = "";
         for (const node of element.children) {
-            // Select the children but ignore the .SmartBlockPluginElement
-            if (node.classList.contains(".SmartBlockPluginElement")) {
-                continue;
-            }
-
-            console.log(node.innerText);
-            text += node.innerText + " ";
+            text += extractText(node) + " ";
         }
+
+        console.log(text);
 
         return text;
     } else {
-        if (element.classList.contains(".SmartBlockPluginElement")) {
-            throw new TypeError(`A SmartBlockPluginElement, ${element}, was passed into extractText().`);
-        }
-
         return element.innerText;
     }
 }
