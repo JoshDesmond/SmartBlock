@@ -91,9 +91,7 @@ describe('TextExtractor', () => {
     });
 
     it("Should handle a non-breaking space ", (done) => {
-        // TODO load this
-        document.body.innerHTML = `<p>Hello&nbsp;world!</p>`; // should be two words 
-
+        document.body.innerHTML = `<p>Hello${String.fromCharCode(160)}world!</p>`; // should be two words 
         const text = cleanString(extractText(document.body));
 
         // Test that the word count is exactly 2
