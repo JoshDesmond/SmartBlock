@@ -7,7 +7,6 @@ describe('TextExtractor', () => {
         document.body.innerHTML = "<div><div><p>Hello</p></div><div><p>World!</p></div></div>";
 
         const text = cleanString(extractText(document.body));
-        console.log(text.split(" "));
         assert.equal(text.split(" ").length, 2);
         done();
     });
@@ -17,7 +16,6 @@ describe('TextExtractor', () => {
 
         // Extract text
         const text = cleanString(extractText(document.body));
-        console.log(text);
 
         // Test for specific word in text
         assert.equal(text.includes("seventy"), true);

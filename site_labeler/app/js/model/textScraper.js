@@ -22,6 +22,11 @@ function extractText(element) {
         return "";
     }
 
+    const computedStyle = window.getComputedStyle(element);
+    if (computedStyle.display === "none" || computedStyle.visibility === "hidden") {
+        return "";
+    }
+
     /**
      * If an element is the body, return the innerText of all its children except
      * .SmartBlockPluginElement elements. Otherwise, just return the elements innerText
@@ -31,8 +36,6 @@ function extractText(element) {
         for (const node of element.children) {
             text += extractText(node) + " ";
         }
-
-        console.log(text);
 
         return text;
     } else {
