@@ -47,7 +47,7 @@ function extractText(element) {
  */
 function cleanString(text) {
     if (typeof text !== 'string') { throw new TypeError() }
-    text = text.replace(/(\r\n|\n|\r)/gm, ""); // Remove linebreaks
+    text = text.replace(/(\r\n|\n|\r)/gm, " "); // Remove linebreaks
     text = text.toLowerCase();
     text = text.replace(/[./–;?!)(]/g, ' ');
     text = text.replace(/[^a-z0-9 ]/g, ''); // Remove all but alphanumerics

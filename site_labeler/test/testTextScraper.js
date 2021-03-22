@@ -3,6 +3,15 @@ import { extractText, cleanString } from "../app/js/model/textScraper.js";
 
 describe('TextExtractor', () => {
 
+    it("Should add spaces between text from seperate elements", (done) => {
+        document.body.innerHTML = "<div><div><p>Hello</p></div><div><p>World!</p></div></div>";
+
+        const text = cleanString(extractText(document.body));
+        console.log(text.split(" "));
+        assert.equal(text.split(" ").length, 2);
+        done();
+    });
+
     it("Should extract the correct text from test document", (done) => {
         document.body.innerHTML = __html__['test/test_doc.html'];
 

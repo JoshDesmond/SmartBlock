@@ -43,6 +43,7 @@ describe('MutationController', () => {
 
     it("Should avoid extracting text from .SmartBlockPluginElement elements");
 
+    it("Should add spaces between text from seperate elements if multiple are added at once");
 });
 
 // sleep time expects milliseconds
