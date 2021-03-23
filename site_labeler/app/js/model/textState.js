@@ -1,3 +1,5 @@
+import { cleanString } from "./textScraper.js";
+
 /**
  * Stores the current state of textual analysis.
  */
@@ -35,6 +37,14 @@ class TextState {
         this.words.replace(searchValue, replaceValue);
         console.log("Removing: " + searchValue);
         console.log("Adding: " + replaceValue);
+    }
+
+    /**
+     * Outputs cleaned text.
+     * @returns {String} the cleaned and formatted text of the document
+     */
+    getFormattedText() {
+        return cleanString(this.words);
     }
 }
 

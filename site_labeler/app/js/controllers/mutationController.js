@@ -51,6 +51,7 @@ class MutationController {
              * The corrected logic will need to consider wonky nests of divs, spans, and text
              */
             else if (mutation.type === "childList") { // When html elements are added/removed
+                // TODO consider if node.nodeType == TEXT vs. Element vs the other types
                 mutation.addedNodes.forEach((node) => {
                     this.textState.addText(extractText(node));
                 });

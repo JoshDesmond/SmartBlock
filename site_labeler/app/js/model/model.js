@@ -28,13 +28,6 @@ class Model {
         return ["Very Unproductive", "Unproductive", "Productive", "Very Productive"];
     }
 
-    /**
-     * Retrieve the entire HTML of the current webpage
-     * @returns {String} The entire HTML of the webpage
-     */
-    extractFullHTML() {
-        return document.getElementsByTagName('html')[0].innerHTML;
-    }
 
     /**
      * Extracts the title of the current webpage
@@ -50,10 +43,6 @@ class Model {
         return cleanString(titleTags[0].text);
     }
 
-    /** Returns the last/cached result of extractText() */
-    getLatestTextContent() {
-        return this.textState.words;
-    }
 
     /**
      * Compiles all the necessary data into a json object that will be submitted to the labeling
@@ -69,7 +58,7 @@ class Model {
             snapshot: {
                 dateTime: Math.round((new Date()).getTime() / 1000),
                 title: this.extractTitle(),
-                contentRaw: this.getLatestTextContent()
+                contentRaw: this.textState.getFormattedText()
             },
             label: {
                 primaryVote: this.modelState.primaryVote,

@@ -1,5 +1,6 @@
 import { MutationController } from "../app/js/controllers/mutationController.js";
 import { TextState } from "../app/js/model/textState.js";
+import { extractText } from "../app/js/model/textScraper.js";
 
 
 describe('MutationController', () => {
@@ -23,6 +24,7 @@ describe('MutationController', () => {
         mutationController = new MutationController(textState);
         const observer = new MutationObserver(mutationController.mutationCallback.bind(mutationController));
         observer.observe(document.body, config);
+        textState.addText(extractText(document.body));
     });
 
     it("Should extract text when new text is added", (done) => {
@@ -41,7 +43,22 @@ describe('MutationController', () => {
         });
     });
 
-    it("Should avoid extracting text from .SmartBlockPluginElement elements");
+    it("Should avoid extracting text from .SmartBlockPluginElement elements", (done) => {
+        // Mutate text on the footer
+        const button = document.body.querySelector('.footerButton');
+        button.nodeValue += " chickenz";
+
+        sleep(5).then(() => {
+            // Check that chickenz wasn't added to text state
+            const text = textState.getFormattedText();
+            assert.isFalse(text.includes("chickenz"));
+            done();
+        });
+    });
+
+    it("Should handle Node.TEXT_NODE childlist mutations");
+
+    it("Should handle characterData mutations");
 
     it("Should add spaces between text from seperate elements if multiple are added at once");
 });
