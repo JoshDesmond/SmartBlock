@@ -53,11 +53,17 @@ class MutationController {
             else if (mutation.type === "childList") { // When html elements are added/removed
                 // TODO consider if node.nodeType == TEXT vs. Element vs the other types
                 mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        // TODO Also consider other node types - there are multiple 
+                    }
                     this.textState.addText(extractText(node));
                 });
 
                 mutation.removedNodes.forEach((node) => {
-                    // TODO
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        // TODO
+                    }
+                    this.textState.removeText(extractText(node));
                 });
             }
 

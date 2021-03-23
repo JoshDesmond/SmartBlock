@@ -17,6 +17,10 @@ class TextState {
         return string.split(/\s+/g).length;
     }
 
+    /**
+     * Adds new text to the given TextState.
+     * @param {string} text Text to add
+     */
     addText(text) {
         if (typeof text !== 'string') { throw new TypeError() }
         if (this.words.length !== 0 && !this.words.endsWith(" ")) {
@@ -26,6 +30,19 @@ class TextState {
         this.wordCount += this.countWordsInString(text);
         if (text) {
             this.words += text;
+        }
+    }
+
+    /**
+     * Removes text from the given TextState. Fails if given text not part of this TextState.
+     * @param {string} text Text to remove
+     */
+    removeText(text) {
+        if (typeof text !== 'string') { throw new TypeError() }
+
+        this.wordCount -= this.countWordsInString(text);
+        if (text) {
+            this.words.replace(text, " ");
         }
     }
 
