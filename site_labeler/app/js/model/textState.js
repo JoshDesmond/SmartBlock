@@ -22,6 +22,7 @@ class TextState {
      * @param {string} text Text to add
      */
     addText(text) {
+        // console.log(`Adding ${text}`);
         if (typeof text !== 'string') { throw new TypeError() }
         if (this.words.length !== 0 && !this.words.endsWith(" ")) {
             this.words += " ";
@@ -38,12 +39,15 @@ class TextState {
      * @param {string} text Text to remove
      */
     removeText(text) {
+        // console.log(`Removing ${text}`);
         if (typeof text !== 'string') { throw new TypeError() }
 
-        this.wordCount -= this.countWordsInString(text);
-        if (text) {
-            this.words.replace(text, " ");
+        if (!this.words.includes(text)) {
+            throw new Error(`Attempting to remove text, ${text}, not part of words, ${this.words}`);
         }
+
+        this.wordCount -= this.countWordsInString(text);
+        this.words = this.words.replace(text, " ");
     }
 
     replaceText(searchValue, replaceValue) {

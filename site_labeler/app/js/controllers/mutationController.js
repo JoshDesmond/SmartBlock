@@ -51,19 +51,25 @@ class MutationController {
              * The corrected logic will need to consider wonky nests of divs, spans, and text
              */
             else if (mutation.type === "childList") { // When html elements are added/removed
-                // TODO consider if node.nodeType == TEXT vs. Element vs the other types
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        // TODO Also consider other node types - there are multiple 
+                        this.textState.addText(node.nodeValue);
+                    } else if (node.nodeType === Node.ELEMENT_NODE) {
+                        this.textState.addText(extractText(node));
+                    } else if (node.nodeType === Node.ATTRIBUTE_NODE) {
+                        // TODO
+                        console.error(`Unexpected Attribute mutation ${node}`);
                     }
-                    this.textState.addText(extractText(node));
                 });
 
                 mutation.removedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        // TODO
+                        this.textState.removeText(node.nodeValue);
+                    } else if (node.nodeType === Node.ELEMENT_NODE) {
+                        this.textState.removeText(extractText(node));
+                    } else if (node.nodeType === Node.ATTRIBUTE_NODE) {
+                        console.error(`Unexpected Attribute mutation ${node}`);
                     }
-                    this.textState.removeText(extractText(node));
                 });
             }
 

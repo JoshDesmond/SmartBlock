@@ -27,50 +27,44 @@ describe('MutationController', () => {
         textState.addText(extractText(document.body));
     });
 
-    it("Should extract new text from a childlist mutation", (done) => {
+    it("Should extract new text from a childlist mutation", async () => {
         // Add two new words to the document via childlist mutation
         const newText = document.createElement('p');
         newText.innerHTML = "bruce lee";
         document.body.appendChild(newText);
 
-        sleep(5).then(() => {
-            // Check that "Adding This" was added to its text
-            const formattedText = textState.getFormattedText();
-            assert.isTrue(formattedText.includes('bruce'));
-            assert.isTrue(formattedText.includes('lee'));
-            done();
-        });
+        // Check that "Adding This" was added to its text
+        await sleep(5);
+        const formattedText = textState.getFormattedText();
+        assert.isTrue(formattedText.includes('bruce'));
+        assert.isTrue(formattedText.includes('lee'));
     });
 
-    it("Should not extract from characterData mutations to .SmartBlockPluginElement elements", (done) => {
+    it("Should not extract from characterData mutations to .SmartBlockPluginElement elements", async () => {
         // Mutate text on the footer
         const button = document.body.querySelector('.footerButton');
         button.nodeValue += " chickenz";
 
-        sleep(5).then(() => {
-            // Check that chickenz wasn't added to text state
-            const text = textState.getFormattedText();
-            assert.isFalse(text.includes("chickenz"));
-            done();
-        });
+        // Check that chickenz wasn't added to text state
+        await sleep(5);
+        const text = textState.getFormattedText();
+        assert.isFalse(text.includes("chickenz"));
     });
 
-    it("Should handle childList mutations to Node.TEXT_NODE nodes.", (done) => {
+    it("Should handle childList mutations to Node.TEXT_NODE nodes.", async () => {
         // Find a text element, confirm its status in textState
         const el = document.body.querySelector('p');
-        const oldText = el.innerText;
+        const oldText = el.innerText.toString();
         assert.isTrue(textState.words.includes(oldText));
 
         // Cause a childlist mutation
         const newText = "charles darwin";
-        el.innerText = newText;
+        el.innerText = newText.toString();
 
-        sleep(5).then(() => {
-            // Check that newText was added and oldText removed
-            assert.isTrue(textState.words.includes(newText));
-            assert.isFalse(textState.words.includes(oldText));
-            done();
-        });
+        // Check that newText was added and oldText removed
+        await sleep(5);
+        assert.isTrue(textState.words.includes(newText));
+        assert.isFalse(textState.words.includes(oldText));
     });
 
     it("Should handle characterData mutations");
