@@ -43,7 +43,7 @@ describe('MutationController', () => {
     it("Should not extract from characterData mutations to .SmartBlockPluginElement elements", async () => {
         // Mutate text on the footer
         const button = document.body.querySelector('.footerButton');
-        button.nodeValue += " chickenz";
+        button.firstChild.nodeValue += " chickenz";
 
         // Check that chickenz wasn't added to text state
         await sleep(5);
@@ -67,7 +67,16 @@ describe('MutationController', () => {
         assert.isFalse(textState.words.includes(oldText));
     });
 
-    it("Should handle characterData mutations");
+    it("Should handle characterData mutations", async () => {
+        // Mutate text on the footer
+        const el = document.body.querySelector('h3');
+        el.firstChild.nodeValue += " draven";
+
+        // Check that draven was added to text state and the original header text too
+        await sleep(5);
+        assert.isTrue(textState.words.includes("draven"));
+        assert.isTrue(textState.words.includes("1"));
+    });
 
     it("Should add spaces between text from seperate elements if multiple are added at once");
 

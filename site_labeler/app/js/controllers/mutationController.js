@@ -34,6 +34,12 @@ class MutationController {
                 return;
             }
 
+            // Ignore changes to plugin-elements
+            if (mutation.target.parentElement.classList.contains("SmartBlockPluginElement")) {
+                continue;
+            }
+
+
             if (mutation.type === "characterData") { // When text changes in existing text
                 const newText = mutation.target.data;
                 if (mutation.oldValue) {
@@ -57,7 +63,6 @@ class MutationController {
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
                         this.textState.addText(extractText(node));
                     } else if (node.nodeType === Node.ATTRIBUTE_NODE) {
-                        // TODO
                         console.error(`Unexpected Attribute mutation ${node}`);
                     }
                 });

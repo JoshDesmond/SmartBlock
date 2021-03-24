@@ -43,7 +43,7 @@ class TextState {
         if (typeof text !== 'string') { throw new TypeError() }
 
         if (!this.words.includes(text)) {
-            throw new Error(`Attempting to remove text, ${text}, not part of words, ${this.words}`);
+            throw new Error(`Attempting to remove text, \"${text}\", not part of words, ${this.words}`);
         }
 
         this.wordCount -= this.countWordsInString(text);
@@ -53,9 +53,12 @@ class TextState {
     replaceText(searchValue, replaceValue) {
         if (typeof searchValue !== 'string') { throw new TypeError() }
         if (typeof replaceValue !== 'string') { throw new TypeError() }
+        if (!this.words.includes(searchValue)) {
+            throw new Error(`Attempting to replace text, \"${searchValue}\", not part of words, ${this.words}`);
+        }
         this.wordCount -= this.countWordsInString(searchValue);
         this.wordCount += this.countWordsInString(replaceValue);
-        this.words.replace(searchValue, replaceValue);
+        this.words = this.words.replace(searchValue, replaceValue);
         console.log("Removing: " + searchValue);
         console.log("Adding: " + replaceValue);
     }
