@@ -14,7 +14,7 @@ class TextState {
     }
 
     countWordsInString(string) {
-        return string.split(/\s+/g).length;
+        return (string.split(/\s+/g) || []).length;
     }
 
     /**
@@ -22,7 +22,7 @@ class TextState {
      * @param {string} text Text to add
      */
     addText(text) {
-        // console.log(`Adding ${text}`);
+        // console.log(`Adding: ${text}`);
         if (typeof text !== 'string') { throw new TypeError() }
         if (this.words.length !== 0 && !this.words.endsWith(" ")) {
             this.words += " ";
@@ -39,7 +39,7 @@ class TextState {
      * @param {string} text Text to remove
      */
     removeText(text) {
-        // console.log(`Removing ${text}`);
+        // console.log(`Removing: ${text}`);
         if (typeof text !== 'string') { throw new TypeError() }
 
         if (!this.words.includes(text)) {

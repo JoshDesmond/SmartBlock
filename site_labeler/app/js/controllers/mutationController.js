@@ -59,7 +59,9 @@ class MutationController {
             else if (mutation.type === "childList") { // When html elements are added/removed
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        this.textState.addText(node.nodeValue);
+                        if (!isAllWhitespace(node)) { // Ignore formatting textnodes
+                            this.textState.addText(node.nodeValue);
+                        }
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
                         this.textState.addText(extractText(node));
                     } else if (node.nodeType === Node.ATTRIBUTE_NODE) {
@@ -69,7 +71,9 @@ class MutationController {
 
                 mutation.removedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        this.textState.removeText(node.nodeValue);
+                        if (!isAllWhitespace(node)) { // Ignore formatting textnodes
+                            this.textState.removeText(node.nodeValue);
+                        }
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
                         this.textState.removeText(extractText(node));
                     } else if (node.nodeType === Node.ATTRIBUTE_NODE) {
@@ -84,6 +88,16 @@ class MutationController {
             }
         }
     }
+}
+
+/**
+ * Returns true if the given textNode is all whitespace characters
+ */
+function isAllWhitespace(textNode) {
+    if (!textNode instanceof Node) {
+        throw new TypeError();
+    }
+    return !(/[^\t\n\r ]/.test(textNode.textContent));
 }
 
 // See https://dom.spec.whatwg.org/#mutationrecord when refactoring

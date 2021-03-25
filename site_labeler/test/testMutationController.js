@@ -6,7 +6,9 @@ import { extractText } from "../app/js/model/textScraper.js";
 describe('MutationController', () => {
 
     /** @type {MutationController} */
-    let mutationController
+    let mutationController;
+    /** @type {MutationObserver} */
+    let observer;
     const textState = new TextState();
 
     before(() => {
@@ -22,7 +24,7 @@ describe('MutationController', () => {
             attributes: false,
         };
         mutationController = new MutationController(textState);
-        const observer = new MutationObserver(mutationController.mutationCallback.bind(mutationController));
+        observer = new MutationObserver(mutationController.mutationCallback.bind(mutationController));
         observer.observe(document.body, config);
         textState.addText(extractText(document.body));
     });
@@ -67,6 +69,7 @@ describe('MutationController', () => {
         assert.isFalse(textState.words.includes(oldText));
     });
 
+
     it("Should handle characterData mutations", async () => {
         const el = document.body.querySelector('h3');
         el.firstChild.nodeValue += " draven";
@@ -100,8 +103,29 @@ describe('MutationController', () => {
         assert.isTrue(textState.getFormattedText().includes(" mendicant"));
     });
 
-    it("Should not duplicate text when handling childlist mutations to elements with children", async() => {
+    it("Should not throw errors when HTML formatting whitespace is manipulated", async () => {
+        const div = document.body.querySelector(".col-sm-4");
+        const formattingWhiteSpaceNode = div.firstChild;
+        document.body.append(formattingWhiteSpaceNode);
+    });
 
+    it("Should not throw errors from childList mutations to html formmating whitespace text nodes");
+
+    it("Should not duplicate text when handling childlist mutations to elements with children", async () => {
+        const parentDiv = document.body.querySelector(".row");
+        const textNode = document.createTextNode("cachet");
+        const newDiv = document.createElement("div");
+
+        // Insert a new div inbetween a parent and its children
+        while (parentDiv.childElementCount > 0) {
+            newDiv.appendChild(parentDiv.firstElementChild);
+        }
+        parentDiv.appendChild(newDiv);
+        parentDiv.appendChild(textNode); // Also add some text, just for fun
+
+        await sleep(5);
+        assert.isTrue(textState.words.includes("cachet"));
+        assert.equal((textState.words.match(/Column 1/gm) || []).length, 1);
     });
 
     it.skip("Should add spaces between buttons on the same div when added together", async () => {
@@ -124,6 +148,9 @@ describe('MutationController', () => {
         assert.isTrue(textState.getFormattedText().includes(" ontology"));
     });
 
+    after(() => {
+        observer.disconnect();
+    });
 });
 
 /*
