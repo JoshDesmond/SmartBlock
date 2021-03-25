@@ -87,6 +87,19 @@ describe('TextExtractor', () => {
         });
     });
 
+    it.skip("Should add spaces between buttons on the same div", (done) => {
+        /**
+         * node.innerText doesn't currently support this, so for now, this test is failing.
+         */
+        document.body.innerHTML = "<div><div><button>epistomology</button><button>ontology</button></div></div>";
+        const text = cleanString(extractText(document.body));
+
+        // Test that the text from both buttons have preceding spaces
+        assert.isTrue(text.includes(" epistomology"));
+        assert.isTrue(text.includes(" ontology"));
+    });
+
+
     it("Should handle a non-breaking space ", (done) => {
         document.body.innerHTML = `<p>Hello${String.fromCharCode(160)}world!</p>`; // should be two words 
         const text = cleanString(extractText(document.body));

@@ -68,7 +68,6 @@ describe('MutationController', () => {
     });
 
     it("Should handle characterData mutations", async () => {
-        // Mutate text on the footer
         const el = document.body.querySelector('h3');
         el.firstChild.nodeValue += " draven";
 
@@ -78,9 +77,53 @@ describe('MutationController', () => {
         assert.isTrue(textState.words.includes("1"));
     });
 
-    it("Should add spaces between text from seperate elements if multiple are added at once");
+    it("Should add spaces between text from seperate elements if multiple are added at once", async () => {
+        // <div><div><span>it be like it do, moo</span></div><div><button>mendicant</button></div></div>
+        const div = document.createElement('div');
+        const div1 = document.createElement('div');
+        const div2 = document.createElement('div');
+        const textNode = document.createTextNode("it be like it do, moo");
+        const button = document.createElement('button');
+        button.innerText = "mendicant";
+        const span = document.createElement('span');
 
-    it("Should not duplicate text when handling childlist mutations to elements with children")
+        div.append(div1, div2);
+        div1.append(span);
+        span.append(textNode);
+        div2.append(button);
+        document.body.appendChild(div);
+
+        await sleep(5);
+        assert.isTrue(textState.words.includes("it be like it do, moo"));
+        assert.isTrue(textState.words.includes("mendicant"));
+        assert.isTrue(textState.getFormattedText().includes(" moo"));
+        assert.isTrue(textState.getFormattedText().includes(" mendicant"));
+    });
+
+    it("Should not duplicate text when handling childlist mutations to elements with children", async() => {
+
+    });
+
+    it.skip("Should add spaces between buttons on the same div when added together", async () => {
+        /**
+         * node.innerText doesn't currently support this, so for now, this test is failing.
+         * <div><button>epistomology</button><button>ontology</button></div>
+         */
+        const div = document.createElement('div');
+
+        const button1 = document.createElement('button');
+        const button2 = document.createElement('button');
+        button1.innerText = "epistomology";
+        button2.innerText = "ontology";
+
+        div.append(button1, button2);
+        document.body.appendChild(div);
+
+        await sleep(5);
+        assert.isTrue(textState.getFormattedText().includes(" epistomology"));
+        assert.isTrue(textState.getFormattedText().includes(" ontology"));
+    });
+
 });
 
 /*
