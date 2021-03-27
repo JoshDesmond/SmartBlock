@@ -27,6 +27,16 @@
 			]
 		}
 	],
+	"commands": {
+		"toggle-plugin-active": {
+			"name": "Toggle Plugin",
+			"suggested_key": {
+				"default": "Ctrl+Shift+L",
+				"mac": "Command+Shift+L"
+			},
+			"description": "Activates the plugin for labeling"
+		}
+	},
 	"icons": {
 		"16": "images/get_started16.png",
 		"32": "images/get_started32.png",
