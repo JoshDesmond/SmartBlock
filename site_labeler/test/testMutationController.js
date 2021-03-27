@@ -128,6 +128,34 @@ describe('MutationController', () => {
         assert.equal((textState.words.match(/Column 1/gm) || []).length, 1);
     });
 
+    it("Should not add text from added elements belonging to hidden divs", async () => {
+        // Create elements
+        const hiddenDiv = document.createElement('div');
+        hiddenDiv.setAttribute("hidden", true);
+        const parentDiv = document.createElement('div');
+        const textElement1 = document.createElement('h3');
+        textElement1.nodeValue = "hidden text, provenance";
+        // Append elements to eachother / document
+        parentDiv.appendChild(textElement1);
+        hiddenDiv.appendChild(parentDiv);
+        document.body.appendChild(hiddenDiv);
+
+        // Add a second element to the div to create a new childlist mutation
+        const textElement2 = document.createElement('h2');
+        textElement2.nodeValue = "this text should be hidden, panoply";
+        parentDiv.appendChild(textElement2);
+
+        // Modify an element in the div to create a new characterDataMutation
+        textElement2.nodeValue += " transitive";
+
+        await sleep(5);
+        assert.isFalse(textState.getFormattedText().includes("provenance"));
+        assert.isFalse(textState.getFormattedText().includes("panoply"));
+        assert.isFalse(textState.getFormattedText().includes("transitive"));
+    });
+
+    it("Should add text when its computed visibility changes due to attribute mutations");
+
     it.skip("Should add spaces between buttons on the same div when added together", async () => {
         /**
          * node.innerText doesn't currently support this, so for now, this test is failing.
