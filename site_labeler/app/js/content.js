@@ -77,3 +77,9 @@ chrome.runtime.onMessage.addListener((request, sender) => {
         disableLabeler();
     }
 });
+
+chrome.storage.local.get(['labeler_active'], (result) => {
+    if (result.labeler_active) {
+        run();
+    }
+});
