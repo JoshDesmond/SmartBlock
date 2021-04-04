@@ -35,7 +35,7 @@ class MutationController {
             }
 
             // Ignore changes to plugin-elements
-            if (mutation.target.parentElement.classList.contains("SmartBlockPluginElement")) {
+            if (mutation.target.parentNode.classList.contains("SmartBlockPluginElement")) {
                 continue;
             }
 
@@ -60,7 +60,7 @@ class MutationController {
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
                         if (!isAllWhitespace(node)) { // Ignore formatting textnodes
-                            this.textState.addText(node.nodeValue);
+                            this.textState.addText(node.nodeValue); // TODO this should use extract text
                         }
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
                         this.textState.addText(extractText(node));
@@ -72,7 +72,7 @@ class MutationController {
                 mutation.removedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
                         if (!isAllWhitespace(node)) { // Ignore formatting textnodes
-                            this.textState.removeText(node.nodeValue);
+                            this.textState.removeText(node.nodeValue); // TODO this should use extract text
                         }
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
                         this.textState.removeText(extractText(node));

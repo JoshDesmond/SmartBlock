@@ -65,6 +65,7 @@ function cleanString(text) {
  */
 function getDictionary(text) {
     if (typeof text !== 'string') { throw new TypeError() }
+    text = cleanString(text);
     let dict = {};
     const splitText = text.split(' ');
     for (let s of splitText) {

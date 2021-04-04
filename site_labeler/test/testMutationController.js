@@ -109,7 +109,7 @@ describe('MutationController', () => {
         document.body.append(formattingWhiteSpaceNode);
     });
 
-    it("Should not throw errors from childList mutations to html formmating whitespace text nodes");
+    it("Should not throw errors from childList mutations to html formatting whitespace text nodes");
 
     it("Should not duplicate text when handling childlist mutations to elements with children", async () => {
         const parentDiv = document.body.querySelector(".row");
@@ -155,6 +155,8 @@ describe('MutationController', () => {
     });
 
     it("Should add text when its computed visibility changes due to attribute mutations");
+
+    it("Should not fail when handling mutations to root level nodes without parents");
 
     it.skip("Should add spaces between buttons on the same div when added together", async () => {
         /**
