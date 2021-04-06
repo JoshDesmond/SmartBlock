@@ -22,6 +22,9 @@ class TextState {
      * @param {string} text Text to add
      */
     addText(text) {
+        if (!text) {
+            return;
+        }
         console.log(`Adding: ${text}`);
         if (typeof text !== 'string') { throw new TypeError() }
         if (this.words.length !== 0 && !this.words.endsWith(" ")) {
@@ -39,6 +42,9 @@ class TextState {
      * @param {string} text Text to remove
      */
     removeText(text) {
+        if (!text) {
+            return;
+        }
         console.log(`Removing: ${text}`);
         if (typeof text !== 'string') { throw new TypeError() }
 

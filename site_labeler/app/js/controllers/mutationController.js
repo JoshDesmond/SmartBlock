@@ -1,4 +1,4 @@
-import { extractText } from "../model/textScraper.js";
+import { extractText, isAllWhitespace } from "../model/textScraper.js";
 import { TextState } from "../model/textState.js";
 
 /**
@@ -34,9 +34,16 @@ class MutationController {
                 return;
             }
 
+            if (mutation.target === document.body) {
+                console.log("body mutation");
+                // TODO
+            }
+
             // Ignore changes to plugin-elements
-            if (mutation.target.parentNode.classList.contains("SmartBlockPluginElement")) {
-                continue;
+            if (mutation.target.parentNode) {
+                if (mutation.target.parentNode.classList.contains("SmartBlockPluginElement")) {
+                    continue;
+                }
             }
 
 
@@ -59,7 +66,7 @@ class MutationController {
             else if (mutation.type === "childList") { // When html elements are added/removed
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        if (!isAllWhitespace(node)) { // Ignore formatting textnodes
+                        if (!isAllWhitespace(node.textContent)) { // Ignore formatting textnodes
                             this.textState.addText(node.nodeValue); // TODO this should use extract text
                         }
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
@@ -71,7 +78,7 @@ class MutationController {
 
                 mutation.removedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        if (!isAllWhitespace(node)) { // Ignore formatting textnodes
+                        if (!isAllWhitespace(node.textContent)) { // Ignore formatting textnodes
                             this.textState.removeText(node.nodeValue); // TODO this should use extract text
                         }
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
@@ -90,15 +97,6 @@ class MutationController {
     }
 }
 
-/**
- * Returns true if the given textNode is all whitespace characters
- */
-function isAllWhitespace(textNode) {
-    if (!textNode instanceof Node) {
-        throw new TypeError();
-    }
-    return !(/[^\t\n\r ]/.test(textNode.textContent));
-}
 
 // See https://dom.spec.whatwg.org/#mutationrecord when refactoring
 

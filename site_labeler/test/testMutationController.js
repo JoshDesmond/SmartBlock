@@ -154,9 +154,16 @@ describe('MutationController', () => {
         assert.isFalse(textState.getFormattedText().includes("transitive"));
     });
 
+    it("Should not add whitespace from a mutation to an element with no text and only whitespace");
+
     it("Should add text when its computed visibility changes due to attribute mutations");
 
-    it("Should not fail when handling mutations to root level nodes without parents");
+    it("Should not fail when handling mutations to root level nodes without parents", async () => {
+        document.body.appendChild(document.createTextNode("newBodyText"));
+        document.body.nodeValue += " test2";
+        await sleep(5);
+        // Would an error throw fail the test?
+    });
 
     it.skip("Should add spaces between buttons on the same div when added together", async () => {
         /**

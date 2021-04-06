@@ -10,8 +10,13 @@ const formattingTags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS",
  * @return {string} A single string containing the text of the element. Uses .innerText 
  */
 function extractText(element) {
-    if (!element || !(element instanceof HTMLElement)) {
+    if (!element || !(element instanceof Element)) {
         throw new TypeError(`Cannot extract text from given element ${element}`);
+    }
+
+    const innerText = element.innerText;
+    if (isAllWhitespace(innerText)) {
+        return "";
     }
 
     if (ignorableTags.includes(element.tagName)) {
@@ -37,7 +42,7 @@ function extractText(element) {
 
         return text;
     } else {
-        return element.innerText;
+        return innerText;
     }
 }
 
@@ -89,4 +94,12 @@ function getDictionary(text) {
     return items;
 }
 
-export { getDictionary, extractText, cleanString }
+/**
+ * Returns true if the given string is all whitespace characters
+ * @param {string} str
+ */
+function isAllWhitespace(str) {
+    return !(/[^\t\n\r ]/.test(str));
+}
+
+export { getDictionary, extractText, cleanString, isAllWhitespace }
