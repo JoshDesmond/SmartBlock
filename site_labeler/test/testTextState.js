@@ -20,4 +20,11 @@ describe('TextState', () => {
         await textState.addText("");
         assert.equal(textState.wordCount, wcBefore);
     });
+
+    it("Should handle out of order text removals", async () => {
+        await textState.addText("abc def");
+        await textState.addText("abc");
+        await textState.removeText("abc");
+        await textState.removeText("abc def");
+    });
 });
