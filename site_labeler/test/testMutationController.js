@@ -154,6 +154,26 @@ describe('MutationController', () => {
         assert.isFalse(textState.getFormattedText().includes("transitive"));
     });
 
+    it("Should not fail when a hidden element with text is removed", async () => {
+        const div = document.createElement('div');
+        const p = document.createElement('p');
+        // TODO test changes depending on nodeValue or innerText
+        p.nodeValue = "ZebraCow";
+        p.setAttribute("display", "none");
+        div.appendChild(p);
+        document.body.appendChild(div);
+
+        await sleep(5);
+        assert.isFalse(textState.getFormattedText().includes("zebracow"));
+        p.nodeValue = "";
+
+        await sleep(5);
+        // Would an error fail the test?
+        assert.isFalse(textState.getFormattedText().includes("zebracow"));
+
+        // TODO
+    });
+
     it("Should not add whitespace from a mutation to an element with no text and only whitespace");
 
     it("Should add text when its computed visibility changes due to attribute mutations");
