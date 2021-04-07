@@ -22,9 +22,25 @@ describe('TextState', () => {
     });
 
     it("Should handle out of order text removals", async () => {
-        await textState.addText("abc def");
-        await textState.addText("abc");
-        await textState.removeText("abc");
-        await textState.removeText("abc def");
+        const ts= new TextState();
+        await ts.addText("abc def");
+        await ts.addText("abc");
+        await ts.removeText("abc");
+        await ts.removeText("abc def");
+        assert.equal(ts.wordCount, 0);
+    });
+
+    it("Should handle out of order text removals with newlines", async () => {
+        const ts= new TextState();
+        await ts.addText("abc\ndef");
+        await ts.addText("abc");
+        await ts.removeText("abc");
+        await ts.removeText("abc\ndef");
+        assert.equal(ts.wordCount, 0);
+    });
+
+    it("Should throw an error when removing non-existing text", (done) => {
+        assert.throws(() => { textState.removeText("fjfdkl") }, Error);
+        done();
     });
 });

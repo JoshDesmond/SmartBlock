@@ -38,7 +38,7 @@ class TextState {
     }
 
     /**
-     * Removes text from the given TextState. Fails if given text not part of this TextState.
+     * Removes text from this TextState. Fails if given text not part of this TextState.
      * @param {string} text Text to remove
      */
     removeText(text) {
@@ -49,11 +49,28 @@ class TextState {
         if (typeof text !== 'string') { throw new TypeError() }
 
         if (!this.words.includes(text)) {
-            throw new Error(`Attempting to remove text, \"${text}\", not part of words, ${this.words}`);
+            console.log(`Attempting to remove text, \"${text}\", not part of words, ${this.words}`);
+            this.removeWords(text);
+            return;
         }
 
         this.wordCount -= this.countWordsInString(text);
-        this.words = this.words.replace(text, " ");
+        this.words = this.words.replace(text, ' ');
+    }
+
+    /**
+     * Removes all of the words in text from this TextState.
+     * @param {string} text The text to remove from this TextState
+     */
+    removeWords(text) {
+        const splitText = text.split(/[\t\n\r ]/);
+        for (const s of splitText) {
+            if (!this.words.includes(s)) {
+                throw Error(`Attempting to remove text, \"${text}\", not part of words, ${this.words}`);
+            }
+            this.words = this.words.replace(s, ' ');
+            this.wordCount--;
+        }
     }
 
     replaceText(searchValue, replaceValue) {

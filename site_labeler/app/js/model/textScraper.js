@@ -69,6 +69,7 @@ function cleanString(text) {
  * @param {String} text A long string of text
  */
 function getDictionary(text) {
+    // TODO refactor to textState
     if (typeof text !== 'string') { throw new TypeError() }
     text = cleanString(text);
     let dict = {};
