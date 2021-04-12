@@ -5,28 +5,17 @@ const formattingTags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS",
 
 
 /**
- * Extracts the text from the given HTMLElement
+ * Extracts the text from the given HTMLElement. Use validateForExtraction() before calling.
  * @param {HTMLElement} element The tag to extract text from
  * @return {string} A single string containing the text of the element. Uses .innerText 
  */
 function extractText(element) {
     if (!element || !(element instanceof Element)) {
-        throw new TypeError(`Cannot extract text from given element ${element}`);
+        throw new TypeError(`Cannot extract text from given object ${element}`);
     }
 
     const innerText = element.innerText;
     if (isAllWhitespace(innerText)) {
-        return "";
-    }
-
-    if (ignorableTags.includes(element.tagName)) {
-        return "";
-    } else if (element.classList.contains("SmartBlockPluginElement")) {
-        return "";
-    }
-
-    const computedStyle = window.getComputedStyle(element);
-    if (computedStyle.display === "none" || computedStyle.visibility === "hidden") {
         return "";
     }
 
@@ -37,13 +26,40 @@ function extractText(element) {
     if (element.tagName === "BODY") {
         let text = "";
         for (const node of element.children) {
-            text += extractText(node) + " ";
+            if (validateForExtraction(node)) {
+                text += extractText(node) + " ";
+            }
         }
 
         return text;
     } else {
         return innerText;
     }
+}
+
+/**
+ * Determines whether text should be extracted from the given element.
+ * @param {HTMLElement} element The element to potentially extract text from
+ * @returns True if the element should have its text extracted
+ */
+function validateForExtraction(element) {
+    if (!element || !(element instanceof Element)) {
+        console.trace();
+        throw new TypeError(`Cannot validate given object for extraction: ${element}`);
+    }
+
+    if (ignorableTags.includes(element.tagName)) {
+        return false;
+    } else if (element.classList.contains("SmartBlockPluginElement")) {
+        return false;
+    }
+
+    const computedStyle = window.getComputedStyle(element);
+    if (computedStyle.display === "none" || computedStyle.visibility === "hidden") {
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -103,4 +119,4 @@ function isAllWhitespace(str) {
     return !(/[^\t\n\r ]/.test(str));
 }
 
-export { getDictionary, extractText, cleanString, isAllWhitespace }
+export { extractText, validateForExtraction, cleanString, isAllWhitespace, getDictionary }

@@ -1,4 +1,4 @@
-import { extractText, isAllWhitespace } from "../model/textScraper.js";
+import { extractText, isAllWhitespace, validateForExtraction } from "../model/textScraper.js";
 import { TextState } from "../model/textState.js";
 
 /**
@@ -34,20 +34,12 @@ class MutationController {
                 return;
             }
 
-            if (mutation.target === document.body) {
-                console.log("body mutation");
-                // TODO
-            }
-
-            // Ignore changes to plugin-elements
-            if (mutation.target.parentNode) {
-                if (mutation.target.parentNode.classList.contains("SmartBlockPluginElement")) {
-                    continue;
-                }
-            }
-
 
             if (mutation.type === "characterData") { // When text changes in existing text
+                if (validateForExtraction(mutation.target.parentElement) === false) {
+                    continue;
+                }
+
                 const newText = mutation.target.data;
                 if (mutation.oldValue) {
                     const old = mutation.oldValue;
@@ -64,27 +56,39 @@ class MutationController {
              * The corrected logic will need to consider wonky nests of divs, spans, and text
              */
             else if (mutation.type === "childList") { // When html elements are added/removed
+                console.log(mutation);
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        if (!isAllWhitespace(node.textContent)) { // Ignore formatting textnodes
-                            this.textState.addText(node.nodeValue); // TODO this should use extract text
+                        if (node.parentElement === null) {
+                            console.log(`no parent found ${node}`);
+                        }
+                        if (validateForExtraction(node.parentElement)) {
+                            this.textState.addText(node.nodeValue);
                         }
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
-                        this.textState.addText(extractText(node));
+                        if (validateForExtraction(node)) {
+                            this.textState.addText(extractText(node));
+                        }
                     } else if (node.nodeType === Node.ATTRIBUTE_NODE) {
                         console.error(`Unexpected Attribute mutation ${node}`);
+                    } else if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+                        console.error(`TODO, handle document fragments like: ${node}`);
                     }
                 });
 
                 mutation.removedNodes.forEach((node) => {
                     if (node.nodeType === Node.TEXT_NODE) {
-                        if (!isAllWhitespace(node.textContent)) { // Ignore formatting textnodes
-                            this.textState.removeText(node.nodeValue); // TODO this should use extract text
-                        }
+                        // No validation as the element has no parent as it is now removed
+                        this.textState.removeText(node.nodeValue);
                     } else if (node.nodeType === Node.ELEMENT_NODE) {
-                        this.textState.removeText(extractText(node));
+                        // TODO This might be buggy as the computed style of a removed node is ambiguous
+                        if (validateForExtraction(node)) {
+                            this.textState.removeText(extractText(node));
+                        }
                     } else if (node.nodeType === Node.ATTRIBUTE_NODE) {
                         console.error(`Unexpected Attribute mutation ${node}`);
+                    } else if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+                        console.error(`TODO, handle document fragments like: ${node}`);
                     }
                 });
             }
