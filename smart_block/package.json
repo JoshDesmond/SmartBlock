@@ -5,7 +5,7 @@
   "main": "app/js/content.js",
   "type": "module",
   "devDependencies": {
-    "jsdom": "^16.4.0",
+    "jsdom": "^16.5.0",
     "mocha": "^8.2.1",
     "rollup": "^2.38.4",
     "rollup-plugin-chrome-extension": "^3.5.2",
