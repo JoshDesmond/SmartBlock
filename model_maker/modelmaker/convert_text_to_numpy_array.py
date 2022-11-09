@@ -1,7 +1,7 @@
 from collections import Counter
 from typing import Dict
 import numpy as np
-from pymagnitude import *
+from pymagnitude-lite import *
 
 
 def load_glove(glove_path: str) -> Magnitude:

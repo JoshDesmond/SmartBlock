@@ -9,8 +9,7 @@ verify_ssl = true
 numpy = "*"
 keras = "*"
 pymagnitude = "*"
-tensorflow = "*"
-matplotlib = "*"
+pymagnitude-lite = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
