@@ -6,7 +6,7 @@
   "type": "module",
   "devDependencies": {
     "jsdom": "^16.5.0",
-    "mocha": "^8.2.1",
+    "mocha": "^10.1.0",
     "rollup": "^2.38.4",
     "rollup-plugin-chrome-extension": "^3.5.2",
     "rollup-plugin-delete": "^2.0.0"
