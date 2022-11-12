@@ -35,7 +35,8 @@ class MutationController {
             }
 
             // Ignore changes to plugin-elements
-            if (mutation.target.parentNode.classList.contains("SmartBlockPluginElement")) {
+            if (mutation.target.parentNode &&
+                mutation.target.parentNode.classList.contains("SmartBlockPluginElement")) {
                 continue;
             }
 
