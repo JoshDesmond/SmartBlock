@@ -19,6 +19,7 @@ module.exports = {
             patterns: [
                 { from: "app/images", to: "images" },
                 { from: path.resolve(__dirname, "app/manifest.json") },
+                { from: "app/css", to: "css" },
             ]
         })
     ]
