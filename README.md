@@ -10,5 +10,3 @@ The project is divided into five sub-projects, each described below:
 **model_maker**: The model maker is a python project for training neural networks using the labeled sqlite data. It uses Keras/Tensorflow to build and export models.
 
 **smart_block**: Smart Block is the final product. It is the plugin that will, using the text displayed on whatever website you visit and a pre-trained neural network, attempt to co-operatively steer users away from black-holes of internet distraction.
-
-**website**: https://joshdesmond.github.io/SmartBlock/website/index.html
